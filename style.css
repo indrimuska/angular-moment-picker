@@ -1,0 +1,73 @@
+html, body { color: #5b656d;
+    background: -webkit-linear-gradient(#ecf0f1, #fff 500px);
+    background:    -moz-linear-gradient(#ecf0f1, #fff 500px);
+    background:     -ms-linear-gradient(#ecf0f1, #fff 500px);
+    background:      -o-linear-gradient(#ecf0f1, #fff 500px);
+    background:         linear-gradient(#f1f5f5, #fff 10%); }
+h3 { color: #343b41; padding-top: 40px; margin-top: 0; margin-bottom: 20px; font-weight: 200; border-bottom: 1px solid #e5e5e5; padding-bottom: 10px;}
+h3 .text-muted { color: #597ea2; font-size: .8em; }
+q { font-style: italic; }
+a, a:hover, a:focus { color: #0095ff; }
+.text-overflow { white-space: nowrap; text-overflow: ellipsis; overflow: hidden; }
+
+.header, .footer { padding-right: 15px; padding-left: 15px; }
+@media (min-width: 768px) {
+	.header, .footer { padding-right: 0; padding-left: 0; }
+	.container { max-width: 730px !important; }
+}
+
+/* Header */
+.header { padding: 40px 0 0; color: #597ea2; }
+.header .list-inline { margin-top: 20px; }
+.header .zoomify-logo { margin-top: 17px; display: block; }
+.header h1 { color: #0095ff; }
+
+/* Why */
+.why { font-size: 17px; font-weight: 300; line-height: 1.5em; }
+.why q { font-weight: 400; }
+
+/* Code */
+pre { padding: 5px 10px; font-size: 12px; background: #275475; border: none; position: relative; }
+pre code { text-shadow: none; background: none !important; color: rgba(255, 255, 255, .6) !important; }
+pre code mark { border-radius: 2px; background: rgba(255, 255, 255, .15); color: inherit; }
+pre .clipboard { position: absolute; top: 0; right: 0; background: #fafafa; border-radius: 0 4px 0 4px; padding: 2px 7px 2px 5px; cursor: pointer; opacity: 0;
+	white-space: nowrap; transition: all 200ms ease; }
+pre:hover .clipboard { opacity: 1; }
+pre .clipboard span { display: inline-block; vertical-align: middle; max-width: 0; opacity: 0; overflow: hidden; transition: all 200ms ease; }
+pre .clipboard:hover span { max-width: 100px; opacity: 1; }
+
+/* Examples */
+.examples { margin-top: 40px; }
+.examples .example { margin-bottom: 70px; }
+.examples .example .lead { color: #597ea2; margin-bottom: 40px; }
+.examples .example .locales .moment-picker { margin: 3px; display: inline-block; }
+.examples .example label small { color: #abbbc7; }
+.examples .example .min-max-containers { min-height: 34px; display: block; }
+.examples .example .builder pre,
+.examples .example .builder .results { margin: 20px 0; }
+.examples .example .builder .results { background: #e4eef5; padding: 10px 0 15px; border-radius: 4px; min-height: 58px; }
+.examples .example .builder .results .moment-picker { display: inline-block; }
+/*
+.examples .example .builder .results .moment-picker { font-size: 16px; }
+.examples .example .builder .results .moment-picker .moment-picker-container { display: inline-block !important; position: static !important; margin: 0 !important; }
+.examples .example .builder .results .moment-picker .moment-picker-container:before,
+.examples .example .builder .results .moment-picker .moment-picker-container:after { content: none; }
+*/
+
+/* Footer */
+.footer { border-top: 1px solid #e5e5e5; margin: 60px 0; }
+.footer .pull-right { margin-top: 15px; }
+
+/* GitHub buttons fallback style */
+.jumbotron .list-inline > li { vertical-align: top; }
+.github-button { padding: 0 10px; height: 28px; line-height: 26px; text-shadow: 0 1px 0 rgba(255, 255, 255, .9); color: #333; margin-bottom: 5px;
+	border: 1px solid #d5d5d5; border-radius: 3px; display: inline-block; font-weight: 700; font-size: 13px; vertical-align: top; background: #fff;
+	background-color: #eee;
+	background: -webkit-linear-gradient(#fcfcfc, #eee);
+	background:    -moz-linear-gradient(#fcfcfc, #eee);
+	background:     -ms-linear-gradient(#fcfcfc, #eee);
+	background:      -o-linear-gradient(#fcfcfc, #eee);
+	background:         linear-gradient(#fcfcfc, #eee); }
+
+/* Fork-me ribbon */
+.fork-me-ribbon { position: fixed; top: 0; right: 0; }

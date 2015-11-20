@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:og="http://ogp.me/ns#" xmlns:fb="http://www.facebook.com/2008/fbml" ng-app="AngularMomentPickerDemo">
+	<head>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		
+		<title>Angular Moment Picker - Finally an easy to use AngularJS datetime picker for your app!</title>
+		<meta name="description" content="Angular Moment Picker is an AngularJS directive for date and time picker using Moment.js">
+		<meta name="author" content="Indri Muska <indrimuska@gmail.com>">
+		<meta name="keywords" content="datepicker timepicker datetime picker calendar moment.js angular">
+		
+		<!-- Open Graph Meta Tags -->
+		<meta property="og:title" content="Angular Moment Picker">
+		<meta property="og:site_name" content="Angular Moment Picker">
+		<meta property="og:url" content="http://indrimuska.github.io/angular-moment-picker/">
+		<meta property="og:description" content="Angular Moment Picker is an AngularJS directive for date and time picker using Moment.js">
+		<meta property="og:image" content="http://indrimuska.github.io/angular-moment-picker/img/angular-moment-picker-views-selected.png">
+		<meta property="og:type" content="website">
+		
+		<!-- Stylesheets -->
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.css">
+		<link rel="stylesheet" href="style.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/3.3.0/octicons.min.css">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/solarized_light.min.css">
+	</head>
+	<body itemscope itemtype="http://schema.org/SoftwareApplication">
+		<div class="container">
+			<div class="header">
+				<h1 itemprop="name">Angular Moment Picker</h1>
+				<div class="lead">Angular Moment Picker is an AngularJS directive for date and time picker using Moment.js</div>
+				<ul class="list-inline">
+					<li>
+						<a class="github-button" href="https://github.com/indrimuska/angular-moment-picker" data-icon="octicon-star"
+							data-style="mega" aria-label="Star indrimuska/angular-moment-picker on GitHub">Star</a>
+					</li>
+					<li>
+						<a class="github-button" href="https://github.com/indrimuska/angular-moment-picker/fork" data-icon="octicon-git-branch"
+							data-style="mega" aria-label="Fork indrimuska/angular-moment-picker on GitHub">Fork</a>
+					</li>
+					<li>
+						<a class="github-button" href="https://github.com/indrimuska/angular-moment-picker" data-icon="octicon-eye"
+							data-style="mega" aria-label="Watch indrimuska/angular-moment-picker on GitHub">Watch</a>
+					</li>
+					<li>
+						<a class="github-button" href="https://github.com/indrimuska/angular-moment-picker/issues" data-icon="octicon-issue-opened"
+							data-style="mega" aria-label="Issue indrimuska/angular-moment-picker on GitHub">Issue</a>
+					</li>
+					<li>
+						<a class="github-button" href="https://github.com/indrimuska/angular-moment-picker/archive/master.zip" data-icon="octicon-cloud-download"
+							data-style="mega" aria-label="Download indrimuska/angular-moment-picker on GitHub">Download</a>
+					</li>
+				</ul>
+			</div>
+			
+			<div class="why text-justify">
+				<h3>Why?</h3>
+				<p>
+					It was crazy for me to see that there are so many <i>jQuery</i> plugins for date and time picker and so few
+					<a href="https://angularjs.org/" rel="nofollow" target="_blank">AngularJS</a> directives doing the same
+					in the same way, none of them using <a href="http://momentjs.com/" rel="nofollow">Moment.js</a>
+					(let's say, Moment.js is unique!).
+				</p>
+				<p>
+					The question is <q>Why?</q>, I thought <q>it's not so hard!</q>.
+				</p>
+				<p>
+					That's why I decided to create <a href="https://github.com/indrimuska/angular-moment-picker">Angular Moment Picker</a>,
+					an easy to use datetime picker that <b>does not requires jQuery</b>
+					and uses the powerful of Moment.js to perform Internationalization (i18n) and all the operations on dates.
+				</p>
+			</div>
+			
+			<div class="examples" ng-controller="AngularMomentPickerDemoCtrl as ctrl" ng-cloak>
+				<div class="example">
+					<h3>Easy to use. <span class="text-muted">Easy to install.</span></h3>
+					<div class="lead">
+						<span moment-picker="ctrl.today" format="LLLL">
+							<i class="mega-octicon octicon-calendar"></i>&nbsp;
+							{{ctrl.today}}
+						</span>
+					</div>
+					<pre><code class="html" ng-non-bindable>&lt;script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"&gt;&lt;/script&gt;
+&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"&gt;&lt;/script&gt;
+&lt;script src="vendor/angular-moment-picker/angular-moment-picker.min.js"&gt;&lt;/script&gt;</code></pre>
+					<pre><code class="js" ng-non-bindable>var myApp = angular.module('myApp', ['moment-picker']);</code></pre>
+				</div>
+				<div class="example">
+					<h3>Use it everywhere. <span class="text-muted">Attached to a component or to an input.</span></h3>
+					<div class="row">
+						<div class="col-md-4">
+							<span moment-picker="ctrl.component">{{ctrl.component || 'Click here to select a date'}}</span>
+						</div>
+						<div class="col-md-8">
+							<pre><code class="html" ng-non-bindable>&lt;span <mark>moment-picker="ctrl.component"</mark>&gt;
+    {{ ctrl.component || 'Click here to select a date' }}
+&lt;/span&gt;</code></pre>
+						</div>
+						<div class="col-md-4">
+							<input class="form-control" ng-model="ctrl.input" placeholder="Select a date..." moment-picker="ctrl.input">
+						</div>
+						<div class="col-md-8">
+							<pre><code class="html">&lt;input class="form-control"
+       ng-model="ctrl.input"
+       placeholder="Select a date..."
+       <mark>moment-picker="ctrl.input"</mark>&gt;</code></pre>
+						</div>
+					</div>
+				</div>
+				<div class="example">
+					<h3>Smart min/max view detection.
+						<span class="text-muted"><q>Write less, do more</q> <small><a href="http://jquery.com/" target="_blank">(cit.)</a></small></span>
+					</h3>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="input-group" moment-picker="ctrl.datepicker" format="YYYY-MM-DD">
+								<span class="input-group-addon">
+									<i class="octicon octicon-calendar"></i>
+								</span>
+								<input class="form-control" placeholder="Select a date" ng-model="ctrl.datepicker">
+							</div>
+						</div>
+						<div class="col-md-8">
+							<pre><code class="html" ng-non-bindable>&lt;div class="input-group"
+     moment-picker="ctrl.datepicker"
+     <mark>format="YYYY-MM-DD"</mark>&gt;
+    &lt;span class="input-group-addon"&gt;
+        &lt;i class="octicon octicon-calendar"&gt;&lt;/i&gt;
+    &lt;/span&gt;
+    &lt;input class="form-control"
+           placeholder="Select a date"
+           ng-model="ctrl.datepicker"&gt;
+&lt;/div&gt;</code></pre>
+						</div>
+						<div class="col-md-4">
+							<div class="input-group" moment-picker="ctrl.timepicker" format="HH:mm">
+								<span class="input-group-addon">
+									<i class="octicon octicon-clock"></i>
+								</span>
+								<input class="form-control" placeholder="Select a time" ng-model="ctrl.timepicker">
+							</div>
+						</div>
+						<div class="col-md-8">
+							<pre><code class="html" ng-non-bindable>&lt;div class="input-group"
+     moment-picker="ctrl.timepicker"
+     <mark>format="HH:mm"</mark>&gt;
+    &lt;span class="input-group-addon"&gt;
+        &lt;i class="octicon octicon-clock"&gt;&lt;/i&gt;
+    &lt;/span&gt;
+    &lt;input class="form-control"
+           placeholder="Select a time"
+           ng-model="ctrl.timepicker"&gt;
+&lt;/div&gt;</code></pre>
+						</div>
+					</div>
+				</div>
+				<div class="example" id="locales">
+					<h3>Choose your locale. <span class="text-muted">Thanks to Moment.js.</span></h3>
+					<pre><code class="html" ng-non-bindable>&lt;div moment-picker="ctrl.locale" <mark>locale="en"</mark>&gt; English &lt;/div&gt;</code></pre>
+					<div class="locales">
+						<span class="btn btn-default" ng-repeat="locale in ctrl.locales track by locale.code"
+							moment-picker="ctrl[locale.code]" locale="{{locale.code}}" ng-bind="locale.label"></span>
+					</div>
+				</div>
+				<div class="example" id="builder">
+					<h3>Builder. <span class="text-muted">You have no excuses now!</span></h3>
+					<div class="builder">
+						<div class="lead results text-center">
+							<span moment-picker="ctrl.myInput" ng-if="ctrl.built"
+								locale="{{ctrl.builder.locale}}"
+								ng-attr-format="{{ctrl.builder.format || ctrl.defaults.formatDef}}"
+								min-view="{{ctrl.builder.minView}}"
+								max-view="{{ctrl.builder.maxView}}"
+								start-view="{{ctrl.builder.startView}}"
+								min-date="ctrl.builder.minDate"
+								max-date="ctrl.builder.maxDate"
+								left-arrow="{{ctrl.builder.leftArrow | encoded}}"
+								right-arrow="{{ctrl.builder.rightArrow | encoded}}">
+								<i class="mega-octicon octicon-calendar"></i>&nbsp;
+								{{ ctrl.myInput }}
+							</span>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="locale">Locale</label>
+								<select class="form-control" id="locale" ng-model="ctrl.builder.locale"
+									ng-options="locale.code as locale.label for locale in ctrl.locales"></select>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="format">Format</label>
+								<select class="form-control" id="format" ng-model="ctrl.builder.format" placeholder="Custom format"
+									ng-options="format.token as format.output group by format.group for format in ctrl.formats">
+									<option value="" disabled>Custom format</option>
+								</select>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="custom-format">Custom format</label>
+								<input class="form-control" id="custom-format" ng-model="ctrl.builder.format" placeholder="default: &quot;{{ctrl.defaults.formatDef}}&quot;">
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="min-view">Min view</label>
+								<select class="form-control" id="min-view" ng-model="ctrl.builder.minView" ng-options="view
+									disable when ctrl.views.indexOf(view) > ctrl.views.indexOf(ctrl.builder.maxView)
+									for view in ctrl.views"></select>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="max-view">Max view</label>
+								<select class="form-control" id="max-view" ng-model="ctrl.builder.maxView" ng-options="view
+									disable when ctrl.views.indexOf(view) < ctrl.views.indexOf(ctrl.builder.minView)
+									for view in ctrl.views"></select>
+							</div>
+						</div>
+						<div class="col-md-4">
+							<div class="form-group">
+								<label for="start-view">Start view</label>
+								<select class="form-control" id="start-view" ng-model="ctrl.builder.startView" ng-options="view
+									disable when ctrl.views.indexOf(view) < ctrl.views.indexOf(ctrl.builder.minView) ||
+										ctrl.views.indexOf(view) > ctrl.views.indexOf(ctrl.builder.maxView)
+									for view in ctrl.views"></select>
+							</div>
+						</div>
+					</div>
+					<p class="small">
+						Be careful when using <b>min/max view</b> properties, they will be overridden by the smart view auto-detection
+						if the format selected does not require a specific view
+						(i.e. format <code>HH:mm</code> doesn't require <code>year</code> and <code>month</code> views).
+					</p>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="min-date">Min date&nbsp; <small>Same format as value</small></label>
+								<div class="min-max-containers">
+									<input class="form-control" id="min-date" ng-model="ctrl.builder.minDate" ng-if="ctrl.built"
+										moment-picker="ctrl.builder.minDate" locale="{{ctrl.builder.locale}}" format="{{ctrl.builder.format || ctrl.defaults.formatDef}}">
+								</div>
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="max-date">Max date&nbsp; <small>Same format as value</small></label>
+								<div class="min-max-containers">
+									<input class="form-control" id="max-date" ng-model="ctrl.builder.maxDate" ng-if="ctrl.built"
+										moment-picker="ctrl.builder.maxDate" locale="{{ctrl.builder.locale}}" format="{{ctrl.builder.format || ctrl.defaults.formatDef}}">
+								</div>
+							</div>
+						</div>
+					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="left-arrow">Left arrow&nbsp; <small>HTML allowed</small></label>
+								<input class="form-control" id="left-arrow" ng-model="ctrl.builder.leftArrow">
+							</div>
+						</div>
+						<div class="col-md-6">
+							<div class="form-group">
+								<label for="right-arrow">Right arrow&nbsp; <small>HTML allowed</small></label>
+								<input class="form-control" id="right-arrow" ng-model="ctrl.builder.rightArrow">
+							</div>
+						</div>
+					</div>
+					<div class="builder">
+						<pre><code class="html">&lt;div moment-picker="ctrl.myInput"<span ng-show="ctrl.builder.locale != ctrl.defaults.locale">
+     locale="{{ctrl.builder.locale | encoded}}"</span><span ng-show="ctrl.builder.format.length > 0 && ctrl.builder.format != ctrl.defaults.formatDef">
+     format="{{ctrl.builder.format | encoded}}"</span><span ng-show="ctrl.builder.minView != ctrl.defaults.minView">
+     min-view="{{ctrl.builder.minView | encoded}}"</span><span ng-show="ctrl.builder.maxView != ctrl.defaults.maxView">
+     max-view="{{ctrl.builder.maxView | encoded}}"</span><span ng-show="ctrl.builder.startView != ctrl.builder.minView && ctrl.builder.startView != ctrl.defaults.startView">
+     start-view="{{ctrl.builder.startView | encoded}}"</span><span ng-show="ctrl.builder.minDate">
+     min-date="'{{ctrl.builder.minDate | encoded}}'"</span><span ng-show="ctrl.builder.maxDate">
+     max-date="'{{ctrl.builder.maxDate | encoded}}'"</span><span ng-show="ctrl.builder.leftArrow != ctrl.defaults.leftArrow">
+     left-arrow="{{ctrl.builder.leftArrow | encoded}}"</span><span ng-show="ctrl.builder.rightArrow != ctrl.defaults.rightArrow">
+     right-arrow="{{ctrl.builder.rightArrow | encoded}}"</span>&gt;
+    <span ng-non-bindable>{{ ctrl.myInput }}</span>
+&lt;/div&gt;</code></pre>
+					</div>
+				</div>
+				<div class="example">
+					<h3>MomentPickerProvider. <span class="text-muted">Set a default configuration for all the pickers.</span></h3>
+					<pre><code class="javascript">angular
+    .module('myApp', ['moment-picker'])
+    .config(['momentPickerProvider', function (<mark>momentPickerProvider</mark>) {
+        momentPickerProvider.options({
+            /* Picker properties */
+            locale:        'en',
+            format:        'L LT',
+            minView:       'year',
+            maxView:       'hour',
+            startView:     'year',
+            
+            /* Extras: View properties */
+            leftArrow:     '&amp;larr;',
+            rightArrow:    '&amp;rarr;',
+            monthsFormat:  'MMM',
+            daysFormat:    'D',
+            hoursFormat:   'HH:[00]',
+            minutesFormat: moment.localeData().longDateFormat('LT').replace(/[aA]/, ''),
+            minutesStep:   5
+        });
+    }]);</code></pre>
+				</div>
+			</div>
+			
+			<a href="https://github.com/indrimuska/angular-moment-picker" target="_blank" class="fork-me-ribbon">
+				<img src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub">
+			</a>
+			
+			<footer class="footer">
+				<div class="pull-right">
+					<a class="github-button" href="https://github.com/indrimuska" data-style="mega" aria-label="Follow @indrimuska on GitHub">Follow @indrimuska</a>
+				</div>
+				<div>
+					<h4>Indri Muska</h4>
+					<p><a href="https://gitter.im/indrimuska/angular-moment-picker" target="_blank"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Gitter"></a></p>
+				</div>
+			</footer>
+		</div>
+		
+		<!-- Scripts -->
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
+		<script src="https://rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.js"></script>
+		<script src="script.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.3/clipboard.min.js"></script>
+		<script src="https://buttons.github.io/buttons.js" async defer id="github-bjs"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/highlight.min.js"></script>
+		<script>
+		(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+		(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+		m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+		})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+		ga('create', 'UA-67205107-5', 'auto'); ga('send', 'pageview');
+		</script>
+		<script>
+		!function(g,s,q,r,d){r=g[r]=g[r]||function(){(r.q=r.q||[]).push(
+		arguments)};d=s.createElement(q);q=s.getElementsByTagName(q)[0];
+		d.src='//d1l6p2sc9645hc.cloudfront.net/tracker.js';q.parentNode.
+		insertBefore(d,q)}(window,document,'script','_gs');
+		_gs('GSN-082090-H');
+		</script>
+	</body>
