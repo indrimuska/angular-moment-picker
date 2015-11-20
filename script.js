@@ -164,14 +164,12 @@
 			];
 			ctrl.views = ['year', 'month', 'day', 'hour'];
 			ctrl.defaults = {
-				locale:     'en',
-				format:     'LLLL',
-				formatDef:  momentPicker.format,
-				minView:    momentPicker.minView,
-				maxView:    momentPicker.maxView,
-				startView:  momentPicker.startView,
-				leftArrow:  momentPicker.leftArrow,
-				rightArrow: momentPicker.rightArrow
+				locale:    'en',
+				format:    'LLLL',
+				formatDef: momentPicker.format,
+				minView:   momentPicker.minView,
+				maxView:   momentPicker.maxView,
+				startView: momentPicker.startView,
 			}
 			ctrl.builder = angular.copy(ctrl.defaults);
 			ctrl.built = true;

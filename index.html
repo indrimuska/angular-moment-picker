@@ -15,7 +15,7 @@
 		<meta property="og:site_name" content="Angular Moment Picker">
 		<meta property="og:url" content="http://indrimuska.github.io/angular-moment-picker/">
 		<meta property="og:description" content="Angular Moment Picker is an AngularJS directive for date and time picker using Moment.js">
-		<meta property="og:image" content="http://indrimuska.github.io/angular-moment-picker/img/angular-moment-picker-views-selected.png">
+		<meta property="og:image" content="http://indrimuska.github.io/angular-moment-picker/img/angular-moment-picker.gif">
 		<meta property="og:type" content="website">
 		
 		<!-- Stylesheets -->
@@ -259,20 +259,6 @@
 							</div>
 						</div>
 					</div>
-					<div class="row">
-						<div class="col-md-6">
-							<div class="form-group">
-								<label for="left-arrow">Left arrow&nbsp; <small>HTML allowed</small></label>
-								<input class="form-control" id="left-arrow" ng-model="ctrl.builder.leftArrow">
-							</div>
-						</div>
-						<div class="col-md-6">
-							<div class="form-group">
-								<label for="right-arrow">Right arrow&nbsp; <small>HTML allowed</small></label>
-								<input class="form-control" id="right-arrow" ng-model="ctrl.builder.rightArrow">
-							</div>
-						</div>
-					</div>
 					<div class="builder">
 						<pre><code class="html">&lt;div moment-picker="ctrl.myInput"<span ng-show="ctrl.builder.locale != ctrl.defaults.locale">
      locale="{{ctrl.builder.locale | encoded}}"</span><span ng-show="ctrl.builder.format.length > 0 && ctrl.builder.format != ctrl.defaults.formatDef">
@@ -281,9 +267,7 @@
      max-view="{{ctrl.builder.maxView | encoded}}"</span><span ng-show="ctrl.builder.startView != ctrl.builder.minView && ctrl.builder.startView != ctrl.defaults.startView">
      start-view="{{ctrl.builder.startView | encoded}}"</span><span ng-show="ctrl.builder.minDate">
      min-date="'{{ctrl.builder.minDate | encoded}}'"</span><span ng-show="ctrl.builder.maxDate">
-     max-date="'{{ctrl.builder.maxDate | encoded}}'"</span><span ng-show="ctrl.builder.leftArrow != ctrl.defaults.leftArrow">
-     left-arrow="{{ctrl.builder.leftArrow | encoded}}"</span><span ng-show="ctrl.builder.rightArrow != ctrl.defaults.rightArrow">
-     right-arrow="{{ctrl.builder.rightArrow | encoded}}"</span>&gt;
+     max-date="'{{ctrl.builder.maxDate | encoded}}'"</span>&gt;
     <span ng-non-bindable>{{ ctrl.myInput }}</span>
 &lt;/div&gt;</code></pre>
 					</div>
@@ -301,7 +285,7 @@
             maxView:       'hour',
             startView:     'year',
             
-            /* Extras: View properties */
+            /* Extra: Views properties */
             leftArrow:     '&amp;larr;',
             rightArrow:    '&amp;rarr;',
             monthsFormat:  'MMM',
