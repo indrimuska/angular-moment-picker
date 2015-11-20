@@ -10,7 +10,11 @@ Check out the homepage at [http://indrimuska.github.io/angular-moment-picker/](h
 
 *Angular Moment Picker* is a native AngularJS directive for date and time picker that uses *Moment.js* and **does not require jQuery**.
 
-[![Angualar Moment Picker demo](http://indrimuska.github.io/angular-moment-picker/img/angular-moment-picker.gif)](http://indrimuska.github.io/angular-moment-picker/)
+<p align="center">
+    <a href="http://indrimuska.github.io/angular-moment-picker/">
+        <img src="http://indrimuska.github.io/angular-moment-picker/img/angular-moment-picker.gif" alt="Angualar Moment Picker demo">
+    </a>
+</p>
 
 ## Install
 
@@ -50,7 +54,7 @@ locale | `"en"` | Locale code. <sup>1</sup>
 format | `"L LT"` | Format of the output value and min/max date. <sup>1</sup>
 min-view | `"year"` | Minimum navigable view.
 max-view | `"hour"` | Maximum navigable view.
-start-view | `"year"` | Initial view when the picker is open. <sup>2</sup>
+start-view | `"year"` | Initial view when the picker is open.
 min-date | | Two-way bindable property representing the minimum selectable date in the same format of the value.
 max-date | | Two-way bindable property representing the maximum selectable date in the same format of the value.
 
@@ -85,7 +89,7 @@ minuts-step | `5` | Step between each visible minute in `hour` view.
 
 ## Notes
 
-1. Locales and formats are available at http://momentjs.com/.
+1. Locale codes and format tokens are available at http://momentjs.com/.
 2. Locale format `LT` without meridiem part (AM/PM, am/pm).
 
 ## Builder
