@@ -1,0 +1,32 @@
+{
+  "name": "angular-moment-picker",
+  "version": "0.1.0",
+  "authors": [
+    "Indri Muska <indrimuska@gmail.com>"
+  ],
+  "description": "Angular Moment Picker is an AngularJS directive for date and time picker using Moment.js",
+  "main": [
+    "./js/angular-moment-picker.js"
+  ],
+  "keywords": [
+    "datepicker",
+    "timepicker",
+    "datetime",
+    "picker",
+    "calendar",
+    "moment.js",
+    "angular"
+  ],
+  "license": "MIT",
+  "homepage": "http://indrimuska.github.io/angular-moment-picker",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "~1.4.3"
+  }
+}
