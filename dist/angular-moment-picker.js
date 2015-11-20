@@ -405,6 +405,7 @@
 						$scope.views.all.indexOf($scope.minView)
 					)
 				];
+				$scope.view.selected = $scope.startView;
 			});
 			$scope.$watch('[minDate, maxDate]', function () {
 				angular.forEach(['minDate', 'maxDate'], function (limitValue) {
