@@ -1,53 +1,51 @@
 (function (angular) {
 	
-	var momentPicker = (function () {
-		function momentPicker() {
+	var momentPickerProvider = (function () {
+		function momentPickerProvider() {
 			defaults = {
 				locale:        'en',
 				format:        'L LT',
-				monthsFormat:  'MMM',
-				daysFormat:    'D',
-				hoursFormat:   'HH:[00]',
-				minutesFormat: moment.localeData().longDateFormat('LT').replace(/[aA]/, ''),
-				minutesStep:   5,
 				minView:       'year',
 				maxView:       'hour',
 				startView:     'year',
 				leftArrow:     '&larr;',
-				rightArrow:    '&rarr;'
+				rightArrow:    '&rarr;',
+				monthsFormat:  'MMM',
+				daysFormat:    'D',
+				hoursFormat:   'HH:[00]',
+				minutesFormat: moment.localeData().longDateFormat('LT').replace(/[aA]/, ''),
+				minutesStep:   5
 			};
 		};
-		momentPicker.prototype.options = function (options) {
+		momentPickerProvider.prototype.options = function (options) {
 			angular.extend(defaults, options);
 			return angular.copy(defaults);
 		};
-		momentPicker.prototype.$get = function () {
+		momentPickerProvider.prototype.$get = function () {
 			return defaults;
 		};
 		
-		return momentPicker;
+		return momentPickerProvider;
 	})();
 	
 	var MomentPickerDirective = (function () {
-		function MomentPickerDirective(timeout, sce, compile, document, _momentPicker) {
+		function MomentPickerDirective(timeout, sce, compile, document, momentPickerProvider) {
 			this.restrict = 'A',
 			this.scope = {
-				model:      '=momentPicker',
-				locale:     '@?',
-				format:     '@?',
-				startView:  '@?',
-				minView:    '@?',
-				maxView:    '@?',
-				minDate:    '=?',
-				maxDate:    '=?',
-				leftArrow:  '@?',
-				rightArrow: '@?'
+				model:     '=momentPicker',
+				locale:    '@?',
+				format:    '@?',
+				minView:   '@?',
+				maxView:   '@?',
+				startView: '@?',
+				minDate:   '=?',
+				maxDate:   '=?'
 			};
-			$timeout             = timeout;
-			$sce                 = sce;
-			$compile             = compile;
-			$document            = document;
-			momentPicker = _momentPicker;
+			$timeout     = timeout;
+			$sce         = sce;
+			$compile     = compile;
+			$document    = document;
+			momentPicker = momentPickerProvider;
 		};
 		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$document', 'momentPicker'];
 		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs) {
@@ -103,7 +101,7 @@
 			);
 			
 			// one-way binding attributes
-			angular.forEach(['locale', 'format', 'startView', 'minView', 'maxView', 'leftArrow', 'rightArrow'], function (attr) {
+			angular.forEach(['locale', 'format', 'minView', 'maxView', 'startView', 'leftArrow', 'rightArrow'], function (attr) {
 				if (!angular.isDefined($scope[attr])) $scope[attr] = momentPicker[attr]
 				if (!angular.isDefined($attrs[attr])) $attrs[attr] = $scope[attr];
 			});
@@ -437,7 +435,7 @@
 	angular
 		.module('moment-picker', [])
 		.provider('momentPicker', [function () {
-			return new momentPicker();
+			return new momentPickerProvider();
 		}])
 		.directive('momentPicker', ['$timeout', '$sce', '$compile', '$document', 'momentPicker', function ($timeout, $sce, $compile, $document, momentPicker) {
 			return new MomentPickerDirective($timeout, $sce, $compile, $document, momentPicker);
