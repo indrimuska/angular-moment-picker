@@ -6,9 +6,9 @@
 [![NPM downloads](http://img.shields.io/npm/dm/angular-moment-picker.svg?style=flat)](https://npmjs.org/package/angular-moment-picker)
 [![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
-*Angular Moment Picker* is a native AngularJS directive for date and time picker that uses *Moment.js* and **does not require jQuery**.
-
 Check out the homepage at [http://indrimuska.github.io/angular-moment-picker/](http://indrimuska.github.io/angular-moment-picker/).
+
+*Angular Moment Picker* is a native AngularJS directive for date and time picker that uses *Moment.js* and **does not require jQuery**.
 
 [![Angualar Moment Picker demo](http://indrimuska.github.io/angular-moment-picker/img/angular-moment-picker.gif)](http://indrimuska.github.io/angular-moment-picker/)
 
@@ -24,17 +24,14 @@ Check out the homepage at [http://indrimuska.github.io/angular-moment-picker/](h
 var myApp = angular.module('myApp', ['moment-picker']);
 ```
 ```html
-<div moment-picker="myDate"> {{ myDate }} </moment-picker>
+<div moment-picker="myDate"> {{ myDate }} </div>
 ```
 
 ## The views
 
-Name | Preview
----|---
-*Year view* | ![Year view](http://indrimuska.github.io/angular-moment-picker/img/year-view.png)
-*Month view* | ![Month view](http://indrimuska.github.io/angular-moment-picker/img/month-view.png)
-*Day view* | ![Day view](http://indrimuska.github.io/angular-moment-picker/img/day-view.png)
-*Hour view* | ![Hour view](http://indrimuska.github.io/angular-moment-picker/img/hour-view.png)
+*Year view* | *Month view* | *Day view* | *Hour view*
+---|---|---|---
+![Year view](http://indrimuska.github.io/angular-moment-picker/img/year-view.png) | ![Month view](http://indrimuska.github.io/angular-moment-picker/img/month-view.png) | ![Day view](http://indrimuska.github.io/angular-moment-picker/img/day-view.png) | ![Hour view](http://indrimuska.github.io/angular-moment-picker/img/hour-view.png)
 
 ## Options
 
