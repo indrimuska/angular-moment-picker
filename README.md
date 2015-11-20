@@ -4,13 +4,13 @@
 
 [![NPM version](http://img.shields.io/npm/v/angular-moment-picker.svg?style=flat)](https://npmjs.org/package/angular-moment-picker)
 [![NPM downloads](http://img.shields.io/npm/dm/angular-moment-picker.svg?style=flat)](https://npmjs.org/package/angular-moment-picker)
-[![MIT License](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat)](LICENSE)
+[![MIT License](http://img.shields.io/badge/license-MIT-blue.svg?style=flat)](LICENSE)
 
 Angular Moment Picker is an AngularJS directive for date and time picker using Moment.js.
 
-Check out the homepage at [https://github.com/indrimuska/angular-moment-picker](https://github.com/indrimuska/angular-moment-picker).
+Check out the homepage at [http://indrimuska.github.io/angular-moment-picker/](http://indrimuska.github.io/angular-moment-picker/).
 
-![Angualar Moment Picker](https://github.com/indrimuska/angular-moment-picker/img/angualar-moment-picker-views-selected.png)
+![Angular Moment Picker](http://indrimuska.github.io/angular-moment-picker/img/angualar-moment-picker-views-selected.png)
 
 ## Install
 
@@ -18,6 +18,7 @@ Check out the homepage at [https://github.com/indrimuska/angular-moment-picker](
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
 <script src="//rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.js"></script>
+<link rel="stylesheet" href="//rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.css">
 ```
 ```js
 var myApp = angular.module('myApp', ['moment-picker']);
@@ -35,7 +36,7 @@ locale | `"en"` | Locale code. <sup>1</sup>
 format | `"L LT"` | Format of the output value and min/max date. <sup>1</sup>
 min-view | `"year"` | Minimum navigable view. <sup>2</sup>
 max-view | `"year"` | Maximum navigable view. <sup>2</sup>
-start-view | `"year"` | Initial view when opening the picker. <sup>2</sup>
+start-view | `"year"` | Initial view when the picker is open. <sup>2</sup>
 min-date | | Two-way bindable property representing the minimum selectable date in the same format of the value.
 max-date | | Two-way bindable property representing the maximum selectable date in the same format of the value.
 
