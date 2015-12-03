@@ -250,6 +250,8 @@
 							$timeout(function () {
 								$scope.text = 'Copied!';
 								$timeout(function () { $scope.text = 'Copy'; }, 1000);
+								ga('send', 'event', 'Code', 'copied', e.text);
+								_gs('event', 'Code copied', { text: e.text });
 							});
 						});
 						// compile everything
