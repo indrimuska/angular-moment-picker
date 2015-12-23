@@ -12,7 +12,7 @@ Check out the homepage at [http://indrimuska.github.io/angular-moment-picker/](h
 
 <p align="center">
     <a href="http://indrimuska.github.io/angular-moment-picker/">
-        <img src="http://indrimuska.github.io/angular-moment-picker/img/angular-moment-picker.gif" alt="Angualar Moment Picker demo">
+        <img src="http://indrimuska.github.io/angular-moment-picker/img/angular-moment-picker.gif" alt="Angular Moment Picker demo">
     </a>
 </p>
 
@@ -94,7 +94,8 @@ minuts-step | `5` | Step between each visible minute in `hour` view.
 
 ## Builder
 
-Try the online Angular Moment Picker Builder:
+Try the online [Angular Moment Picker Builder](http://indrimuska.github.io/angular-moment-picker/#builder):
+
 [http://indrimuska.github.io/angular-moment-picker/#builder](http://indrimuska.github.io/angular-moment-picker/#builder).
 
 ## License
