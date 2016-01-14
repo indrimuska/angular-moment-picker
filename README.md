@@ -16,17 +16,29 @@ Check out the homepage at [http://indrimuska.github.io/angular-moment-picker/](h
     </a>
 </p>
 
-## Install
+## Installation
 
+Get Angular Moment Picker from [**npm**](https://www.npmjs.com/), [**bower**](http://bower.io/) or [**git**](https://git-scm.com/):
+```
+  npm install angular-moment-picker
+bower install moment-picker
+  git clone   https://github.com/indrimuska/angular-moment-picker.git
+```
+
+Include style and script in your page:
 ```html
 <script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
 <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
-<script src="//rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.js"></script>
-<link href="//rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.css" rel="stylesheet">
+<script src="//cdn.rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.js"></script>
+<link href="//cdn.rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.css" rel="stylesheet">
 ```
+
+Add *moment-picker* dependency to your module:
 ```js
 var myApp = angular.module('myApp', ['moment-picker']);
 ```
+
+Provide the attribute to your element:
 ```html
 <div moment-picker="myDate"> {{ myDate }} </div>
 ```
