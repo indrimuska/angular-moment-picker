@@ -91,7 +91,7 @@ angular
 Property | Default | Description
 ---|---|---
 locale | `"en"` | Locale code. <sup>1</sup>
-format | `"L LT"` | Format of the output value and min/max date. <sup>1</sup>
+format | `"L LTS"` | Format of the output value and min/max date. <sup>1</sup>
 min-view | `"year"` | Minimum navigable view.
 max-view | `"hour"` | Maximum navigable view.
 start-view | `"year"` | Initial view when opening the picker.
@@ -101,9 +101,9 @@ months-format | `"MMM"` | Months format in `year` view.
 days-format | `"D"` | Days format in `month` view.
 hours-format | `"HH:[00]"` | Hours format in `day` view.
 minutes-format | <sup>2</sub> | Minutes format in `hour` view.
-secondsFormat | `"ss"` | Seconds format in `minute` view.
-minuts-step | `5` | Step between each visible minute in `hour` view.
-secondsStep | `1` | Step between each visible second in `minute` view.
+minutes-step | `5` | Step between each visible minute in `hour` view.
+seconds-format | `"ss"` | Seconds format in `minute` view.
+seconds-step | `1` | Step between each visible second in `minute` view.
 
 ## Notes
 
