@@ -291,8 +291,10 @@
             monthsFormat:  'MMM',
             daysFormat:    'D',
             hoursFormat:   'HH:[00]',
-            minutesFormat: moment.localeData().longDateFormat('LT').replace(/[aA]/, ''),
-            minutesStep:   5
+			minutesFormat: moment.localeData().longDateFormat('LT').replace(/[aA]/, ''),
+			secondsFormat: 'ss',
+			minutesStep:   5,
+			secondsStep:   1
         });
     }]);</code></pre>
 				</div>
