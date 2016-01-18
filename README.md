@@ -43,11 +43,14 @@ Provide the attribute to your element:
 <div moment-picker="myDate"> {{ myDate }} </div>
 ```
 
+## Demo
+
+
 ## The views
 
-*Year view* | *Month view* | *Day view* | *Hour view*
----|---|---|---
-![Year view](http://indrimuska.github.io/angular-moment-picker/img/year-view.png) | ![Month view](http://indrimuska.github.io/angular-moment-picker/img/month-view.png) | ![Day view](http://indrimuska.github.io/angular-moment-picker/img/day-view.png) | ![Hour view](http://indrimuska.github.io/angular-moment-picker/img/hour-view.png)
+*Year view* | *Month view* | *Day view* | *Hour view* | *Minute view*
+---|---|---|---|---
+![Year view](http://indrimuska.github.io/angular-moment-picker/img/year-view.png) | ![Month view](http://indrimuska.github.io/angular-moment-picker/img/month-view.png) | ![Day view](http://indrimuska.github.io/angular-moment-picker/img/day-view.png) | ![Hour view](http://indrimuska.github.io/angular-moment-picker/img/hour-view.png) | ![Minute view](http://indrimuska.github.io/angular-moment-picker/img/minute-view.png)
 
 ## Options
 
@@ -97,7 +100,9 @@ months-format | `"MMM"` | Months format in `year` view.
 days-format | `"D"` | Days format in `month` view.
 hours-format | `"HH:[00]"` | Hours format in `day` view.
 minutes-format | <sup>2</sub> | Minutes format in `hour` view.
+secondsFormat | `"ss"` | Seconds format in `minute` view.
 minuts-step | `5` | Step between each visible minute in `hour` view.
+secondsStep | `1` | Step between each visible second in `minute` view.
 
 ## Notes
 

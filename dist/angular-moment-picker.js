@@ -4,9 +4,9 @@
 		function momentPickerProvider() {
 			defaults = {
 				locale:        'en',
-				format:        'L LT',
+				format:        'L LTS',
 				minView:       'year',
-				maxView:       'hour',
+				maxView:       'minute',
 				startView:     'year',
 				leftArrow:     '&larr;',
 				rightArrow:    '&rarr;',
@@ -14,7 +14,9 @@
 				daysFormat:    'D',
 				hoursFormat:   'HH:[00]',
 				minutesFormat: moment.localeData().longDateFormat('LT').replace(/[aA]/, ''),
-				minutesStep:   5
+				secondsFormat: 'ss',
+				minutesStep:   5,
+				secondsStep:   1
 			};
 		};
 		momentPickerProvider.prototype.options = function (options) {
@@ -96,6 +98,13 @@
 								'</tr>' +
 							'</tbody>' +
 						'</table>' +
+						'<table ng-if="view.selected == \'minute\'">' +
+							'<tbody>' +
+								'<tr ng-repeat="seconds in minuteView.seconds">' +
+									'<td ng-repeat="second in seconds" ng-class="second.class" ng-bind="second.label" ng-click="minuteView.setSecond(second)"></td>' +
+								'</tr>' +
+							'</tbody>' +
+						'</table>' +
 					'</div>' +
 				'</div>'
 			);
@@ -133,18 +142,20 @@
 			};
 			
 			$scope.views = {
-				all: ['year', 'month', 'day', 'hour'],
+				all: ['year', 'month', 'day', 'hour', 'minute'],
 				// for each view, `$scope.views.formats` object contains the available moment formats
 				// formats present in more views are used to perform min/max view detection (i.e. 'LTS', 'LT', ...)
 				formats: {
-					'year':  'M{1,4}(?![Mo])|Mo|Q|[Ll]{1,4}(?!T)',
-							 /* formats: M,MM,MMM,MMM,Mo,Q,L,LL,LLL,LLLL,l,ll,lll,llll */
-					'month': '[Dd]{1,4}(?![Ddo])|DDDo|[Dd]o|[Ww]{1,2}(?![Wwo])|[Ww]o|[Ee]|L{1,4}(?!T)|l{1,4}',
-							 /* formats: D,DD,DDD,DDDD,d,dd,ddd,dddd,DDDo,Do,do,W,WW,w,ww,Wo,wo,E,e,L,LL,l,ll */
-					'day':   '[Hh]{1,2}|LTS?',
-							 /* formats: H,HH,h,hh,LT,LTS */
-					'hour':  'm{1,2}|[Ll]{3,4}|LTS?'
-							 /* formats: m,mm,LLL,LLLL,lll,llll,LT,LTS */
+					'year':    'M{1,4}(?![Mo])|Mo|Q|[Ll]{1,4}(?!T)',
+							   /* formats: M,MM,MMM,MMM,Mo,Q,L,LL,LLL,LLLL,l,ll,lll,llll */
+					'month':   '[Dd]{1,4}(?![Ddo])|DDDo|[Dd]o|[Ww]{1,2}(?![Wwo])|[Ww]o|[Ee]|L{1,4}(?!T)|l{1,4}',
+							   /* formats: D,DD,DDD,DDDD,d,dd,ddd,dddd,DDDo,Do,do,W,WW,w,ww,Wo,wo,E,e,L,LL,l,ll */
+					'day':     '[Hh]{1,2}|LTS?',
+							   /* formats: H,HH,h,hh,LT,LTS */
+					'hour':    'm{1,2}|[Ll]{3,4}|LT(?!S)',
+							   /* formats: m,mm,LLL,LLLL,lll,llll,LT */
+					'minute':  's{1,2}|S{1,}|X|LTS'
+							   /* formats: s,ss,S,SS,SSS..,X,LTS */
 				},
 				detectMinMax: function () {
 					var minView, maxView;
@@ -359,6 +370,43 @@
 					if (!minute.selectable) return;
 					$scope.view.update($scope.view.moment.year(minute.year).month(minute.month).date(minute.date).hour(minute.hour).minute(minute.minute));
 					$scope.view.change('minute');
+				}
+			};
+			// minute view
+			$scope.minuteView = {
+				seconds: [],
+				render: function () {
+					var i = 0,
+						second = $scope.view.moment.clone().startOf('minute');
+					
+					$scope.minuteView.seconds = [];
+					for (var s = 0; s < 60; s += momentPicker.secondsStep) {
+						var index = Math.floor(i / 6),
+							selectable = $scope.limits.isSelectable(second, 'second');
+						
+						if (!$scope.minuteView.seconds[index])
+							$scope.minuteView.seconds[index] = [];
+						$scope.minuteView.seconds[index].push({
+							label:  second.format(momentPicker.secondsFormat),
+							year:   second.year(),
+							month:  second.month(),
+							date:   second.date(),
+							hour:   second.hour(),
+							minute: second.minute(),
+							second: second.second(),
+							class:  !selectable ? 'disabled' : second.isSame($scope.valueMoment, 'second') ? 'selected' : '',
+							selectable: selectable
+						});
+						i++;
+						second.add(momentPicker.secondsStep, 'seconds');
+					}
+					// return title
+					return $scope.view.moment.clone().startOf('minute').format('lll');
+				},
+				setSecond: function (second) {
+					if (!second.selectable) return;
+					$scope.view.update($scope.view.moment.year(second.year).month(second.month).date(second.date).hour(second.hour).minute(second.minute).second(second.second));
+					$scope.view.change('second');
 				}
 			};
 			

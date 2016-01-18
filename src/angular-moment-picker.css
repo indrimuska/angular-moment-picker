@@ -1,13 +1,13 @@
 .moment-picker { position: relative; }
 .moment-picker .moment-picker-contents { cursor: pointer; }
-.moment-picker .moment-picker-container { color: #404040; width: 15em; background: #fff; padding: 4px; border: 1px solid #f0f3f4; border-radius: 4px; position: absolute;
+.moment-picker .moment-picker-container { color: #404040; min-width: 15em; background: #fff; padding: 4px; border: 1px solid #f0f3f4; border-radius: 4px; position: absolute;
 	top: 100%; margin-top: 4px; margin-left: -.5em; box-shadow: 0 2px 4px rgba(0, 0, 0, .075); z-index: 5; }
 .moment-picker .moment-picker-container:before,
 .moment-picker .moment-picker-container:after { content: ''; display: block; width: 0; height: 0; border: 8px solid transparent; border-top: none; position: absolute;
 	top: -9px; left: 15px; }
 .moment-picker .moment-picker-container:before { border-bottom-color: #f0f3f4; border-width: 9px; }
 .moment-picker .moment-picker-container:after { border-bottom-color: #fff; margin-top: 1px; margin-left: 1px; }
-.moment-picker table { border-collapse: collapse; border-spacing: 0; width: 100%; }
+.moment-picker table { border-collapse: collapse; border-spacing: 0; width: 100%; table-layout: fixed; }
 
 /* all views */
 .moment-picker th { font-weight: bold; }
@@ -40,5 +40,9 @@
 .moment-picker .month-view .moment-picker-specific-views th { background: none; cursor: default; }
 .moment-picker .month-view td { width: 2.1428571429em; }
 
-/* day view */
-.moment-picker .day-view td { height: 2.3333333333em; }
+/* day view, hour view */
+.moment-picker .day-view td,
+.moment-picker .hour-view td { height: 2.3333333333em; }
+
+/* minute view */
+.moment-picker .minute-view td { height: 1.8em; }
