@@ -45,6 +45,7 @@ Provide the attribute to your element:
 
 ## Demo
 
+Check out the demo page at [http://indrimuska.github.io/angular-moment-picker/](http://indrimuska.github.io/angular-moment-picker/).
 
 ## The views
 
