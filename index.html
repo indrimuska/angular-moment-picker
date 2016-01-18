@@ -20,7 +20,7 @@
 		
 		<!-- Stylesheets -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
-		<link rel="stylesheet" href="https://rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.css">
+		<link rel="stylesheet" href="https://cdn.rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.css">
 		<link rel="stylesheet" href="style.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/3.3.0/octicons.min.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.3/styles/solarized_light.min.css">
@@ -59,14 +59,14 @@
 				<p>
 					It was crazy for me to see that there are so many <i>jQuery</i> plugins for date and time picker and so few
 					<a href="https://angularjs.org/" rel="nofollow" target="_blank">AngularJS</a> directives doing the same
-					in the same way, none of them using <a href="http://momentjs.com/" rel="nofollow">Moment.js</a>
+					in the same way, none of them using <a href="http://momentjs.com/" rel="nofollow" target="_blank">Moment.js</a>
 					(let's say, Moment.js is unique!).
 				</p>
 				<p>
 					The question is <q>Why?</q>, I thought <q>it's not so hard!</q>.
 				</p>
 				<p>
-					That's why I decided to create <a href="https://github.com/indrimuska/angular-moment-picker">Angular Moment Picker</a>,
+					That's why I decided to create <a href="https://github.com/indrimuska/angular-moment-picker" target="_blank">Angular Moment Picker</a>,
 					an easy to use datetime picker that <b>does not requires jQuery</b>
 					and uses the powerful of Moment.js to perform Internationalization (i18n) and all the operations on dates.
 				</p>
@@ -111,7 +111,7 @@
 				</div>
 				<div class="example">
 					<h3>Smart min/max view detection.
-						<span class="text-muted"><q>Write less, do more</q> <small><a href="http://jquery.com/" target="_blank">(cit.)</a></small></span>
+						<span class="text-muted"><q>Write less, do more</q> <small><a href="http://jquery.com/" rel="nofollow" target="_blank">(cit.)</a></small></span>
 					</h3>
 					<div class="row">
 						<div class="col-md-4">
@@ -135,7 +135,7 @@
 &lt;/div&gt;</code></pre>
 						</div>
 						<div class="col-md-4">
-							<div class="input-group" moment-picker="ctrl.timepicker" format="HH:mm">
+							<div class="input-group" moment-picker="ctrl.timepicker" format="HH:mm:ss">
 								<span class="input-group-addon">
 									<i class="octicon octicon-clock"></i>
 								</span>
@@ -145,7 +145,7 @@
 						<div class="col-md-8">
 							<pre><code class="html" ng-non-bindable>&lt;div class="input-group"
      moment-picker="ctrl.timepicker"
-     <mark>format="HH:mm"</mark>&gt;
+     <mark>format="HH:mm:ss"</mark>&gt;
     &lt;span class="input-group-addon"&gt;
         &lt;i class="octicon octicon-clock"&gt;&lt;/i&gt;
     &lt;/span&gt;
@@ -244,8 +244,8 @@
 							<div class="form-group">
 								<label for="min-date">Min date&nbsp; <small>Same format as value</small></label>
 								<div class="min-max-containers">
-									<input class="form-control" id="min-date" ng-model="ctrl.builder.minDate" ng-if="ctrl.built"
-										moment-picker="ctrl.builder.minDate" locale="{{ctrl.builder.locale}}" format="{{ctrl.builder.format || ctrl.defaults.formatDef}}">
+									<input class="form-control" id="min-date" ng-model="ctrl.builder.minDate" ng-if="ctrl.built" moment-picker="ctrl.builder.minDate"
+										locale="{{ctrl.builder.locale}}" format="{{ctrl.builder.format || ctrl.defaults.formatDef}}" max-date="ctrl.builder.maxDate">
 								</div>
 							</div>
 						</div>
@@ -253,8 +253,8 @@
 							<div class="form-group">
 								<label for="max-date">Max date&nbsp; <small>Same format as value</small></label>
 								<div class="min-max-containers">
-									<input class="form-control" id="max-date" ng-model="ctrl.builder.maxDate" ng-if="ctrl.built"
-										moment-picker="ctrl.builder.maxDate" locale="{{ctrl.builder.locale}}" format="{{ctrl.builder.format || ctrl.defaults.formatDef}}">
+									<input class="form-control" id="max-date" ng-model="ctrl.builder.maxDate" ng-if="ctrl.built" moment-picker="ctrl.builder.maxDate"
+										locale="{{ctrl.builder.locale}}" format="{{ctrl.builder.format || ctrl.defaults.formatDef}}" min-date="ctrl.builder.minDate">
 								</div>
 							</div>
 						</div>
@@ -316,7 +316,7 @@
 		<!-- Scripts -->
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
-		<script src="https://rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.js"></script>
+		<script src="https://cdn.rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.js"></script>
 		<script src="script.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/1.5.3/clipboard.min.js"></script>
 		<script src="https://buttons.github.io/buttons.js" async defer id="github-bjs"></script>

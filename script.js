@@ -162,10 +162,10 @@
 				{ group: 'Month name, day of month, day of week, year, time (Localized formats)', token: 'LLLL', output: 'Thursday, September 4 1986 8:30 PM' },
 				{ group: 'Month name, day of month, day of week, year, time (Localized formats)', token: 'llll', output: 'Thu, Sep 4 1986 8:30 PM' },
 			];
-			ctrl.views = ['year', 'month', 'day', 'hour'];
+			ctrl.views = ['year', 'month', 'day', 'hour', 'minute'];
 			ctrl.defaults = {
 				locale:    'en',
-				format:    'LLLL',
+				format:    'LL LTS',
 				formatDef: momentPicker.format,
 				minView:   momentPicker.minView,
 				maxView:   momentPicker.maxView,
