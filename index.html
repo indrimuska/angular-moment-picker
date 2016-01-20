@@ -81,8 +81,8 @@
 							{{ctrl.today}}
 						</span>
 					</div>
-					<pre><code class="html" ng-non-bindable>&lt;script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"&gt;&lt;/script&gt;
-&lt;script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"&gt;&lt;/script&gt;
+					<pre><code class="html" ng-non-bindable>&lt;script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"&gt;&lt;/script&gt;
+&lt;script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"&gt;&lt;/script&gt;
 &lt;script src="vendor/angular-moment-picker/angular-moment-picker.min.js"&gt;&lt;/script&gt;
 &lt;link href="vendor/angular-moment-picker/angular-moment-picker.min.css" rel="stylesheet"&gt;</code></pre>
 					<pre><code class="js" ng-non-bindable>var myApp = angular.module('myApp', ['moment-picker']);</code></pre>
@@ -291,10 +291,10 @@
             monthsFormat:  'MMM',
             daysFormat:    'D',
             hoursFormat:   'HH:[00]',
-			minutesFormat: moment.localeData().longDateFormat('LT').replace(/[aA]/, ''),
-			secondsFormat: 'ss',
-			minutesStep:   5,
-			secondsStep:   1
+            minutesFormat: moment.localeData().longDateFormat('LT').replace(/[aA]/, ''),
+            secondsFormat: 'ss',
+            minutesStep:   5,
+            secondsStep:   1
         });
     }]);</code></pre>
 				</div>
