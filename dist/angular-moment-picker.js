@@ -78,7 +78,7 @@
 								'</tr>' +
 							'</thead>' +
 							'<tbody>' +
-								'<tr ng-repeat="(week, days) in monthView.weeks">' +
+								'<tr ng-repeat="days in monthView.weeks">' +
 									'<td ng-repeat="day in days track by day.date" ng-class="day.class" ng-bind="day.label" ng-click="monthView.setDate(day)"></td>' +
 								'</tr>' +
 							'</tbody>' +
@@ -270,7 +270,7 @@
 					}
 					return days;
 				})(),
-				weeks: {},
+				weeks: [],
 				render: function () {
 					var month     = $scope.view.moment.month(),
 						day       = $scope.view.moment.clone().startOf('month').startOf('week'),
@@ -278,9 +278,10 @@
 						firstWeek = day.week(),
 						lastWeek  = firstWeek + 5;//lastDay.week() == 1 ? lastDay.weekday(-1).week() + 1 : lastDay.week();
 					
-					$scope.monthView.weeks = {};
+					weeks = {};
+					$scope.monthView.weeks = [];
 					for (var w = firstWeek; w <= lastWeek; w++)
-						$scope.monthView.weeks[w] = '0000000'.split('').map(function () {
+						weeks[w] = '0000000'.split('').map(function () {
 							var selectable = $scope.limits.isSelectable(day, 'day'),
 								d = {
 									label: day.format(momentPicker.daysFormat),
@@ -293,6 +294,10 @@
 							day.add(1, 'days');
 							return d;
 						});
+					// object to array - see https://github.com/indrimuska/angular-moment-picker/issues/9
+					angular.forEach(weeks, function (week) {
+						$scope.monthView.weeks.push(week);
+					});
 					// return title
 					return $scope.view.moment.format('MMMM YYYY');
 				},
