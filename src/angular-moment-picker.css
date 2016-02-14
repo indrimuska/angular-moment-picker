@@ -4,9 +4,9 @@
 	top: 100%; margin-top: 4px; margin-left: -.5em; box-shadow: 0 2px 4px rgba(0, 0, 0, .075); z-index: 5; }
 .moment-picker .moment-picker-container:before,
 .moment-picker .moment-picker-container:after { content: ''; display: block; width: 0; height: 0; border: 8px solid transparent; border-top: none; position: absolute;
-	top: -9px; left: 15px; }
+	top: -9px; left: 15px; }
 .moment-picker .moment-picker-container:before { border-bottom-color: #f0f3f4; border-width: 9px; }
-.moment-picker .moment-picker-container:after { border-bottom-color: #fff; margin-top: 1px; margin-left: 1px; }
+.moment-picker .moment-picker-container:after { border-bottom-color: #fff; margin-top: 1px; margin-left: 1px; }
 .moment-picker table { border-collapse: collapse; border-spacing: 0; width: 100%; table-layout: fixed; }
 
 /* all views */

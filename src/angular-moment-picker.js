@@ -225,7 +225,7 @@
 					if (nextView < 0 || nextView > maxView) {
 						$scope.valueUpdate($scope.valueMoment = $scope.view.moment.clone());
 						$scope.view.close();
-					} else if (nextView >= minView) $scope.view.selected = view;
+					} else if (nextView >= minView) $scope.view.selected = view;
 				}
 			};
 			// year view
