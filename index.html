@@ -76,7 +76,7 @@
 				<div class="example">
 					<h3>Easy to use. <span class="text-muted">Easy to install.</span></h3>
 					<div class="lead">
-						<span moment-picker="ctrl.today" format="LLLL">
+						<span moment-picker="ctrl.today" format="LLLL" change="ctrl.log(newValue, oldValue)">
 							<i class="mega-octicon octicon-calendar"></i>&nbsp;
 							{{ctrl.today}}
 						</span>
@@ -338,3 +338,4 @@
 		_gs('GSN-082090-H');
 		</script>
 	</body>
+</html>

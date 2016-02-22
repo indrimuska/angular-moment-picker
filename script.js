@@ -94,10 +94,11 @@
 		.config(['momentPickerProvider', function (momentPickerProvider) {
 			momentPickerProvider.options({ locale: language });
 		}])
-		.controller('AngularMomentPickerDemoCtrl', ['momentPicker', '$scope', function (momentPicker, $scope) {
+		.controller('AngularMomentPickerDemoCtrl', ['momentPicker', '$scope', '$log', function (momentPicker, $scope, $log) {
 			var ctrl = this;
 			
 			ctrl.today = moment().locale(language).format('LLLL');
+			ctrl.log = function (newValue, oldValue) { $log.log('new value = [' + newValue + ']; old value = [' + oldValue + ']'); };
 			ctrl.locales = locales;
 			ctrl.formats = [
 				{ group: 'Month', token: 'M', output: '1 2 ... 11 12' },
