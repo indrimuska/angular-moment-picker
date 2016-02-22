@@ -79,8 +79,7 @@ max-date | | Two-way bindable property representing the maximum selectable date 
 As for the options, to bind an event you only need to append the right property to your picker.
 
 ```html
-<div moment-picker="ctrl.meeting" format="HH:mm A"
-     change="ctrl.onChange(newValue, oldValue)">
+<div moment-picker="ctrl.meeting" format="HH:mm A" change="ctrl.onChange(newValue, oldValue)">
     The meeting starts at {{ ctrl.meeting }}.
 </div>
 ```
