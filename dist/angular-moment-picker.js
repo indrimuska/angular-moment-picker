@@ -41,7 +41,8 @@
 				maxView:   '@?',
 				startView: '@?',
 				minDate:   '=?',
-				maxDate:   '=?'
+				maxDate:   '=?',
+				change:    '&?'
 			};
 			$timeout     = timeout;
 			$sce         = sce;
@@ -52,7 +53,7 @@
 		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$document', 'momentPicker'];
 		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs) {
 			$scope.template = (
-				'<div class="moment-picker-container {{view.selected}}-view" ng-show="view.isOpen" ng-class="{open:view.isOpen}">' +
+				'<div class="moment-picker-container {{view.selected}}-view" ng-show="view.isOpen">' +
 					'<table class="header-view">' +
 						'<thead>' +
 							'<tr>' +
@@ -439,10 +440,14 @@
 			});
 			$scope.$watch('value', function (value, previous) {
 				if (!angular.isDefined($scope.valueMoment)) return;
-				$timeout(function () {
-					$scope.view.update($scope.view.moment = $scope.valueMoment.clone());
-					$scope.model = $scope.valueMoment.format($scope.format);
-				});
+				var oldValue = $scope.model,
+					newValue = $scope.valueMoment.format($scope.format);
+				if (newValue != oldValue)
+					$timeout(function () {
+						$scope.view.update($scope.view.moment = $scope.valueMoment.clone());
+						$scope.model = newValue;
+						if (angular.isFunction($scope.change)) $scope.change({ newValue: newValue, oldValue: oldValue });
+					});
 			});
 			$scope.$watch('[view.selected, view.value]', $scope.view.render, true);
 			$scope.$watch('[minView, maxView]', function () {

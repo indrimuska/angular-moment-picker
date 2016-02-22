@@ -74,6 +74,21 @@ start-view | `"year"` | Initial view when the picker is open.
 min-date | | Two-way bindable property representing the minimum selectable date in the same format of the value.
 max-date | | Two-way bindable property representing the maximum selectable date in the same format of the value.
 
+## Events
+
+As for the options, to bind an event you only need to append the right property to your picker.
+
+```html
+<div moment-picker="ctrl.meeting" format="HH:mm A"
+     change="ctrl.onChange(newValue, oldValue)">
+    The meeting starts at {{ ctrl.meeting }}.
+</div>
+```
+
+Event | Parameters | Description
+---|---|---
+change | `newValue`, `oldValue` | Function fired upon change in picker value.
+
 ## momentPickerProvider
 
 Angular Moment Picker comes out with its own provider, in order to define your own configuration for all the pickers in your app.
