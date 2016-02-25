@@ -99,11 +99,12 @@
 &lt;/span&gt;</code></pre>
 						</div>
 						<div class="col-md-4">
-							<input class="form-control" ng-model="ctrl.input" placeholder="Select a date..." moment-picker="ctrl.input">
+							<input class="form-control" ng-model="ctrl.input" ng-model-options="{ updateOn: 'blur' }" placeholder="Select a date..." moment-picker="ctrl.input">
 						</div>
 						<div class="col-md-8">
 							<pre><code class="html">&lt;input class="form-control"
        ng-model="ctrl.input"
+       ng-model-options="{ updateOn: 'blur' }"
        placeholder="Select a date..."
        <mark>moment-picker="ctrl.input"</mark>&gt;</code></pre>
 						</div>
@@ -119,7 +120,7 @@
 								<span class="input-group-addon">
 									<i class="octicon octicon-calendar"></i>
 								</span>
-								<input class="form-control" placeholder="Select a date" ng-model="ctrl.datepicker">
+								<input class="form-control" placeholder="Select a date" ng-model="ctrl.datepicker" ng-model-options="{ updateOn: 'blur' }">
 							</div>
 						</div>
 						<div class="col-md-8">
@@ -131,7 +132,8 @@
     &lt;/span&gt;
     &lt;input class="form-control"
            placeholder="Select a date"
-           ng-model="ctrl.datepicker"&gt;
+           ng-model="ctrl.datepicker"
+           ng-model-options="{ updateOn: 'blur' }"&gt;
 &lt;/div&gt;</code></pre>
 						</div>
 						<div class="col-md-4">
@@ -139,7 +141,7 @@
 								<span class="input-group-addon">
 									<i class="octicon octicon-clock"></i>
 								</span>
-								<input class="form-control" placeholder="Select a time" ng-model="ctrl.timepicker">
+								<input class="form-control" placeholder="Select a time" ng-model="ctrl.timepicker" ng-model-options="{ updateOn: 'blur' }">
 							</div>
 						</div>
 						<div class="col-md-8">
@@ -151,7 +153,8 @@
     &lt;/span&gt;
     &lt;input class="form-control"
            placeholder="Select a time"
-           ng-model="ctrl.timepicker"&gt;
+           ng-model="ctrl.timepicker"
+           ng-model-options="{ updateOn: 'blur' }"&gt;
 &lt;/div&gt;</code></pre>
 						</div>
 					</div>
