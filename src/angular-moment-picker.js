@@ -42,6 +42,7 @@
 				startView: '@?',
 				minDate:   '=?',
 				maxDate:   '=?',
+				disabled:  '=?disable',
 				change:    '&?'
 			};
 			$timeout     = timeout;
@@ -53,7 +54,7 @@
 		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$document', 'momentPicker'];
 		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs) {
 			$scope.template = (
-				'<div class="moment-picker-container {{view.selected}}-view" ng-show="view.isOpen">' +
+				'<div class="moment-picker-container {{view.selected}}-view" ng-show="view.isOpen && !disabled" ng-class="{\'moment-picker-disabled\': disabled}">' +
 					'<table class="header-view">' +
 						'<thead>' +
 							'<tr>' +
@@ -118,7 +119,7 @@
 			
 			// utilities
 			$scope.momentToDate = function (value) { return angular.isDefined(value) && value.isValid() ? value.clone().toDate() : undefined; }
-			$scope.valueUpdate = function () { $scope.value = $scope.momentToDate($scope.valueMoment); }
+			$scope.valueUpdate = function () { if (!$scope.disabled) $scope.value = $scope.momentToDate($scope.valueMoment); }
 			$scope.limits = {
 				isAfterOrEqualMin: function (value, precision) {
 					return !angular.isDefined($scope.minDateMoment) || value.isAfter($scope.minDateMoment, precision) || value.isSame($scope.minDateMoment, precision);
