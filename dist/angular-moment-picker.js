@@ -435,6 +435,10 @@
 					$scope.valueMoment = moment(model, $scope.format, $scope.locale);
 					if (!$scope.valueMoment.isValid())
 						$scope.valueMoment = undefined;
+					else {
+						$scope.view.moment = $scope.valueMoment.clone();
+						$scope.view.update();
+					}
 				}
 				$scope.valueUpdate($scope.valueMoment);
 				$scope.limits.checkValue();
