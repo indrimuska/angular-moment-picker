@@ -30,6 +30,8 @@
 		return momentPickerProvider;
 	})();
 	
+	var $timeout, $sce, $compile, $document, momentPicker;
+	
 	var MomentPickerDirective = (function () {
 		function MomentPickerDirective(timeout, sce, compile, document, momentPickerProvider) {
 			this.restrict = 'A',
