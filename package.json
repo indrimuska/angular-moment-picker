@@ -2,7 +2,7 @@
   "name": "angular-moment-picker",
   "version": "0.4.3",
   "description": "Angular Moment Picker is an AngularJS directive for date and time picker using Moment.js",
-  "main": "Gruntfile.js",
+  "main": "dist/angular-moment-picker.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/indrimuska/angular-moment-picker.git"
