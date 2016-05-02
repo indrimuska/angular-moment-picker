@@ -5,11 +5,12 @@
 			defaults = {
 				locale:        'en',
 				format:        'L LTS',
-				minView:       'year',
+				minView:       'decade',
 				maxView:       'minute',
 				startView:     'year',
 				leftArrow:     '&larr;',
 				rightArrow:    '&rarr;',
+				yearsFormat:   'YYYY',
 				monthsFormat:  'MMM',
 				daysFormat:    'D',
 				hoursFormat:   'HH:[00]',
@@ -67,6 +68,14 @@
 						'</thead>' +
 					'</table>' +
 					'<div class="moment-picker-specific-views">' +
+						'<table ng-if="view.selected == \'decade\'">' +
+							'<tbody>' +
+								'<tr ng-repeat="fourYear in decadeView.fourYears">' +
+									'<td ng-repeat="year in fourYear track by year.year" ' +
+										'ng-class="year.class" ng-bind="year.label" ng-click="decadeView.setYear(year)"></td>' +
+								'</tr>' +
+							'</tbody>' +
+						'</table>' +
 						'<table ng-if="view.selected == \'year\'">' +
 							'<tbody>' +
 								'<tr ng-repeat="fourMonth in yearView.fourMonths">' +
@@ -146,13 +155,15 @@
 			};
 			
 			$scope.views = {
-				all: ['year', 'month', 'day', 'hour', 'minute'],
+				all: ['decade', 'year', 'month', 'day', 'hour', 'minute'],
 				// for each view, `$scope.views.formats` object contains the available moment formats
 				// formats present in more views are used to perform min/max view detection (i.e. 'LTS', 'LT', ...)
 				formats: {
-					'year':    'M{1,4}(?![Mo])|Mo|Q|[Ll]{1,4}(?!T)',
-							   /* formats: M,MM,MMM,MMM,Mo,Q,L,LL,LLL,LLLL,l,ll,lll,llll */
-					'month':   '[Dd]{1,4}(?![Ddo])|DDDo|[Dd]o|[Ww]{1,2}(?![Wwo])|[Ww]o|[Ee]|L{1,4}(?!T)|l{1,4}',
+					'decade':  'Y{1,2}(?!Y)|YYYY|[Ll]{1,4}(?!T)',
+							   /* formats: Y,YY,YYYY,L,LL,LLL,LLLL,l,ll,lll,llll */
+					'year':    'M{1,4}(?![Mo])|Mo|Q',
+							   /* formats: M,MM,MMM,MMM,Mo,Q */
+					'month':   '[Dd]{1,4}(?![Ddo])|DDDo|[Dd]o|[Ww]{1,2}(?![Wwo])|[Ww]o|[Ee]|L{1,2}(?!T)|l{1,2}',
 							   /* formats: D,DD,DDD,DDDD,d,dd,ddd,dddd,DDDo,Do,do,W,WW,w,ww,Wo,wo,E,e,L,LL,l,ll */
 					'day':     '[Hh]{1,2}|LTS?',
 							   /* formats: H,HH,h,hh,LT,LTS */
@@ -196,28 +207,35 @@
 					$scope.view.isOpen = false;
 					$scope.view.selected = $scope.startView;
 				},
+				// utility
+				unit: function () { return $scope.view.selected == 'decade' ? 10 : 1; },
+				precision: function () { return $scope.view.selected.replace('decade', 'year'); },
 				// header
 				title: '',
 				previous: {
 					selectable: true,
 					label: $sce.trustAsHtml($scope.leftArrow),
 					selectable: true,
-					set: function () { if ($scope.view.previous.selectable) $scope.view.update($scope.view.moment.subtract(1, $scope.view.selected).toDate()); },
+					set: function () {
+						if ($scope.view.previous.selectable) $scope.view.update($scope.view.moment.subtract($scope.view.unit(), $scope.view.precision()).toDate());
+					}
 				},
 				next: {
 					selectable: true,
 					label: $sce.trustAsHtml($scope.rightArrow),
-					set: function () { if ($scope.view.next.selectable) $scope.view.update($scope.view.moment.add(1, $scope.view.selected).toDate()); },
+					set: function () {
+						if ($scope.view.next.selectable) $scope.view.update($scope.view.moment.add($scope.view.unit(), $scope.view.precision()).toDate());
+					}
 				},
 				setParentView: function () { $scope.view.change($scope.views.all[ Math.max(0, $scope.views.all.indexOf($scope.view.selected) - 1) ]); },
 				// body
 				render: function () {
-					var momentPrevious = $scope.view.moment.clone().startOf($scope.view.selected).subtract(1, $scope.view.selected),
-						momentNext     = $scope.view.moment.clone().endOf($scope.view.selected).add(1, $scope.view.selected);
+					var momentPrevious = $scope.view.moment.clone().startOf($scope.view.precision()).subtract($scope.view.unit(), $scope.view.precision()),
+						momentNext     = $scope.view.moment.clone().endOf($scope.view.precision()).add($scope.view.unit(), $scope.view.precision());
 					
-					$scope.view.previous.selectable = $scope.limits.isAfterOrEqualMin(momentPrevious, $scope.view.selected);
+					$scope.view.previous.selectable = $scope.limits.isAfterOrEqualMin(momentPrevious, $scope.view.precision());
 					$scope.view.previous.label      = $sce.trustAsHtml($scope.view.previous.selectable ? $scope.leftArrow : '&nbsp;');
-					$scope.view.next.selectable     = $scope.limits.isBeforeOrEqualMax(momentNext, $scope.view.selected);
+					$scope.view.next.selectable     = $scope.limits.isBeforeOrEqualMax(momentNext, $scope.view.precision());
 					$scope.view.next.label          = $sce.trustAsHtml($scope.view.next.selectable ? $scope.rightArrow : '&nbsp;');
 					$scope.view.title               = $scope[$scope.view.selected + 'View'].render();
 				},
@@ -232,6 +250,38 @@
 					} else if (nextView >= minView) $scope.view.selected = view;
 				}
 			};
+			// decade view
+			$scope.decadeView = {
+				fourYears: {},
+				render: function () {
+					var year      = $scope.view.moment.clone();
+						firstYear = Math.floor(year.year() / 10) * 10 - 1,
+						lastYear  = firstYear + 11;
+					
+					year.year(firstYear);
+					$scope.decadeView.fourYears = {};
+					for (var y = 0; y < 12; y++) {
+						var index      = Math.floor(y / 4),
+							selectable = $scope.limits.isSelectable(year, 'year');
+						
+						if (!$scope.decadeView.fourYears[index]) $scope.decadeView.fourYears[index] = [];
+						$scope.decadeView.fourYears[index].push({
+							label: year.format(momentPicker.yearsFormat),
+							year:  year.year(),
+							class: !selectable || [0, 11].indexOf(y) >= 0 ? 'disabled' : year.isSame($scope.valueMoment, 'year') ? 'selected' : '',
+							selectable: selectable
+						});
+						year.add(1, 'years');
+					}
+					// return title
+					return [year.subtract(2, 'years').format('YYYY'), year.subtract(9, 'years').format('YYYY')].reverse().join(' - ');
+				},
+				setYear: function (year) {
+					if (!year.selectable) return;
+					$scope.view.update($scope.view.moment.year(year.year));
+					$scope.view.change('year');
+				}
+			};
 			// year view
 			$scope.yearView = {
 				fourMonths: {},
@@ -239,9 +289,9 @@
 					var month  = $scope.view.moment.clone().startOf('year'),
 						months = moment.monthsShort();
 					
-					$scope.yearView.fourMonths = [];
+					$scope.yearView.fourMonths = {};
 					months.forEach(function (label, i) {
-						var index = Math.floor(i / 4),
+						var index      = Math.floor(i / 4),
 							selectable = $scope.limits.isSelectable(month, 'month');
 						
 						if (!$scope.yearView.fourMonths[index]) $scope.yearView.fourMonths[index] = [];
