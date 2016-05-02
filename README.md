@@ -49,9 +49,11 @@ Check out the demo page at [http://indrimuska.github.io/angular-moment-picker/](
 
 ## The views
 
-*Year view* | *Month view* | *Day view* | *Hour view* | *Minute view*
----|---|---|---|---
-![Year view](http://indrimuska.github.io/angular-moment-picker/img/year-view.png) | ![Month view](http://indrimuska.github.io/angular-moment-picker/img/month-view.png) | ![Day view](http://indrimuska.github.io/angular-moment-picker/img/day-view.png) | ![Hour view](http://indrimuska.github.io/angular-moment-picker/img/hour-view.png) | ![Minute view](http://indrimuska.github.io/angular-moment-picker/img/minute-view.png)
+***Decade view*** | ***Year view*** | ***Month view***
+:---:|:---:|:---:
+![Decade view](http://indrimuska.github.io/angular-moment-picker/img/decade-view.png) | ![Year view](http://indrimuska.github.io/angular-moment-picker/img/year-view.png) | ![Month view](http://indrimuska.github.io/angular-moment-picker/img/month-view.png)
+***Day view*** | ***Hour view*** | ***Minute view***
+![Day view](http://indrimuska.github.io/angular-moment-picker/img/day-view.png) | ![Hour view](http://indrimuska.github.io/angular-moment-picker/img/hour-view.png) | ![Minute view](http://indrimuska.github.io/angular-moment-picker/img/minute-view.png)
 
 ## Options
 
@@ -68,7 +70,7 @@ Property | Default | Description
 moment-picker | | Two-way bindable model property, required to use the directive.
 locale | `"en"` | Locale code. <sup>1</sup>
 format | `"L LT"` | Format of the output value and min/max date. <sup>1</sup>
-min-view | `"year"` | Minimum navigable view.
+min-view | `"decade"` | Minimum navigable view.
 max-view | `"hour"` | Maximum navigable view.
 start-view | `"year"` | Initial view when the picker is open.
 min-date | | Two-way bindable property representing the minimum selectable date in the same format of the value.
@@ -107,11 +109,12 @@ Property | Default | Description
 ---|---|---
 locale | `"en"` | Locale code. <sup>1</sup>
 format | `"L LTS"` | Format of the output value and min/max date. <sup>1</sup>
-min-view | `"year"` | Minimum navigable view.
+min-view | `"decade"` | Minimum navigable view.
 max-view | `"hour"` | Maximum navigable view.
 start-view | `"year"` | Initial view when opening the picker.
 left-arrow | `"&larr;"` | Left arrow string (HTML allowed).
 right-arrow | `"&rarr;"` | Right arrow string (HTML allowed).
+yearsFormat | `"YYYY"` | Years format in `decade` view.
 months-format | `"MMM"` | Months format in `year` view.
 days-format | `"D"` | Days format in `month` view.
 hours-format | `"HH:[00]"` | Hours format in `day` view.
