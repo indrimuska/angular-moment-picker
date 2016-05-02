@@ -163,7 +163,7 @@
 				{ group: 'Month name, day of month, day of week, year, time (Localized formats)', token: 'LLLL', output: 'Thursday, September 4 1986 8:30 PM' },
 				{ group: 'Month name, day of month, day of week, year, time (Localized formats)', token: 'llll', output: 'Thu, Sep 4 1986 8:30 PM' },
 			];
-			ctrl.views = ['year', 'month', 'day', 'hour', 'minute'];
+			ctrl.views = ['decade', 'year', 'month', 'day', 'hour', 'minute'];
 			ctrl.defaults = {
 				locale:    'en',
 				format:    'LL LTS',

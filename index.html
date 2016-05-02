@@ -240,7 +240,7 @@
 					<p class="small">
 						Be careful when using <b>min/max view</b> properties, they will be overridden by the smart view auto-detection
 						if the format selected does not require a specific view
-						(i.e. format <code>HH:mm</code> doesn't require <code>year</code> and <code>month</code> views).
+						(i.e. format <code>HH:mm</code> doesn't require <code>decade</code>, <code>year</code>, <code>month</code>, and <code>minute</code> views).
 					</p>
 					<div class="row">
 						<div class="col-md-6">
@@ -284,13 +284,14 @@
             /* Picker properties */
             locale:        'en',
             format:        'L LT',
-            minView:       'year',
+            minView:       'decade',
             maxView:       'hour',
             startView:     'year',
             
             /* Extra: Views properties */
             leftArrow:     '&amp;larr;',
             rightArrow:    '&amp;rarr;',
+            yearsFormat:   'YYYY',
             monthsFormat:  'MMM',
             daysFormat:    'D',
             hoursFormat:   'HH:[00]',
