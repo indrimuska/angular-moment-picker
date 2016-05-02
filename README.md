@@ -51,9 +51,9 @@ Check out the demo page at [http://indrimuska.github.io/angular-moment-picker/](
 
 ***Decade view*** | ***Year view*** | ***Month view***
 :---:|:---:|:---:
-![Decade view](http://indrimuska.github.io/angular-moment-picker/img/decade-view.png) | ![Year view](http://indrimuska.github.io/angular-moment-picker/img/year-view.png) | ![Month view](http://indrimuska.github.io/angular-moment-picker/img/month-view.png)
+![Decade view](http://indrimuska.github.io/angular-moment-picker/img/decade-view.png?) | ![Year view](http://indrimuska.github.io/angular-moment-picker/img/year-view.png?) | ![Month view](http://indrimuska.github.io/angular-moment-picker/img/month-view.png?)
 ***Day view*** | ***Hour view*** | ***Minute view***
-![Day view](http://indrimuska.github.io/angular-moment-picker/img/day-view.png) | ![Hour view](http://indrimuska.github.io/angular-moment-picker/img/hour-view.png) | ![Minute view](http://indrimuska.github.io/angular-moment-picker/img/minute-view.png)
+![Day view](http://indrimuska.github.io/angular-moment-picker/img/day-view.png?) | ![Hour view](http://indrimuska.github.io/angular-moment-picker/img/hour-view.png?) | ![Minute view](http://indrimuska.github.io/angular-moment-picker/img/minute-view.png?)
 
 ## Options
 
