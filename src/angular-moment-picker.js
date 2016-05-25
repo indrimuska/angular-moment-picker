@@ -198,7 +198,7 @@
 				open: function () {
 					// close every open picker
 					// this is required because every picker stops click event propagation
-					angular.forEach($document[0].querySelectorAll('.moment-picker-container.open'), function (element) {
+					angular.forEach($document[0].querySelectorAll('.moment-picker-container'), function (element) {
 						((angular.element(element).scope().view || {}).close || angular.noop)();
 					});
 					$scope.view.isOpen = true;
