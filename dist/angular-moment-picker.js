@@ -57,7 +57,7 @@
 		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$document', 'momentPicker'];
 		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs) {
 			$scope.template = (
-				'<div class="moment-picker-container {{view.selected}}-view" ng-show="view.isOpen && !disabled" ng-class="{\'moment-picker-disabled\': disabled}">' +
+				'<div class="moment-picker-container {{view.selected}}-view" ng-show="view.isOpen && !disabled" ng-class="{\'moment-picker-disabled\': disabled, \'open\': view.isOpen}">' +
 					'<table class="header-view">' +
 						'<thead>' +
 							'<tr>' +
