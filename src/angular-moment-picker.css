@@ -15,6 +15,7 @@
 .moment-picker th:last-child { width: 2em; }
 .moment-picker th,
 .moment-picker td { padding: 0; text-align: center; min-width: 2em; height: 2em; text-shadow: 0 1px 0 rgba(255, 255, 255, .9); cursor: pointer; border-radius: 4px; }
+.moment-picker td.today { background: #e4eef5; color: #404040; text-shadow: 0 1px 0 rgba(255, 255, 255, .9); }
 .moment-picker th:hover,
 .moment-picker td:hover { background: #fafbfb;
 	background-image: -webkit-linear-gradient(#f0f3f4, #fafbfb);

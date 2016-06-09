@@ -46,6 +46,7 @@
 				minDate:   '=?',
 				maxDate:   '=?',
 				disabled:  '=?disable',
+				today:     '=?',
 				change:    '&?'
 			};
 			$timeout     = timeout;
@@ -342,7 +343,10 @@
 									year:  day.year(),
 									date:  day.date(),
 									month: day.month(),
-									class: !selectable || day.month() != month ? 'disabled' : day.isSame($scope.valueMoment, 'day') ? 'selected' : '',
+									class: [
+										!!$scope.today && day.isSame(new Date(), 'day') ? 'today' : '',
+										!selectable || day.month() != month ? 'disabled' : day.isSame($scope.valueMoment, 'day') ? 'selected' : ''
+									].join(' ').trim(),
 									selectable: selectable
 								};
 							day.add(1, 'days');

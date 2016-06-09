@@ -76,6 +76,7 @@ start-view | `"year"` | Initial view when the picker is open.
 min-date | | Two-way bindable property representing the minimum selectable date in the same format of the value.
 max-date | | Two-way bindable property representing the maximum selectable date in the same format of the value.
 disable | | Disables the picker if truly.
+today | `false` | Highlights the current day.
 
 ## Events
 
