@@ -20,6 +20,7 @@
 		
 		<!-- Stylesheets -->
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css">
+		<link rel="stylesheet" href="https://cdn.rawgit.com/indrimuska/angular-switcher/master/dist/angular-switcher.min.css">
 		<link rel="stylesheet" href="https://cdn.rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.css">
 		<link rel="stylesheet" href="style.css">
 		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/octicons/3.3.0/octicons.min.css">
@@ -78,7 +79,7 @@
 					<div class="lead">
 						<span moment-picker="ctrl.today" format="LLLL" change="ctrl.log(newValue, oldValue)">
 							<i class="mega-octicon octicon-calendar"></i>&nbsp;
-							{{ctrl.today}}
+							{{ ctrl.today || 'Click here to select a date' }}
 						</span>
 					</div>
 					<pre><code class="html" ng-non-bindable>&lt;script src="//ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"&gt;&lt;/script&gt;
@@ -179,8 +180,8 @@
 								start-view="{{ctrl.builder.startView}}"
 								min-date="ctrl.builder.minDate"
 								max-date="ctrl.builder.maxDate"
-								left-arrow="{{ctrl.builder.leftArrow | encoded}}"
-								right-arrow="{{ctrl.builder.rightArrow | encoded}}">
+								disable="ctrl.builder.disable"
+								today="ctrl.builder.today">
 								<i class="mega-octicon octicon-calendar"></i>&nbsp;
 								{{ ctrl.myInput }}
 							</span>
@@ -262,6 +263,20 @@
 							</div>
 						</div>
 					</div>
+					<div class="row">
+						<div class="col-md-6">
+							<div class="form-group text-center">
+								<label for="disabled">Disabled</label><br>
+								<switcher ng-model="ctrl.builder.disable"></switcher>
+							</div>
+						</div>
+							<div class="col-md-6">
+								<div class="form-group text-center">
+									<label for="disabled">Today</label><br>
+									<switcher ng-model="ctrl.builder.today"></switcher>
+								</div>
+							</div>
+					</div>
 					<div class="builder">
 						<pre><code class="html">&lt;div moment-picker="ctrl.myInput"<span ng-show="ctrl.builder.locale != ctrl.defaults.locale">
      locale="{{ctrl.builder.locale | encoded}}"</span><span ng-show="ctrl.builder.format.length > 0 && ctrl.builder.format != ctrl.defaults.formatDef">
@@ -270,7 +285,9 @@
      max-view="{{ctrl.builder.maxView | encoded}}"</span><span ng-show="ctrl.builder.startView != ctrl.builder.minView && ctrl.builder.startView != ctrl.defaults.startView">
      start-view="{{ctrl.builder.startView | encoded}}"</span><span ng-show="ctrl.builder.minDate">
      min-date="'{{ctrl.builder.minDate | encoded}}'"</span><span ng-show="ctrl.builder.maxDate">
-     max-date="'{{ctrl.builder.maxDate | encoded}}'"</span>&gt;
+     max-date="'{{ctrl.builder.maxDate | encoded}}'"</span><span ng-show="ctrl.builder.disable">
+     disable="{{ctrl.builder.disable}}"</span><span ng-show="ctrl.builder.today">
+     today="{{ctrl.builder.today}}"</span>&gt;
     <span ng-non-bindable>{{ ctrl.myInput }}</span>
 &lt;/div&gt;</code></pre>
 					</div>
@@ -283,10 +300,11 @@
         momentPickerProvider.options({
             /* Picker properties */
             locale:        'en',
-            format:        'L LT',
+            format:        'L LTS',
             minView:       'decade',
-            maxView:       'hour',
+            maxView:       'minute',
             startView:     'year',
+			today:         false,
             
             /* Extra: Views properties */
             leftArrow:     '&amp;larr;',
@@ -321,6 +339,7 @@
 		
 		<!-- Scripts -->
 		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.4/angular.min.js"></script>
+		<script src="https://cdn.rawgit.com/indrimuska/angular-switcher/master/dist/angular-switcher.min.js"></script>
 		<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.6/moment-with-locales.js"></script>
 		<script src="https://cdn.rawgit.com/indrimuska/angular-moment-picker/master/dist/angular-moment-picker.min.js"></script>
 		<script src="script.js"></script>

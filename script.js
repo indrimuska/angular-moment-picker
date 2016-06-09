@@ -90,11 +90,11 @@
 		language = 'en';
 	
 	angular
-		.module('AngularMomentPickerDemo', ['moment-picker'])
+		.module('AngularMomentPickerDemo', ['moment-picker', 'switcher'])
 		.config(['momentPickerProvider', function (momentPickerProvider) {
 			momentPickerProvider.options({ locale: language });
 		}])
-		.controller('AngularMomentPickerDemoCtrl', ['momentPicker', '$scope', '$log', function (momentPicker, $scope, $log) {
+		.controller('AngularMomentPickerDemoCtrl', ['momentPicker', '$scope', '$log', '$timeout', function (momentPicker, $scope, $log, $timeout) {
 			var ctrl = this;
 			
 			ctrl.today = moment().locale(language).format('LLLL');
@@ -171,6 +171,7 @@
 				minView:   momentPicker.minView,
 				maxView:   momentPicker.maxView,
 				startView: momentPicker.startView,
+				today:     momentPicker.today
 			}
 			ctrl.builder = angular.copy(ctrl.defaults);
 			ctrl.built = true;
