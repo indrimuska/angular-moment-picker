@@ -8,6 +8,7 @@
 				minView:       'decade',
 				maxView:       'minute',
 				startView:     'year',
+				today:         false,
 				leftArrow:     '&larr;',
 				rightArrow:    '&rarr;',
 				yearsFormat:   'YYYY',
@@ -45,8 +46,8 @@
 				startView: '@?',
 				minDate:   '=?',
 				maxDate:   '=?',
-				disabled:  '=?disable',
 				today:     '=?',
+				disabled:  '=?disable',
 				change:    '&?'
 			};
 			$timeout     = timeout;
@@ -124,7 +125,7 @@
 			);
 			
 			// one-way binding attributes
-			angular.forEach(['locale', 'format', 'minView', 'maxView', 'startView', 'leftArrow', 'rightArrow'], function (attr) {
+			angular.forEach(['locale', 'format', 'minView', 'maxView', 'startView', 'today', 'leftArrow', 'rightArrow'], function (attr) {
 				if (!angular.isDefined($scope[attr])) $scope[attr] = momentPicker[attr]
 				if (!angular.isDefined($attrs[attr])) $attrs[attr] = $scope[attr];
 			});
@@ -202,7 +203,7 @@
 					angular.forEach($document[0].querySelectorAll('.moment-picker-container.open'), function (element) {
 						((angular.element(element).scope().view || {}).close || angular.noop)();
 					});
-					$scope.view.isOpen = true;
+					if (!$scope.disabled) $scope.view.isOpen = true;
 				},
 				close: function () {
 					$scope.view.isOpen = false;

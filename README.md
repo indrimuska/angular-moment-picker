@@ -69,14 +69,14 @@ Property | Default | Description
 ---|---|---
 moment-picker | | Two-way bindable model property, required to use the directive.
 locale | `"en"` | Locale code. <sup>1</sup>
-format | `"L LT"` | Format of the output value and min/max date. <sup>1</sup>
+format | `"L LTS"` | Format of the output value and min/max date. <sup>1</sup>
 min-view | `"decade"` | Minimum navigable view.
-max-view | `"hour"` | Maximum navigable view.
+max-view | `"minute"` | Maximum navigable view.
 start-view | `"year"` | Initial view when the picker is open.
 min-date | | Two-way bindable property representing the minimum selectable date in the same format of the value.
 max-date | | Two-way bindable property representing the maximum selectable date in the same format of the value.
-disable | | Disables the picker if truly.
 today | `false` | Highlights the current day.
+disable | `false` | Disables the picker if truly.
 
 ## Events
 
@@ -111,8 +111,9 @@ Property | Default | Description
 locale | `"en"` | Locale code. <sup>1</sup>
 format | `"L LTS"` | Format of the output value and min/max date. <sup>1</sup>
 min-view | `"decade"` | Minimum navigable view.
-max-view | `"hour"` | Maximum navigable view.
-start-view | `"year"` | Initial view when opening the picker.
+max-view | `"minute"` | Maximum navigable view.
+start-view | `"year"` | Initial view after picker opening.
+today | `false` | Highlights the current day.
 left-arrow | `"&larr;"` | Left arrow string (HTML allowed).
 right-arrow | `"&rarr;"` | Right arrow string (HTML allowed).
 yearsFormat | `"YYYY"` | Years format in `decade` view.
