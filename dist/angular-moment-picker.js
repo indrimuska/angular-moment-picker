@@ -126,7 +126,7 @@
 			
 			// one-way binding attributes
 			angular.forEach(['locale', 'format', 'minView', 'maxView', 'startView', 'today', 'leftArrow', 'rightArrow'], function (attr) {
-				if (!angular.isDefined($scope[attr])) $scope[attr] = momentPicker[attr]
+				if (!angular.isDefined($scope[attr])) $scope[attr] = momentPicker[attr];
 				if (!angular.isDefined($attrs[attr])) $attrs[attr] = $scope[attr];
 			});
 			
@@ -539,6 +539,14 @@
 				$scope.limits.checkView();
 				$scope.view.render();
 			}, true);
+			$scope.$watch('locale', function (locale, previous) {
+				if (!angular.isDefined(previous) || locale == previous) return;
+				angular.forEach(['model', 'minDate', 'maxDate'], function (variable) {
+					if (angular.isDefined($scope[variable]))
+						$scope[variable] = moment($scope[variable], $scope.format, previous).locale(locale).format($scope.format);
+				});
+				$scope.view.render();
+			});
 			
 			// open/close listeners
 			$document.on('click', function () { if ($scope.view.isOpen) $timeout($scope.view.close); });
