@@ -177,26 +177,11 @@
 			ctrl.built = true;
 			ctrl.myInput = moment().format(ctrl.builder.format);
 			
-			ctrl.changeLocale = function (date, from, to) {
-				var format = ctrl.builder.format || ctrl.defaults.formatDef,
-					date   = moment(date, format, from).locale(to);
-				return date.isValid() ? date.format(format) : '';
-			};
 			ctrl.changeFormat = function (date, from, to) {
 				var date = moment(date, from, ctrl.builder.locale);
 				return date.isValid() ? date.format(to) : '';
 			};
 			
-			$scope.$watch('ctrl.builder.locale', function (to, from) {
-				if (from == to) return;
-				
-				if (ctrl.myInput)
-					ctrl.myInput = ctrl.changeLocale(ctrl.myInput, from, to);
-				['minDate', 'maxDate'].forEach(function (key) {
-					if (ctrl.builder[key])
-						ctrl.builder[key] = ctrl.changeLocale(ctrl.builder[key], from, to);
-				});
-			});
 			$scope.$watch('ctrl.builder.format', function (to, from) {
 				if (from == to) return;
 				if (!from) from = ctrl.defaults.formatDef;
