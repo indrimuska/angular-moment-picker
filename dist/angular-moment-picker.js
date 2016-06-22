@@ -508,7 +508,10 @@
 					$timeout(function () {
 						$scope.view.update($scope.view.moment = $scope.valueMoment.clone());
 						$scope.model = newValue;
-						if (angular.isFunction($scope.change)) $scope.change({ newValue: newValue, oldValue: oldValue });
+						if (angular.isFunction($scope.change))
+							$timeout(function () {
+								$scope.change({ newValue: newValue, oldValue: oldValue });
+							}, 0, false);
 					});
 			});
 			$scope.$watch('[view.selected, view.value]', $scope.view.render, true);
