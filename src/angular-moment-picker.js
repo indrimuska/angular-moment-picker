@@ -15,7 +15,6 @@
 				monthsFormat:  'MMM',
 				daysFormat:    'D',
 				hoursFormat:   'HH:[00]',
-				minutesFormat: moment.localeData().longDateFormat('LT').replace(/[aA]/, ''),
 				secondsFormat: 'ss',
 				minutesStep:   5,
 				secondsStep:   1
@@ -405,7 +404,8 @@
 				minutes: [],
 				render: function () {
 					var i = 0,
-						minute = $scope.view.moment.clone().startOf('hour');
+						minute = $scope.view.moment.clone().startOf('hour'),
+						minutesFormat = momentPicker.minutesFormat || moment.localeData($scope.locale).longDateFormat('LT').replace(/[aA]/, '');
 					
 					$scope.hourView.minutes = [];
 					for (var m = 0; m < 60; m += momentPicker.minutesStep) {
@@ -415,7 +415,7 @@
 						if (!$scope.hourView.minutes[index])
 							$scope.hourView.minutes[index] = [];
 						$scope.hourView.minutes[index].push({
-							label:  minute.format(momentPicker.minutesFormat),
+							label:  minute.format(minutesFormat),
 							year:   minute.year(),
 							month:  minute.month(),
 							date:   minute.date(),
