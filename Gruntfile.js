@@ -15,9 +15,6 @@ module.exports = function(grunt) {
 			}
 		},
 		uglify: {
-			options: {
-				banner: '/*! Angular Moment Picker - v<%= pkg.version %> - https://github.com/indrimuska/angular-moment-picker - (c) 2015 Indri Muska - MIT */\n'
-			},
 			main: {
 				files: {
 					'dist/angular-moment-picker.min.js': ['dist/angular-moment-picker.js']
@@ -35,6 +32,19 @@ module.exports = function(grunt) {
 				}
 			}
 		},
+		header: {
+			main: {
+				options: {
+					text: '/*! Angular Moment Picker - v<%= pkg.version %> - https://github.com/indrimuska/angular-moment-picker - (c) 2015 Indri Muska - MIT */'
+				},
+				files: {
+					'dist/angular-moment-picker.js': 'dist/angular-moment-picker.js',
+					'dist/angular-moment-picker.css': 'dist/angular-moment-picker.css',
+					'dist/angular-moment-picker.min.js': 'dist/angular-moment-picker.min.js',
+					'dist/angular-moment-picker.min.css': 'dist/angular-moment-picker.min.css'
+				}
+			}
+		},
 		'sync-json': {
 			options: {
 				include: ['name', 'description', 'version']
@@ -48,6 +58,6 @@ module.exports = function(grunt) {
 	});
 	
 	// Default tasks.
-	grunt.registerTask('default', ['copy', 'uglify', 'cssmin', 'sync-json']);
+	grunt.registerTask('default', ['copy', 'uglify', 'cssmin', 'header', 'sync-json']);
 	
 };
