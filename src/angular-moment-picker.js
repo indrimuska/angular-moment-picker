@@ -31,10 +31,28 @@
 		return momentPickerProvider;
 	})();
 	
-	var $timeout, $sce, $compile, $document, momentPicker;
+	var $timeout, $sce, $compile, $document, $window, momentPicker;
 	
 	var MomentPickerDirective = (function () {
-		function MomentPickerDirective(timeout, sce, compile, document, momentPickerProvider) {
+		
+		// Utility
+		function getOffset(element) {
+			var docElem, win, rect, doc;
+			if (!element) return;
+			if (!element.getClientRects().length) return { top: 0, left: 0 };
+			rect = element.getBoundingClientRect();
+			if (!rect.width && !rect.height) return rect;
+			doc = element.ownerDocument;
+			win = doc != null && doc === doc.window ? element : doc.nodeType === 9 && doc.defaultView;
+			docElem = doc.documentElement;
+			return {
+				top: rect.top + win.pageYOffset - docElem.clientTop,
+				left: rect.left + win.pageXOffset - docElem.clientLeft
+			};
+		}
+		
+		// Directive
+		function MomentPickerDirective(timeout, sce, compile, document, window, momentPickerProvider) {
 			this.restrict = 'A',
 			this.scope = {
 				model:     '=momentPicker',
@@ -53,12 +71,14 @@
 			$sce         = sce;
 			$compile     = compile;
 			$document    = document;
+			$window      = window;
 			momentPicker = momentPickerProvider;
 		};
-		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$document', 'momentPicker'];
+		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$document', '$window', 'momentPicker'];
 		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs) {
 			$scope.template = (
-				'<div class="moment-picker-container {{view.selected}}-view" ng-show="view.isOpen && !disabled" ng-class="{\'moment-picker-disabled\': disabled, \'open\': view.isOpen}">' +
+				'<div class="moment-picker-container {{view.selected}}-view" ' +
+					'ng-show="view.isOpen && !disabled" ng-class="{\'moment-picker-disabled\': disabled, \'open\': view.isOpen}">' +
 					'<table class="header-view">' +
 						'<thead>' +
 							'<tr>' +
@@ -203,10 +223,24 @@
 						((angular.element(element).scope().view || {}).close || angular.noop)();
 					});
 					if (!$scope.disabled) $scope.view.isOpen = true;
+					$timeout($scope.view.position, 0, false);
 				},
 				close: function () {
 					$scope.view.isOpen = false;
 					$scope.view.selected = $scope.startView;
+				},
+				position: function () {
+					$scope.picker.removeClass('top').removeClass('left');
+					
+					var container = $scope.container[0],
+						offset    = getOffset(container),
+						top       = offset.top - $window.pageYOffset,
+						left      = offset.left - $window.pageXOffset,
+						winWidth  = $window.innerWidth,
+						winHeight = $window.innerHeight;
+					
+					if (top + $window.pageYOffset - container.offsetHeight > 0 && top > winHeight / 2) $scope.picker.addClass('top');
+					if (left + container.offsetWidth > winWidth) $scope.picker.addClass('left');
 				},
 				// utility
 				unit: function () { return $scope.view.selected == 'decade' ? 10 : 1; },
@@ -559,6 +593,7 @@
 				if (!$scope.view.isOpen) $timeout($scope.view.open);
 			});
 			angular.element($scope.contents[0].querySelector('input')).on('focus', function () { if (!$scope.view.isOpen) $timeout($scope.view.open); });
+			angular.element($window).on('resize', $scope.view.position);
 		};
 		
 		return MomentPickerDirective;
@@ -569,8 +604,11 @@
 		.provider('momentPicker', [function () {
 			return new momentPickerProvider();
 		}])
-		.directive('momentPicker', ['$timeout', '$sce', '$compile', '$document', 'momentPicker', function ($timeout, $sce, $compile, $document, momentPicker) {
-			return new MomentPickerDirective($timeout, $sce, $compile, $document, momentPicker);
-		}]);
+		.directive('momentPicker', [
+			'$timeout', '$sce', '$compile', '$document', '$window', 'momentPicker',
+			function ($timeout, $sce, $compile, $document, $window, momentPicker) {
+				return new MomentPickerDirective($timeout, $sce, $compile, $document, $window, momentPicker);
+			}
+		]);
 	
 })(window.angular);

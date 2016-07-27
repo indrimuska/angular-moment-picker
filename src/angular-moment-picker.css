@@ -9,6 +9,19 @@
 .moment-picker .moment-picker-container:after { border-bottom-color: #fff; margin-top: 1px; margin-left: 1px; }
 .moment-picker table { border-collapse: collapse; border-spacing: 0; min-width: 100%; table-layout: fixed; }
 
+/* picker on top */
+.moment-picker.top .moment-picker-container { top: auto; bottom: 100%; margin-top: auto; margin-bottom: 4px; }
+.moment-picker.top .moment-picker-container:before,
+.moment-picker.top .moment-picker-container:after { border: 8px solid transparent; border-bottom: none; top: auto; bottom: -9px; }
+.moment-picker.top .moment-picker-container:before { border-top-color: #f0f3f4; border-width: 9px; }
+.moment-picker.top .moment-picker-container:after { border-top-color: #fff; margin-top: auto; margin-bottom: 1px; }
+
+/* picker on left */
+.moment-picker.left .moment-picker-container { right: 0; margin-left: auto; margin-right: -.5em; }
+.moment-picker.left .moment-picker-container:before,
+.moment-picker.left .moment-picker-container:after { left: auto; right: 15px; }
+.moment-picker.left .moment-picker-container:after { margin-left: auto; margin-right: 1px; }
+
 /* all views */
 .moment-picker th { font-weight: bold; }
 .moment-picker th:first-child,
