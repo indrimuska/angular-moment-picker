@@ -9,6 +9,7 @@
 				maxView:       'minute',
 				startView:     'year',
 				today:         false,
+				autoclose:     true,
 				leftArrow:     '&larr;',
 				rightArrow:    '&rarr;',
 				yearsFormat:   'YYYY',
@@ -65,6 +66,7 @@
 				maxDate:   '=?',
 				today:     '=?',
 				disabled:  '=?disable',
+				autoclose: '=?',
 				change:    '&?'
 			};
 			$timeout     = timeout;
@@ -144,7 +146,7 @@
 			);
 			
 			// one-way binding attributes
-			angular.forEach(['locale', 'format', 'minView', 'maxView', 'startView', 'today', 'leftArrow', 'rightArrow'], function (attr) {
+			angular.forEach(['locale', 'format', 'minView', 'maxView', 'startView', 'today', 'leftArrow', 'rightArrow', 'autoclose'], function (attr) {
 				if (!angular.isDefined($scope[attr])) $scope[attr] = momentPicker[attr];
 				if (!angular.isDefined($attrs[attr])) $attrs[attr] = $scope[attr];
 			});
@@ -281,7 +283,7 @@
 					
 					if (nextView < 0 || nextView > maxView) {
 						$scope.valueUpdate($scope.valueMoment = $scope.view.moment.clone());
-						$scope.view.close();
+						if ($scope.autoclose) $scope.view.close();
 					} else if (nextView >= minView) $scope.view.selected = view;
 				}
 			};

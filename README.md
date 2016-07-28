@@ -77,6 +77,7 @@ min-date | | Two-way bindable property representing the minimum selectable date 
 max-date | | Two-way bindable property representing the maximum selectable date in the same format of the value.
 today | `false` | Highlights the current day.
 disable | `false` | Disables the picker if truly.
+autoclose | `true` | Closes the picker after selecting a date.
 
 ## Events
 
@@ -114,6 +115,7 @@ min-view | `"decade"` | Minimum navigable view.
 max-view | `"minute"` | Maximum navigable view.
 start-view | `"year"` | Initial view after picker opening.
 today | `false` | Highlights the current day.
+autoclose | `true` | Closes the picker after selecting a date.
 left-arrow | `"&larr;"` | Left arrow string (HTML allowed).
 right-arrow | `"&rarr;"` | Right arrow string (HTML allowed).
 yearsFormat | `"YYYY"` | Years format in `decade` view.
