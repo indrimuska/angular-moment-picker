@@ -2,7 +2,7 @@
 	
 	var momentPickerProvider = (function () {
 		function momentPickerProvider() {
-			defaults = {
+			var defaults = {
 				locale:        'en',
 				format:        'L LTS',
 				minView:       'decade',
