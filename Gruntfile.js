@@ -6,6 +6,12 @@ module.exports = function(grunt) {
 	// Project configuration.
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
+		eslint: {
+			options: {
+				configFile: 'eslint.json'
+			},
+			target: ['src/angular-moment-picker.js']
+		},
 		copy: {
 			main: {
 				files: {
@@ -58,6 +64,6 @@ module.exports = function(grunt) {
 	});
 	
 	// Default tasks.
-	grunt.registerTask('default', ['copy', 'uglify', 'cssmin', 'header', 'sync-json']);
+	grunt.registerTask('default', ['eslint', 'copy', 'uglify', 'cssmin', 'header', 'sync-json']);
 	
 };
