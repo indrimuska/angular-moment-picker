@@ -1,5 +1,7 @@
+'use strict';
+
 (function (angular) {
-	
+	var defaults;
 	var momentPickerProvider = (function () {
 		function momentPickerProvider() {
 			defaults = {
@@ -250,7 +252,6 @@
 				// header
 				title: '',
 				previous: {
-					selectable: true,
 					label: $sce.trustAsHtml($scope.leftArrow),
 					selectable: true,
 					set: function () {
@@ -291,9 +292,9 @@
 			$scope.decadeView = {
 				fourYears: {},
 				render: function () {
-					var year      = $scope.view.moment.clone();
-						firstYear = Math.floor(year.year() / 10) * 10 - 1,
-						lastYear  = firstYear + 11;
+					var year      = $scope.view.moment.clone(),
+					    firstYear = Math.floor(year.year() / 10) * 10 - 1,
+					    lastYear  = firstYear + 11;
 					
 					year.year(firstYear);
 					$scope.decadeView.fourYears = {};
@@ -367,9 +368,9 @@
 						day       = $scope.view.moment.clone().startOf('month').startOf('week'),
 						lastDay   = $scope.view.moment.clone().endOf('month').endOf('week'),
 						firstWeek = day.week(),
+						weeks     = {},
 						lastWeek  = firstWeek + 5;//lastDay.week() == 1 ? lastDay.weekday(-1).week() + 1 : lastDay.week();
 					
-					weeks = {};
 					$scope.monthView.weeks = [];
 					for (var w = firstWeek; w <= lastWeek; w++)
 						weeks[w] = '0000000'.split('').map(function () {
