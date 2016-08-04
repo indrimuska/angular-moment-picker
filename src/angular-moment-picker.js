@@ -1,8 +1,9 @@
-'use strict';
-
 (function (angular) {
-	var defaults;
+	'use strict';
+	
 	var momentPickerProvider = (function () {
+		var defaults;
+		
 		function momentPickerProvider() {
 			defaults = {
 				locale:        'en',
@@ -22,7 +23,7 @@
 				minutesStep:   5,
 				secondsStep:   1
 			};
-		};
+		}
 		momentPickerProvider.prototype.options = function (options) {
 			angular.extend(defaults, options);
 			return angular.copy(defaults);
@@ -77,7 +78,7 @@
 			$document    = document;
 			$window      = window;
 			momentPicker = momentPickerProvider;
-		};
+		}
 		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$document', '$window', 'momentPicker'];
 		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs) {
 			$scope.template = (
@@ -154,8 +155,8 @@
 			});
 			
 			// utilities
-			$scope.momentToDate = function (value) { return angular.isDefined(value) && value.isValid() ? value.clone().toDate() : undefined; }
-			$scope.valueUpdate = function () { if (!$scope.disabled) $scope.value = $scope.momentToDate($scope.valueMoment); }
+			$scope.momentToDate = function (value) { return angular.isDefined(value) && value.isValid() ? value.clone().toDate() : undefined; };
+			$scope.valueUpdate = function () { if (!$scope.disabled) $scope.value = $scope.momentToDate($scope.valueMoment); };
 			$scope.limits = {
 				isAfterOrEqualMin: function (value, precision) {
 					return !angular.isDefined($scope.minDateMoment) || value.isAfter($scope.minDateMoment, precision) || value.isSame($scope.minDateMoment, precision);
@@ -184,18 +185,18 @@
 				// for each view, `$scope.views.formats` object contains the available moment formats
 				// formats present in more views are used to perform min/max view detection (i.e. 'LTS', 'LT', ...)
 				formats: {
-					'decade':  'Y{1,2}(?!Y)|YYYY|[Ll]{1,4}(?!T)',
-							   /* formats: Y,YY,YYYY,L,LL,LLL,LLLL,l,ll,lll,llll */
-					'year':    'M{1,4}(?![Mo])|Mo|Q',
-							   /* formats: M,MM,MMM,MMM,Mo,Q */
-					'month':   '[Dd]{1,4}(?![Ddo])|DDDo|[Dd]o|[Ww]{1,2}(?![Wwo])|[Ww]o|[Ee]|L{1,2}(?!T)|l{1,2}',
-							   /* formats: D,DD,DDD,DDDD,d,dd,ddd,dddd,DDDo,Do,do,W,WW,w,ww,Wo,wo,E,e,L,LL,l,ll */
-					'day':     '[Hh]{1,2}|LTS?',
-							   /* formats: H,HH,h,hh,LT,LTS */
-					'hour':    'm{1,2}|[Ll]{3,4}|LT(?!S)',
-							   /* formats: m,mm,LLL,LLLL,lll,llll,LT */
-					'minute':  's{1,2}|S{1,}|X|LTS'
-							   /* formats: s,ss,S,SS,SSS..,X,LTS */
+					'decade':	'Y{1,2}(?!Y)|YYYY|[Ll]{1,4}(?!T)',
+								/* formats: Y,YY,YYYY,L,LL,LLL,LLLL,l,ll,lll,llll */
+					'year':		'M{1,4}(?![Mo])|Mo|Q',
+								/* formats: M,MM,MMM,MMM,Mo,Q */
+					'month':	'[Dd]{1,4}(?![Ddo])|DDDo|[Dd]o|[Ww]{1,2}(?![Wwo])|[Ww]o|[Ee]|L{1,2}(?!T)|l{1,2}',
+								/* formats: D,DD,DDD,DDDD,d,dd,ddd,dddd,DDDo,Do,do,W,WW,w,ww,Wo,wo,E,e,L,LL,l,ll */
+					'day':		'[Hh]{1,2}|LTS?',
+								/* formats: H,HH,h,hh,LT,LTS */
+					'hour':		'm{1,2}|[Ll]{3,4}|LT(?!S)',
+								/* formats: m,mm,LLL,LLLL,lll,llll,LT */
+					'minute':	's{1,2}|S{1,}|X|LTS'
+								/* formats: s,ss,S,SS,SSS..,X,LTS */
 				},
 				detectMinMax: function () {
 					var minView, maxView;
@@ -293,8 +294,7 @@
 				fourYears: {},
 				render: function () {
 					var year      = $scope.view.moment.clone(),
-					    firstYear = Math.floor(year.year() / 10) * 10 - 1,
-					    lastYear  = firstYear + 11;
+						firstYear = Math.floor(year.year() / 10) * 10 - 1;
 					
 					year.year(firstYear);
 					$scope.decadeView.fourYears = {};
@@ -366,10 +366,9 @@
 				render: function () {
 					var month     = $scope.view.moment.month(),
 						day       = $scope.view.moment.clone().startOf('month').startOf('week'),
-						lastDay   = $scope.view.moment.clone().endOf('month').endOf('week'),
-						firstWeek = day.week(),
 						weeks     = {},
-						lastWeek  = firstWeek + 5;//lastDay.week() == 1 ? lastDay.weekday(-1).week() + 1 : lastDay.week();
+						firstWeek = day.week(),
+						lastWeek  = firstWeek + 5;
 					
 					$scope.monthView.weeks = [];
 					for (var w = firstWeek; w <= lastWeek; w++)
@@ -406,8 +405,7 @@
 			$scope.dayView = {
 				threeHours: [],
 				render: function () {
-					var hour = $scope.view.moment.clone().startOf('day'),
-						format = moment.localeData().longDateFormat('LT').replace(/[aA]/, '');
+					var hour = $scope.view.moment.clone().startOf('day');
 					
 					$scope.dayView.threeHours = [];
 					for (var h = 0; h < 24; h++) {
@@ -524,7 +522,7 @@
 			$scope.limits.checkView();
 			
 			// properties listeners
-			$scope.$watch('model', function (model, previous) {
+			$scope.$watch('model', function (model) {
 				if (angular.isDefined(model)) {
 					$scope.valueMoment = moment(model, $scope.format, $scope.locale);
 					if (!$scope.valueMoment.isValid())
@@ -537,7 +535,7 @@
 				$scope.valueUpdate($scope.valueMoment);
 				$scope.limits.checkValue();
 			});
-			$scope.$watch('value', function (value, previous) {
+			$scope.$watch('value', function () {
 				if (!angular.isDefined($scope.valueMoment)) return;
 				var oldValue = $scope.model,
 					newValue = $scope.valueMoment.format($scope.format);
