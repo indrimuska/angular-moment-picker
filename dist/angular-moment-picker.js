@@ -1,6 +1,10 @@
+/*! Angular Moment Picker - v0.5.7 - https://github.com/indrimuska/angular-moment-picker - (c) 2015 Indri Muska - MIT */
 (function (angular) {
+	'use strict';
 	
 	var momentPickerProvider = (function () {
+		var defaults;
+		
 		function momentPickerProvider() {
 			defaults = {
 				locale:        'en',
@@ -9,6 +13,7 @@
 				maxView:       'minute',
 				startView:     'year',
 				today:         false,
+				autoclose:     true,
 				leftArrow:     '&larr;',
 				rightArrow:    '&rarr;',
 				yearsFormat:   'YYYY',
@@ -19,7 +24,7 @@
 				minutesStep:   5,
 				secondsStep:   1
 			};
-		};
+		}
 		momentPickerProvider.prototype.options = function (options) {
 			angular.extend(defaults, options);
 			return angular.copy(defaults);
@@ -31,10 +36,28 @@
 		return momentPickerProvider;
 	})();
 	
-	var $timeout, $sce, $compile, $document, momentPicker;
+	var $timeout, $sce, $compile, $document, $window, momentPicker;
 	
 	var MomentPickerDirective = (function () {
-		function MomentPickerDirective(timeout, sce, compile, document, momentPickerProvider) {
+		
+		// Utility
+		function getOffset(element) {
+			var docElem, win, rect, doc;
+			if (!element) return;
+			if (!element.getClientRects().length) return { top: 0, left: 0 };
+			rect = element.getBoundingClientRect();
+			if (!rect.width && !rect.height) return rect;
+			doc = element.ownerDocument;
+			win = doc != null && doc === doc.window ? element : doc.nodeType === 9 && doc.defaultView;
+			docElem = doc.documentElement;
+			return {
+				top: rect.top + win.pageYOffset - docElem.clientTop,
+				left: rect.left + win.pageXOffset - docElem.clientLeft
+			};
+		}
+		
+		// Directive
+		function MomentPickerDirective(timeout, sce, compile, document, window, momentPickerProvider) {
 			this.restrict = 'A',
 			this.scope = {
 				model:     '=momentPicker',
@@ -47,18 +70,21 @@
 				maxDate:   '=?',
 				today:     '=?',
 				disabled:  '=?disable',
+				autoclose: '=?',
 				change:    '&?'
 			};
 			$timeout     = timeout;
 			$sce         = sce;
 			$compile     = compile;
 			$document    = document;
+			$window      = window;
 			momentPicker = momentPickerProvider;
-		};
-		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$document', 'momentPicker'];
+		}
+		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$document', '$window', 'momentPicker'];
 		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs) {
 			$scope.template = (
-				'<div class="moment-picker-container {{view.selected}}-view" ng-show="view.isOpen && !disabled" ng-class="{\'moment-picker-disabled\': disabled, \'open\': view.isOpen}">' +
+				'<div class="moment-picker-container {{view.selected}}-view" ' +
+					'ng-show="view.isOpen && !disabled" ng-class="{\'moment-picker-disabled\': disabled, \'open\': view.isOpen}">' +
 					'<table class="header-view">' +
 						'<thead>' +
 							'<tr>' +
@@ -100,7 +126,7 @@
 						'<table ng-if="view.selected == \'day\'">' +
 							'<tbody>' +
 								'<tr ng-repeat="threeHours in dayView.threeHours">' +
-									'<td ng-repeat="hour in threeHours track by hour.hour" '+
+									'<td ng-repeat="hour in threeHours track by hour.hour" ' +
 										'ng-class="hour.class" ng-bind="hour.label" ng-click="dayView.setHour(hour)"></td>' +
 								'</tr>' +
 							'</tbody>' +
@@ -124,14 +150,14 @@
 			);
 			
 			// one-way binding attributes
-			angular.forEach(['locale', 'format', 'minView', 'maxView', 'startView', 'today', 'leftArrow', 'rightArrow'], function (attr) {
+			angular.forEach(['locale', 'format', 'minView', 'maxView', 'startView', 'today', 'leftArrow', 'rightArrow', 'autoclose'], function (attr) {
 				if (!angular.isDefined($scope[attr])) $scope[attr] = momentPicker[attr];
 				if (!angular.isDefined($attrs[attr])) $attrs[attr] = $scope[attr];
 			});
 			
 			// utilities
-			$scope.momentToDate = function (value) { return angular.isDefined(value) && value.isValid() ? value.clone().toDate() : undefined; }
-			$scope.valueUpdate = function () { if (!$scope.disabled) $scope.value = $scope.momentToDate($scope.valueMoment); }
+			$scope.momentToDate = function (value) { return angular.isDefined(value) && value.isValid() ? value.clone().toDate() : undefined; };
+			$scope.valueUpdate = function () { if (!$scope.disabled) $scope.value = $scope.momentToDate($scope.valueMoment); };
 			$scope.limits = {
 				isAfterOrEqualMin: function (value, precision) {
 					return !angular.isDefined($scope.minDateMoment) || value.isAfter($scope.minDateMoment, precision) || value.isSame($scope.minDateMoment, precision);
@@ -160,18 +186,18 @@
 				// for each view, `$scope.views.formats` object contains the available moment formats
 				// formats present in more views are used to perform min/max view detection (i.e. 'LTS', 'LT', ...)
 				formats: {
-					'decade':  'Y{1,2}(?!Y)|YYYY|[Ll]{1,4}(?!T)',
-							   /* formats: Y,YY,YYYY,L,LL,LLL,LLLL,l,ll,lll,llll */
-					'year':    'M{1,4}(?![Mo])|Mo|Q',
-							   /* formats: M,MM,MMM,MMM,Mo,Q */
-					'month':   '[Dd]{1,4}(?![Ddo])|DDDo|[Dd]o|[Ww]{1,2}(?![Wwo])|[Ww]o|[Ee]|L{1,2}(?!T)|l{1,2}',
-							   /* formats: D,DD,DDD,DDDD,d,dd,ddd,dddd,DDDo,Do,do,W,WW,w,ww,Wo,wo,E,e,L,LL,l,ll */
-					'day':     '[Hh]{1,2}|LTS?',
-							   /* formats: H,HH,h,hh,LT,LTS */
-					'hour':    'm{1,2}|[Ll]{3,4}|LT(?!S)',
-							   /* formats: m,mm,LLL,LLLL,lll,llll,LT */
-					'minute':  's{1,2}|S{1,}|X|LTS'
-							   /* formats: s,ss,S,SS,SSS..,X,LTS */
+					'decade':	'Y{1,2}(?!Y)|YYYY|[Ll]{1,4}(?!T)',
+								/* formats: Y,YY,YYYY,L,LL,LLL,LLLL,l,ll,lll,llll */
+					'year':		'M{1,4}(?![Mo])|Mo|Q',
+								/* formats: M,MM,MMM,MMM,Mo,Q */
+					'month':	'[Dd]{1,4}(?![Ddo])|DDDo|[Dd]o|[Ww]{1,2}(?![Wwo])|[Ww]o|[Ee]|L{1,2}(?!T)|l{1,2}',
+								/* formats: D,DD,DDD,DDDD,d,dd,ddd,dddd,DDDo,Do,do,W,WW,w,ww,Wo,wo,E,e,L,LL,l,ll */
+					'day':		'[Hh]{1,2}|LTS?',
+								/* formats: H,HH,h,hh,LT,LTS */
+					'hour':		'm{1,2}|[Ll]{3,4}|LT(?!S)',
+								/* formats: m,mm,LLL,LLLL,lll,llll,LT */
+					'minute':	's{1,2}|S{1,}|X|LTS'
+								/* formats: s,ss,S,SS,SSS..,X,LTS */
 				},
 				detectMinMax: function () {
 					var minView, maxView;
@@ -203,10 +229,24 @@
 						((angular.element(element).scope().view || {}).close || angular.noop)();
 					});
 					if (!$scope.disabled) $scope.view.isOpen = true;
+					$timeout($scope.view.position, 0, false);
 				},
 				close: function () {
 					$scope.view.isOpen = false;
 					$scope.view.selected = $scope.startView;
+				},
+				position: function () {
+					$scope.picker.removeClass('top').removeClass('left');
+					
+					var container = $scope.container[0],
+						offset    = getOffset(container),
+						top       = offset.top - $window.pageYOffset,
+						left      = offset.left - $window.pageXOffset,
+						winWidth  = $window.innerWidth,
+						winHeight = $window.innerHeight;
+					
+					if (top + $window.pageYOffset - container.offsetHeight > 0 && top > winHeight / 2) $scope.picker.addClass('top');
+					if (left + container.offsetWidth > winWidth) $scope.picker.addClass('left');
 				},
 				// utility
 				unit: function () { return $scope.view.selected == 'decade' ? 10 : 1; },
@@ -214,7 +254,6 @@
 				// header
 				title: '',
 				previous: {
-					selectable: true,
 					label: $sce.trustAsHtml($scope.leftArrow),
 					selectable: true,
 					set: function () {
@@ -247,7 +286,7 @@
 					
 					if (nextView < 0 || nextView > maxView) {
 						$scope.valueUpdate($scope.valueMoment = $scope.view.moment.clone());
-						$scope.view.close();
+						if ($scope.autoclose) $scope.view.close();
 					} else if (nextView >= minView) $scope.view.selected = view;
 				}
 			};
@@ -255,9 +294,8 @@
 			$scope.decadeView = {
 				fourYears: {},
 				render: function () {
-					var year      = $scope.view.moment.clone();
-						firstYear = Math.floor(year.year() / 10) * 10 - 1,
-						lastYear  = firstYear + 11;
+					var year      = $scope.view.moment.clone(),
+						firstYear = Math.floor(year.year() / 10) * 10 - 1;
 					
 					year.year(firstYear);
 					$scope.decadeView.fourYears = {};
@@ -329,11 +367,10 @@
 				render: function () {
 					var month     = $scope.view.moment.month(),
 						day       = $scope.view.moment.clone().startOf('month').startOf('week'),
-						lastDay   = $scope.view.moment.clone().endOf('month').endOf('week'),
+						weeks     = {},
 						firstWeek = day.week(),
-						lastWeek  = firstWeek + 5;//lastDay.week() == 1 ? lastDay.weekday(-1).week() + 1 : lastDay.week();
+						lastWeek  = firstWeek + 5;
 					
-					weeks = {};
 					$scope.monthView.weeks = [];
 					for (var w = firstWeek; w <= lastWeek; w++)
 						weeks[w] = '0000000'.split('').map(function () {
@@ -369,8 +406,7 @@
 			$scope.dayView = {
 				threeHours: [],
 				render: function () {
-					var hour = $scope.view.moment.clone().startOf('day'),
-						format = moment.localeData().longDateFormat('LT').replace(/[aA]/, '');
+					var hour = $scope.view.moment.clone().startOf('day');
 					
 					$scope.dayView.threeHours = [];
 					for (var h = 0; h < 24; h++) {
@@ -487,7 +523,7 @@
 			$scope.limits.checkView();
 			
 			// properties listeners
-			$scope.$watch('model', function (model, previous) {
+			$scope.$watch('model', function (model) {
 				if (angular.isDefined(model)) {
 					$scope.valueMoment = moment(model, $scope.format, $scope.locale);
 					if (!$scope.valueMoment.isValid())
@@ -500,7 +536,7 @@
 				$scope.valueUpdate($scope.valueMoment);
 				$scope.limits.checkValue();
 			});
-			$scope.$watch('value', function (value, previous) {
+			$scope.$watch('value', function () {
 				if (!angular.isDefined($scope.valueMoment)) return;
 				var oldValue = $scope.model,
 					newValue = $scope.valueMoment.format($scope.format);
@@ -559,6 +595,7 @@
 				if (!$scope.view.isOpen) $timeout($scope.view.open);
 			});
 			angular.element($scope.contents[0].querySelector('input')).on('focus', function () { if (!$scope.view.isOpen) $timeout($scope.view.open); });
+			angular.element($window).on('resize', $scope.view.position);
 		};
 		
 		return MomentPickerDirective;
@@ -569,8 +606,11 @@
 		.provider('momentPicker', [function () {
 			return new momentPickerProvider();
 		}])
-		.directive('momentPicker', ['$timeout', '$sce', '$compile', '$document', 'momentPicker', function ($timeout, $sce, $compile, $document, momentPicker) {
-			return new MomentPickerDirective($timeout, $sce, $compile, $document, momentPicker);
-		}]);
+		.directive('momentPicker', [
+			'$timeout', '$sce', '$compile', '$document', '$window', 'momentPicker',
+			function ($timeout, $sce, $compile, $document, $window, momentPicker) {
+				return new MomentPickerDirective($timeout, $sce, $compile, $document, $window, momentPicker);
+			}
+		]);
 	
 })(window.angular);

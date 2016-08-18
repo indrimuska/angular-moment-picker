@@ -125,7 +125,7 @@
 						'<table ng-if="view.selected == \'day\'">' +
 							'<tbody>' +
 								'<tr ng-repeat="threeHours in dayView.threeHours">' +
-									'<td ng-repeat="hour in threeHours track by hour.hour" '+
+									'<td ng-repeat="hour in threeHours track by hour.hour" ' +
 										'ng-class="hour.class" ng-bind="hour.label" ng-click="dayView.setHour(hour)"></td>' +
 								'</tr>' +
 							'</tbody>' +
