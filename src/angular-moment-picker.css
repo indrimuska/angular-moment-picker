@@ -42,6 +42,12 @@
     background-image:     -ms-linear-gradient(#45b1e8, #3097de);
     background-image:      -o-linear-gradient(#45b1e8, #3097de);
     background-image:         linear-gradient(#45b1e8, #3097de); }
+.moment-picker td.highlighted { background: rgba(0, 0, 0, .15)
+	background-image: -webkit-radial-gradient(transparent, rgba(0, 0, 0, .1));
+    background-image:    -moz-radial-gradient(transparent, rgba(0, 0, 0, .1));
+    background-image:     -ms-radial-gradient(transparent, rgba(0, 0, 0, .1));
+    background-image:      -o-radial-gradient(transparent, rgba(0, 0, 0, .1));
+    background-image:         radial-gradient(transparent, rgba(0, 0, 0, .1)); }
 .moment-picker th.disabled,
 .moment-picker th.disabled:hover,
 .moment-picker td.disabled,
