@@ -181,7 +181,9 @@
 								min-date="ctrl.builder.minDate"
 								max-date="ctrl.builder.maxDate"
 								disable="ctrl.builder.disable"
-								today="ctrl.builder.today">
+								autoclose="ctrl.builder.autoclose"
+								today="ctrl.builder.today"
+								keyboard="ctrl.builder.keyboard">
 								<i class="mega-octicon octicon-calendar"></i>&nbsp;
 								{{ ctrl.myInput }}
 							</span>
@@ -264,18 +266,30 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-6">
+						<div class="col-md-3">
 							<div class="form-group text-center">
-								<label for="disabled">Disabled</label><br>
+								<label for="disabled">Disabled</label>
 								<switcher ng-model="ctrl.builder.disable"></switcher>
 							</div>
 						</div>
-							<div class="col-md-6">
+							<div class="col-md-3">
 								<div class="form-group text-center">
-									<label for="disabled">Today</label><br>
-									<switcher ng-model="ctrl.builder.today"></switcher>
+									<label for="disabled">Autoclose</label>
+									<switcher ng-model="ctrl.builder.autoclose"></switcher>
 								</div>
 							</div>
+						<div class="col-md-3">
+							<div class="form-group text-center">
+								<label for="disabled">Today</label>
+								<switcher ng-model="ctrl.builder.today"></switcher>
+							</div>
+						</div>
+						<div class="col-md-3">
+							<div class="form-group text-center">
+								<label for="disabled">Keyboard</label>
+								<switcher ng-model="ctrl.builder.keyboard"></switcher>
+							</div>
+						</div>
 					</div>
 					<div class="builder">
 						<pre><code class="html">&lt;div moment-picker="ctrl.myInput"<span ng-show="ctrl.builder.locale != ctrl.defaults.locale">
@@ -286,8 +300,10 @@
      start-view="{{ctrl.builder.startView | encoded}}"</span><span ng-show="ctrl.builder.minDate">
      min-date="'{{ctrl.builder.minDate | encoded}}'"</span><span ng-show="ctrl.builder.maxDate">
      max-date="'{{ctrl.builder.maxDate | encoded}}'"</span><span ng-show="ctrl.builder.disable">
-     disable="{{ctrl.builder.disable}}"</span><span ng-show="ctrl.builder.today">
-     today="{{ctrl.builder.today}}"</span>&gt;
+     disable="{{ctrl.builder.disable}}"</span><span ng-show="ctrl.builder.autoclose">
+     autoclose="{{ctrl.builder.autoclose}}"</span><span ng-show="ctrl.builder.today">
+     today="{{ctrl.builder.today}}"</span><span ng-show="ctrl.builder.keyboard">
+     keyboard="{{ctrl.builder.keyboard}}"</span>&gt;
     <span ng-non-bindable>{{ ctrl.myInput }}</span>
 &lt;/div&gt;</code></pre>
 					</div>
@@ -304,7 +320,9 @@
             minView:       'decade',
             maxView:       'minute',
             startView:     'year',
+            autoclose:     true,
             today:         false,
+            keyboard:      false,
             
             /* Extra: Views properties */
             leftArrow:     '&amp;larr;',

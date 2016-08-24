@@ -42,17 +42,12 @@ pre .clipboard:hover span { max-width: 100px; opacity: 1; }
 .examples .example .lead { color: #597ea2; margin-bottom: 40px; }
 .examples .example .locales .moment-picker { margin: 3px; display: inline-block; }
 .examples .example label small { color: #abbbc7; }
+.examples .example .form-group>label { display: block; }
 .examples .example .min-max-containers { min-height: 34px; display: block; }
 .examples .example .builder pre,
 .examples .example .builder .results { margin: 20px 0; }
 .examples .example .builder .results { background: #e4eef5; padding: 10px 0 15px; border-radius: 4px; min-height: 58px; }
 .examples .example .builder .results .moment-picker { display: inline-block; }
-/*
-.examples .example .builder .results .moment-picker { font-size: 16px; }
-.examples .example .builder .results .moment-picker .moment-picker-container { display: inline-block !important; position: static !important; margin: 0 !important; }
-.examples .example .builder .results .moment-picker .moment-picker-container:before,
-.examples .example .builder .results .moment-picker .moment-picker-container:after { content: none; }
-*/
 
 /* Footer */
 .footer { border-top: 1px solid #e5e5e5; margin: 60px 0; }
