@@ -1,6 +1,8 @@
-/*! Angular Moment Picker - v0.5.7 - https://github.com/indrimuska/angular-moment-picker - (c) 2015 Indri Muska - MIT */
+/*! Angular Moment Picker - v0.6.0 - https://github.com/indrimuska/angular-moment-picker - (c) 2015 Indri Muska - MIT */
 (function (angular) {
 	'use strict';
+	
+	var KEYS = { up: 38, down: 40, left: 37, right: 39, escape: 27, enter: 13 };
 	
 	var momentPickerProvider = (function () {
 		var defaults;
@@ -12,8 +14,9 @@
 				minView:       'decade',
 				maxView:       'minute',
 				startView:     'year',
-				today:         false,
 				autoclose:     true,
+				today:         false,
+				keyboard:      false,
 				leftArrow:     '&larr;',
 				rightArrow:    '&rarr;',
 				yearsFormat:   'YYYY',
@@ -36,7 +39,7 @@
 		return momentPickerProvider;
 	})();
 	
-	var $timeout, $sce, $compile, $document, $window, momentPicker;
+	var $timeout, $sce, $compile, $window, momentPicker;
 	
 	var MomentPickerDirective = (function () {
 		
@@ -57,7 +60,7 @@
 		}
 		
 		// Directive
-		function MomentPickerDirective(timeout, sce, compile, document, window, momentPickerProvider) {
+		function MomentPickerDirective(timeout, sce, compile, window, momentPickerProvider) {
 			this.restrict = 'A',
 			this.scope = {
 				model:     '=momentPicker',
@@ -68,19 +71,19 @@
 				startView: '@?',
 				minDate:   '=?',
 				maxDate:   '=?',
-				today:     '=?',
 				disabled:  '=?disable',
 				autoclose: '=?',
+				today:     '=?',
+				keyboard:  '=?',
 				change:    '&?'
 			};
 			$timeout     = timeout;
 			$sce         = sce;
 			$compile     = compile;
-			$document    = document;
 			$window      = window;
 			momentPicker = momentPickerProvider;
 		}
-		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$document', '$window', 'momentPicker'];
+		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$window', 'momentPicker'];
 		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs) {
 			$scope.template = (
 				'<div class="moment-picker-container {{view.selected}}-view" ' +
@@ -119,7 +122,7 @@
 							'</thead>' +
 							'<tbody>' +
 								'<tr ng-repeat="days in monthView.weeks">' +
-									'<td ng-repeat="day in days track by day.date" ng-class="day.class" ng-bind="day.label" ng-click="monthView.setDate(day)"></td>' +
+									'<td ng-repeat="day in days track by day.date" ng-class="day.class" ng-bind="day.label" ng-click="monthView.setDay(day)"></td>' +
 								'</tr>' +
 							'</tbody>' +
 						'</table>' +
@@ -150,14 +153,15 @@
 			);
 			
 			// one-way binding attributes
-			angular.forEach(['locale', 'format', 'minView', 'maxView', 'startView', 'today', 'leftArrow', 'rightArrow', 'autoclose'], function (attr) {
+			angular.forEach(['locale', 'format', 'minView', 'maxView', 'startView', 'autoclose', 'today', 'keyboard', 'leftArrow', 'rightArrow'], function (attr) {
 				if (!angular.isDefined($scope[attr])) $scope[attr] = momentPicker[attr];
 				if (!angular.isDefined($attrs[attr])) $attrs[attr] = $scope[attr];
 			});
 			
 			// utilities
-			$scope.momentToDate = function (value) { return angular.isDefined(value) && value.isValid() ? value.clone().toDate() : undefined; };
-			$scope.valueUpdate = function () { if (!$scope.disabled) $scope.value = $scope.momentToDate($scope.valueMoment); };
+			$scope.momentToDate  = function (value) { return $scope.isValidMoment(value) ? value.clone().toDate() : undefined; };
+			$scope.valueUpdate   = function () { if (!$scope.disabled) $scope.value = $scope.momentToDate($scope.valueMoment); };
+			$scope.isValidMoment = function (value) { return angular.isDefined(value) && value.isValid(); };
 			$scope.limits = {
 				isAfterOrEqualMin: function (value, precision) {
 					return !angular.isDefined($scope.minDateMoment) || value.isAfter($scope.minDateMoment, precision) || value.isSame($scope.minDateMoment, precision);
@@ -223,12 +227,9 @@
 				update: function () { $scope.view.value = $scope.momentToDate($scope.view.moment); },
 				toggle: function () { $scope.view.isOpen ? $scope.view.close() : $scope.view.open(); },
 				open: function () {
-					// close every open picker
-					// this is required because every picker stops click event propagation
-					angular.forEach($document[0].querySelectorAll('.moment-picker-container.open'), function (element) {
-						((angular.element(element).scope().view || {}).close || angular.noop)();
-					});
-					if (!$scope.disabled) $scope.view.isOpen = true;
+					if ($scope.disabled) return;
+					
+					$scope.view.isOpen = true;
 					$timeout($scope.view.position, 0, false);
 				},
 				close: function () {
@@ -247,6 +248,39 @@
 					
 					if (top + $window.pageYOffset - container.offsetHeight > 0 && top > winHeight / 2) $scope.picker.addClass('top');
 					if (left + container.offsetWidth > winWidth) $scope.picker.addClass('left');
+				},
+				keydown: function (e) {
+					var view       = $scope.view.selected + 'View',
+						precision  = { decade: 'year', year: 'month', month: 'day', day: 'hour', hour: 'minute', minute: 'second' }[$scope.view.selected],
+						singleUnit = momentPicker[precision + 'sStep'] || 1,
+						operation  = [KEYS.up, KEYS.left].indexOf(e.keyCode) >= 0 ? 'subtract' : 'add';
+					
+					switch (e.keyCode) {
+						case KEYS.up:
+						case KEYS.down:
+							e.preventDefault();
+							if (!$scope.view.isOpen) $scope.view.open();
+							else {
+								$scope.view.update($scope.view.moment[operation](singleUnit * $scope[view].perLine, precision));
+								$scope.view.render();
+							}
+							break;
+						case KEYS.left:
+						case KEYS.right:
+							if (!$scope.view.isOpen) break;
+							$scope.view.update($scope.view.moment[operation](singleUnit, precision));
+							$scope.view.render();
+							e.preventDefault();
+							break;
+						case KEYS.enter:
+							if (!$scope.view.isOpen) break;
+							$scope.view.change(precision);
+							e.preventDefault();
+							break;
+						case KEYS.escape:
+							$scope.view.toggle();
+							break;
+					}
 				},
 				// utility
 				unit: function () { return $scope.view.selected == 'decade' ? 10 : 1; },
@@ -286,12 +320,13 @@
 					
 					if (nextView < 0 || nextView > maxView) {
 						$scope.valueUpdate($scope.valueMoment = $scope.view.moment.clone());
-						if ($scope.autoclose) $scope.view.close();
+						if ($scope.autoclose) $timeout($scope.view.close);
 					} else if (nextView >= minView) $scope.view.selected = view;
 				}
 			};
 			// decade view
 			$scope.decadeView = {
+				perLine: 4,
 				fourYears: {},
 				render: function () {
 					var year      = $scope.view.moment.clone(),
@@ -307,7 +342,11 @@
 						$scope.decadeView.fourYears[index].push({
 							label: year.format(momentPicker.yearsFormat),
 							year:  year.year(),
-							class: !selectable || [0, 11].indexOf(y) >= 0 ? 'disabled' : year.isSame($scope.valueMoment, 'year') ? 'selected' : '',
+							class: [
+								$scope.keyboard && year.isSame($scope.view.moment, 'year') ? 'highlighted' : '',
+								!selectable || [0, 11].indexOf(y) >= 0 ? 'disabled' :
+									$scope.isValidMoment($scope.valueMoment) && year.isSame($scope.valueMoment, 'year') ? 'selected' : ''
+							].join(' ').trim(),
 							selectable: selectable
 						});
 						year.add(1, 'years');
@@ -323,6 +362,7 @@
 			};
 			// year view
 			$scope.yearView = {
+				perLine: 4,
 				fourMonths: {},
 				render: function () {
 					var month  = $scope.view.moment.clone().startOf('year'),
@@ -338,7 +378,10 @@
 							label: month.format(momentPicker.monthsFormat),
 							year:  month.year(),
 							month: month.month(),
-							class: !selectable ? 'disabled' : month.isSame($scope.valueMoment, 'month') ? 'selected' : '',
+							class: [
+								$scope.keyboard && month.isSame($scope.view.moment, 'month') ? 'highlighted' : '',
+								!selectable ? 'disabled' : $scope.isValidMoment($scope.valueMoment) && month.isSame($scope.valueMoment, 'month') ? 'selected' : ''
+							].join(' ').trim(),
 							selectable: selectable
 						});
 						month.add(1, 'months');
@@ -354,10 +397,12 @@
 			};
 			// month view
 			$scope.monthView = {
+				perLine: 7,
 				days: (function () {
 					var days = [],
-						day  = moment().locale($scope.locale).startOf('week');
-					for (var i = 0; i < 7; i++) {
+						day  = moment().locale($scope.locale).startOf('week'),
+						end  = day.clone().endOf('week');
+					while (!day.isSame(end, 'day')) {
 						days.push(day.format('dd'));
 						day.add(1, 'days');
 					}
@@ -373,7 +418,7 @@
 					
 					$scope.monthView.weeks = [];
 					for (var w = firstWeek; w <= lastWeek; w++)
-						weeks[w] = '0000000'.split('').map(function () {
+						weeks[w] = Array.apply(null, Array($scope.monthView.perLine)).map(function () {
 							var selectable = $scope.limits.isSelectable(day, 'day'),
 								d = {
 									label: day.format(momentPicker.daysFormat),
@@ -381,8 +426,10 @@
 									date:  day.date(),
 									month: day.month(),
 									class: [
+										$scope.keyboard && day.isSame($scope.view.moment, 'day') ? 'highlighted' : '',
 										!!$scope.today && day.isSame(new Date(), 'day') ? 'today' : '',
-										!selectable || day.month() != month ? 'disabled' : day.isSame($scope.valueMoment, 'day') ? 'selected' : ''
+										!selectable || day.month() != month ? 'disabled' :
+											$scope.isValidMoment($scope.valueMoment) && day.isSame($scope.valueMoment, 'day') ? 'selected' : ''
 									].join(' ').trim(),
 									selectable: selectable
 								};
@@ -396,7 +443,7 @@
 					// return title
 					return $scope.view.moment.format('MMMM YYYY');
 				},
-				setDate: function (day) {
+				setDay: function (day) {
 					if (!day.selectable) return;
 					$scope.view.update($scope.view.moment.year(day.year).month(day.month).date(day.date));
 					$scope.view.change('day');
@@ -404,13 +451,14 @@
 			};
 			// day view
 			$scope.dayView = {
+				perLine: 4,
 				threeHours: [],
 				render: function () {
 					var hour = $scope.view.moment.clone().startOf('day');
 					
 					$scope.dayView.threeHours = [];
 					for (var h = 0; h < 24; h++) {
-						var index = Math.floor(h / 4),
+						var index = Math.floor(h / $scope.dayView.perLine),
 							selectable = $scope.limits.isSelectable(hour, 'hour');
 						
 						if (!$scope.dayView.threeHours[index])
@@ -421,7 +469,10 @@
 							month: hour.month(),
 							date:  hour.date(),
 							hour:  hour.hour(),
-							class: !selectable ? 'disabled' : hour.isSame($scope.valueMoment, 'hour') ? 'selected' : '',
+							class: [
+								$scope.keyboard && hour.isSame($scope.view.moment, 'hour') ? 'highlighted' : '',
+								!selectable ? 'disabled' : $scope.isValidMoment($scope.valueMoment) && hour.isSame($scope.valueMoment, 'hour') ? 'selected' : ''
+							].join(' ').trim(),
 							selectable: selectable
 						});
 						hour.add(1, 'hours');
@@ -437,6 +488,7 @@
 			};
 			// hour view
 			$scope.hourView = {
+				perLine: 4,
 				minutes: [],
 				render: function () {
 					var i = 0,
@@ -445,7 +497,7 @@
 					
 					$scope.hourView.minutes = [];
 					for (var m = 0; m < 60; m += momentPicker.minutesStep) {
-						var index = Math.floor(i / 4),
+						var index = Math.floor(i / $scope.hourView.perLine),
 							selectable = $scope.limits.isSelectable(minute, 'minute');
 						
 						if (!$scope.hourView.minutes[index])
@@ -457,12 +509,16 @@
 							date:   minute.date(),
 							hour:   minute.hour(),
 							minute: minute.minute(),
-							class:  !selectable ? 'disabled' : minute.isSame($scope.valueMoment, 'minute') ? 'selected' : '',
+							class:  [
+								$scope.keyboard && minute.isSame($scope.view.moment, 'minute') ? 'highlighted' : '',
+								!selectable ? 'disabled' : $scope.isValidMoment($scope.valueMoment) && minute.isSame($scope.valueMoment, 'minute') ? 'selected' : ''
+							].join(' ').trim(),
 							selectable: selectable
 						});
 						i++;
 						minute.add(momentPicker.minutesStep, 'minutes');
 					}
+					if ($scope.keyboard) $scope.hourView.highlightClosest();
 					// return title
 					return $scope.view.moment.clone().startOf('hour').format('lll');
 				},
@@ -470,10 +526,25 @@
 					if (!minute.selectable) return;
 					$scope.view.update($scope.view.moment.year(minute.year).month(minute.month).date(minute.date).hour(minute.hour).minute(minute.minute));
 					$scope.view.change('minute');
+				},
+				highlightClosest: function () {
+					var minutes = [], minute;
+					angular.forEach($scope.hourView.minutes, function (line) {
+						angular.forEach(line, function (value) {
+							if (Math.abs(value.minute - $scope.view.moment.minute()) < momentPicker.minutesStep) minutes.push(value);
+						});
+					});
+					minute = minutes.sort(function (value1, value2) {
+						return Math.abs(value1.minute - $scope.view.moment.minute()) > Math.abs(value2.minute - $scope.view.moment.minute());
+					})[0];
+					if (minute.minute - $scope.view.moment.minute() == 0) return;
+					$scope.view.update($scope.view.moment.year(minute.year).month(minute.month).date(minute.date).hour(minute.hour).minute(minute.minute));
+					if (minute.selectable) minute.class = (minute.class + ' highlighted').trim();
 				}
 			};
 			// minute view
 			$scope.minuteView = {
+				perLine: 6,
 				seconds: [],
 				render: function () {
 					var i = 0,
@@ -481,7 +552,7 @@
 					
 					$scope.minuteView.seconds = [];
 					for (var s = 0; s < 60; s += momentPicker.secondsStep) {
-						var index = Math.floor(i / 6),
+						var index = Math.floor(i / $scope.minuteView.perLine),
 							selectable = $scope.limits.isSelectable(second, 'second');
 						
 						if (!$scope.minuteView.seconds[index])
@@ -494,12 +565,16 @@
 							hour:   second.hour(),
 							minute: second.minute(),
 							second: second.second(),
-							class:  !selectable ? 'disabled' : second.isSame($scope.valueMoment, 'second') ? 'selected' : '',
+							class:  [
+								$scope.keyboard && second.isSame($scope.view.moment, 'second') ? 'highlighted' : '',
+								!selectable ? 'disabled' : $scope.isValidMoment($scope.valueMoment) && second.isSame($scope.valueMoment, 'second') ? 'selected' : ''
+							].join(' ').trim(),
 							selectable: selectable
 						});
 						i++;
 						second.add(momentPicker.secondsStep, 'seconds');
 					}
+					if ($scope.keyboard) $scope.minuteView.highlightClosest();
 					// return title
 					return $scope.view.moment.clone().startOf('minute').format('lll');
 				},
@@ -507,6 +582,20 @@
 					if (!second.selectable) return;
 					$scope.view.update($scope.view.moment.year(second.year).month(second.month).date(second.date).hour(second.hour).minute(second.minute).second(second.second));
 					$scope.view.change('second');
+				},
+				highlightClosest: function () {
+					var seconds = [], second;
+					angular.forEach($scope.minuteView.seconds, function (line) {
+						angular.forEach(line, function (value) {
+							if (Math.abs(value.second - $scope.view.moment.second()) < momentPicker.secondsStep) seconds.push(value);
+						});
+					});
+					second = seconds.sort(function (value1, value2) {
+						return Math.abs(value1.second - $scope.view.moment.second()) > Math.abs(value2.second - $scope.view.moment.second());
+					})[0];
+					if (second.second - $scope.view.moment.second() == 0) return;
+					$scope.view.update($scope.view.moment.year(second.year).month(second.month).date(second.date).hour(second.hour).minute(second.minute).second(second.second));
+					if (second.selectable) second.class = (second.class + ' highlighted').trim();
 				}
 			};
 			
@@ -517,6 +606,10 @@
 			$scope.container = $compile($scope.template)($scope);
 			$scope.picker.append($scope.contents);
 			$scope.picker.append($scope.container);
+			$scope.input = $scope.contents[0].tagName.toLowerCase() != 'input' && $scope.contents[0].querySelectorAll('input').length > 0
+				? angular.element($scope.contents[0].querySelectorAll('input'))
+				: angular.element($scope.contents[0]);
+			$scope.input.attr('tabindex', 0);
 			
 			// initialization
 			$scope.views.detectMinMax();
@@ -587,15 +680,13 @@
 				$scope.view.render();
 			});
 			
-			// open/close listeners
-			$document.on('click', function () { if ($scope.view.isOpen) $timeout($scope.view.close); });
-			$scope.container.on('click', function (e) { e.stopPropagation(); });
-			$scope.contents.on('click', function (e) {
-				e.stopPropagation();
-				if (!$scope.view.isOpen) $timeout($scope.view.open);
-			});
-			angular.element($scope.contents[0].querySelector('input')).on('focus', function () { if (!$scope.view.isOpen) $timeout($scope.view.open); });
-			angular.element($window).on('resize', $scope.view.position);
+			// event listeners
+			$scope.input
+				.on('focus',   function () { if (!$scope.view.isOpen) $scope.$apply($scope.view.open); })
+				.on('blur',    function () { $timeout(function () { if ($scope.view.isOpen && document.activeElement !== $scope.input[0]) $scope.view.close(); }, 10); })
+				.on('keydown', function (e) { if ($scope.keyboard) $scope.$apply(function () { $scope.view.keydown(e); }); });
+			$scope.container.on('click', function () { $scope.input[0].focus(); });
+			angular.element($window).on('resize scroll', $scope.view.position);
 		};
 		
 		return MomentPickerDirective;
@@ -607,9 +698,9 @@
 			return new momentPickerProvider();
 		}])
 		.directive('momentPicker', [
-			'$timeout', '$sce', '$compile', '$document', '$window', 'momentPicker',
-			function ($timeout, $sce, $compile, $document, $window, momentPicker) {
-				return new MomentPickerDirective($timeout, $sce, $compile, $document, $window, momentPicker);
+			'$timeout', '$sce', '$compile', '$window', 'momentPicker',
+			function ($timeout, $sce, $compile, $window, momentPicker) {
+				return new MomentPickerDirective($timeout, $sce, $compile, $window, momentPicker);
 			}
 		]);
 	
