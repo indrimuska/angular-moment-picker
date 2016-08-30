@@ -396,17 +396,10 @@
 			};
 			// month view
 			$scope.monthView = {
-				perLine: 7,
-				days: (function () {
-					var days = [],
-						day  = moment().locale($scope.locale).startOf('week'),
-						end  = day.clone().endOf('week');
-					while (!day.isSame(end, 'day')) {
-						days.push(day.format('dd'));
-						day.add(1, 'days');
-					}
-					return days;
-				})(),
+				perLine: moment.weekdays().length,
+				days: moment.weekdays().map(function (day, i) {
+					return moment().locale($scope.locale).startOf('week').add(i, 'day').format('dd');
+				}),
 				weeks: [],
 				render: function () {
 					var month     = $scope.view.moment.month(),
@@ -682,8 +675,9 @@
 			// event listeners
 			$scope.input
 				.on('focus',   function () { if (!$scope.view.isOpen) $scope.$apply($scope.view.open); })
-				.on('blur',    function () { $timeout(function () { if ($scope.view.isOpen && document.activeElement !== $scope.input[0]) $scope.view.close(); }, 10); })
+				.on('blur',    function () { $timeout(function () { if ($scope.view.isOpen && document.activeElement !== $scope.input[0]) $scope.view.close(); }, 100); })
 				.on('keydown', function (e) { if ($scope.keyboard) $scope.$apply(function () { $scope.view.keydown(e); }); });
+			$scope.contents.on('click', function () { $scope.input[0].focus(); });
 			$scope.container.on('click', function () { $scope.input[0].focus(); });
 			angular.element($window).on('resize scroll', $scope.view.position);
 		};
