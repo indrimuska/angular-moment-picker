@@ -403,7 +403,7 @@
 				weeks: [],
 				render: function () {
 					var month     = $scope.view.moment.month(),
-						day       = $scope.view.moment.clone().startOf('month').startOf('week'),
+						day       = $scope.view.moment.clone().startOf('month').startOf('week').hour(12),
 						weeks     = {},
 						firstWeek = day.week(),
 						lastWeek  = firstWeek + 5;
