@@ -1,4 +1,4 @@
-/*! Angular Moment Picker - v0.6.1 - https://github.com/indrimuska/angular-moment-picker - (c) 2015 Indri Muska - MIT */
+/*! Angular Moment Picker - v0.6.2 - https://github.com/indrimuska/angular-moment-picker - (c) 2015 Indri Muska - MIT */
 (function (angular) {
 	'use strict';
 	
@@ -404,7 +404,7 @@
 				weeks: [],
 				render: function () {
 					var month     = $scope.view.moment.month(),
-						day       = $scope.view.moment.clone().startOf('month').startOf('week'),
+						day       = $scope.view.moment.clone().startOf('month').startOf('week').hour(12),
 						weeks     = {},
 						firstWeek = day.week(),
 						lastWeek  = firstWeek + 5;
