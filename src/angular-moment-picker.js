@@ -226,12 +226,14 @@
 				update: function () { $scope.view.value = $scope.momentToDate($scope.view.moment); },
 				toggle: function () { $scope.view.isOpen ? $scope.view.close() : $scope.view.open(); },
 				open: function () {
-					if ($scope.disabled) return;
+					if ($scope.disabled || $scope.view.isOpen) return;
 					
 					$scope.view.isOpen = true;
 					$timeout($scope.view.position, 0, false);
 				},
 				close: function () {
+					if (!$scope.view.isOpen) return;
+					
 					$scope.view.isOpen = false;
 					$scope.view.selected = $scope.startView;
 				},
@@ -674,11 +676,15 @@
 			
 			// event listeners
 			$scope.input
-				.on('focus',   function () { if (!$scope.view.isOpen) $scope.$apply($scope.view.open); })
-				.on('blur',    function () { $timeout(function () { if ($scope.view.isOpen && document.activeElement !== $scope.input[0]) $scope.view.close(); }, 100); })
-				.on('keydown', function (e) { if ($scope.keyboard) $scope.$apply(function () { $scope.view.keydown(e); }); });
-			$scope.contents.on('click', function () { $scope.input[0].focus(); });
-			$scope.container.on('click', function () { $scope.input[0].focus(); });
+				.on('focus',   function () { $scope.$evalAsync($scope.view.open); })
+				.on('blur',    function () { $scope.$evalAsync($scope.view.close); })
+				.on('keydown', function (e) { if ($scope.keyboard) $scope.$evalAsync(function () { $scope.view.keydown(e); }); });
+			$scope.contents.on('mousedown', $scope.focusInput);
+			$scope.container.on('mousedown', $scope.focusInput);
+			$scope.focusInput = function (e) {
+				e.preventDefault();
+				$scope.input[0].focus();
+			};
 			angular.element($window).on('resize scroll', $scope.view.position);
 		};
 		
