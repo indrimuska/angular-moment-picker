@@ -1,4 +1,4 @@
-/*! Angular Moment Picker - v0.6.3 - https://github.com/indrimuska/angular-moment-picker - (c) 2015 Indri Muska - MIT */
+/*! Angular Moment Picker - v0.6.4 - https://github.com/indrimuska/angular-moment-picker - (c) 2015 Indri Muska - MIT */
 (function (angular) {
 	'use strict';
 	
@@ -676,16 +676,16 @@
 			});
 			
 			// event listeners
+			$scope.focusInput = function (e) {
+				e.preventDefault();
+				$scope.input[0].focus();
+			};
 			$scope.input
 				.on('focus',   function () { $scope.$evalAsync($scope.view.open); })
 				.on('blur',    function () { $scope.$evalAsync($scope.view.close); })
 				.on('keydown', function (e) { if ($scope.keyboard) $scope.$evalAsync(function () { $scope.view.keydown(e); }); });
 			$scope.contents.on('mousedown', $scope.focusInput);
 			$scope.container.on('mousedown', $scope.focusInput);
-			$scope.focusInput = function (e) {
-				e.preventDefault();
-				$scope.input[0].focus();
-			};
 			angular.element($window).on('resize scroll', $scope.view.position);
 		};
 		
