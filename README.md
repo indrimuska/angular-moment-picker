@@ -94,6 +94,31 @@ Event | Parameters | Description
 ---|---|---
 change | `newValue`, `oldValue` | Function fired upon change in picker value.
 
+## Selectable callback
+
+You can use a callback to decide if a value should be selectable.
+
+
+```html
+<div moment-picker="ctrl.meeting" format="HH:mm A" selectable="ctrl.isSelectable(value, precision)">
+    The meeting starts at {{ ctrl.meeting }}.
+</div>
+```
+
+Parameters:
+  - `value` a Moment.js object
+  - `precision` a string (month, day, ...)
+  
+Return: `boolean`
+
+```js
+// In you controller
+$scope.isSelectable = function (value, precision) {
+    // disable every monday
+    return 'day' !== precision ? true : 1 !== value.day();
+};
+```
+
 ## momentPickerProvider
 
 Angular Moment Picker comes out with its own provider, in order to define your own configuration for all the pickers in your app.
