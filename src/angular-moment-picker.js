@@ -60,7 +60,7 @@
 		
 		// Directive
 		function MomentPickerDirective(timeout, sce, compile, window, momentPickerProvider) {
-			this.restrict = 'A',
+			this.restrict = 'A';
 			this.scope = {
 				model:     '=momentPicker',
 				locale:    '@?',
@@ -99,16 +99,16 @@
 					'<div class="moment-picker-specific-views">' +
 						'<table ng-if="view.selected == \'decade\'">' +
 							'<tbody>' +
-								'<tr ng-repeat="fourYear in decadeView.fourYears">' +
-									'<td ng-repeat="year in fourYear track by year.year" ' +
+								'<tr ng-repeat="row in decadeView.rows">' +
+									'<td ng-repeat="year in row track by year.year" ' +
 										'ng-class="year.class" ng-bind="year.label" ng-click="decadeView.setYear(year)"></td>' +
 								'</tr>' +
 							'</tbody>' +
 						'</table>' +
 						'<table ng-if="view.selected == \'year\'">' +
 							'<tbody>' +
-								'<tr ng-repeat="fourMonth in yearView.fourMonths">' +
-									'<td ng-repeat="month in fourMonth track by month.month" ' +
+								'<tr ng-repeat="row in yearView.rows">' +
+									'<td ng-repeat="month in row track by month.month" ' +
 										'ng-class="month.class" ng-bind="month.label" ng-click="yearView.setMonth(month)"></td>' +
 								'</tr>' +
 							'</tbody>' +
@@ -120,30 +120,30 @@
 								'</tr>' +
 							'</thead>' +
 							'<tbody>' +
-								'<tr ng-repeat="days in monthView.weeks">' +
-									'<td ng-repeat="day in days track by day.date" ng-class="day.class" ng-bind="day.label" ng-click="monthView.setDay(day)"></td>' +
+								'<tr ng-repeat="row in monthView.rows">' +
+									'<td ng-repeat="day in row track by day.date" ng-class="day.class" ng-bind="day.label" ng-click="monthView.setDay(day)"></td>' +
 								'</tr>' +
 							'</tbody>' +
 						'</table>' +
 						'<table ng-if="view.selected == \'day\'">' +
 							'<tbody>' +
-								'<tr ng-repeat="threeHours in dayView.threeHours">' +
-									'<td ng-repeat="hour in threeHours track by hour.hour" ' +
+								'<tr ng-repeat="row in dayView.rows">' +
+									'<td ng-repeat="hour in row track by hour.hour" ' +
 										'ng-class="hour.class" ng-bind="hour.label" ng-click="dayView.setHour(hour)"></td>' +
 								'</tr>' +
 							'</tbody>' +
 						'</table>' +
 						'<table ng-if="view.selected == \'hour\'">' +
 							'<tbody>' +
-								'<tr ng-repeat="minutes in hourView.minutes">' +
-									'<td ng-repeat="minute in minutes" ng-class="minute.class" ng-bind="minute.label" ng-click="hourView.setMinute(minute)"></td>' +
+								'<tr ng-repeat="row in hourView.rows">' +
+									'<td ng-repeat="minute in row" ng-class="minute.class" ng-bind="minute.label" ng-click="hourView.setMinute(minute)"></td>' +
 								'</tr>' +
 							'</tbody>' +
 						'</table>' +
 						'<table ng-if="view.selected == \'minute\'">' +
 							'<tbody>' +
-								'<tr ng-repeat="seconds in minuteView.seconds">' +
-									'<td ng-repeat="second in seconds" ng-class="second.class" ng-bind="second.label" ng-click="minuteView.setSecond(second)"></td>' +
+								'<tr ng-repeat="row in minuteView.rows">' +
+									'<td ng-repeat="second in row" ng-class="second.class" ng-bind="second.label" ng-click="minuteView.setSecond(second)"></td>' +
 								'</tr>' +
 							'</tbody>' +
 						'</table>' +
@@ -328,19 +328,19 @@
 			// decade view
 			$scope.decadeView = {
 				perLine: 4,
-				fourYears: {},
+				rows: {},
 				render: function () {
 					var year      = $scope.view.moment.clone(),
 						firstYear = Math.floor(year.year() / 10) * 10 - 1;
 					
 					year.year(firstYear);
-					$scope.decadeView.fourYears = {};
+					$scope.decadeView.rows = {};
 					for (var y = 0; y < 12; y++) {
-						var index      = Math.floor(y / 4),
+						var index      = Math.floor(y / $scope.decadeView.perLine),
 							selectable = $scope.limits.isSelectable(year, 'year');
 						
-						if (!$scope.decadeView.fourYears[index]) $scope.decadeView.fourYears[index] = [];
-						$scope.decadeView.fourYears[index].push({
+						if (!$scope.decadeView.rows[index]) $scope.decadeView.rows[index] = [];
+						$scope.decadeView.rows[index].push({
 							label: year.format(momentPicker.yearsFormat),
 							year:  year.year(),
 							class: [
@@ -357,25 +357,26 @@
 				},
 				setYear: function (year) {
 					if (!year.selectable) return;
-					$scope.view.update($scope.view.moment.year(year.year));
+					$scope.view.moment.year(year.year);
+					$scope.view.update();
 					$scope.view.change('year');
 				}
 			};
 			// year view
 			$scope.yearView = {
 				perLine: 4,
-				fourMonths: {},
+				rows: {},
 				render: function () {
 					var month  = $scope.view.moment.clone().startOf('year'),
 						months = moment.monthsShort();
 					
-					$scope.yearView.fourMonths = {};
+					$scope.yearView.rows = {};
 					months.forEach(function (label, i) {
-						var index      = Math.floor(i / 4),
+						var index      = Math.floor(i / $scope.yearView.perLine),
 							selectable = $scope.limits.isSelectable(month, 'month');
 						
-						if (!$scope.yearView.fourMonths[index]) $scope.yearView.fourMonths[index] = [];
-						$scope.yearView.fourMonths[index].push({
+						if (!$scope.yearView.rows[index]) $scope.yearView.rows[index] = [];
+						$scope.yearView.rows[index].push({
 							label: month.format(momentPicker.monthsFormat),
 							year:  month.year(),
 							month: month.month(),
@@ -392,7 +393,8 @@
 				},
 				setMonth: function (month) {
 					if (!month.selectable) return;
-					$scope.view.update($scope.view.moment.year(month.year).month(month.month));
+					$scope.view.moment.year(month.year).month(month.month);
+					$scope.view.update();
 					$scope.view.change('month');
 				}
 			};
@@ -402,17 +404,17 @@
 				days: moment.weekdays().map(function (day, i) {
 					return moment().locale($scope.locale).startOf('week').add(i, 'day').format('dd');
 				}),
-				weeks: [],
+				rows: [],
 				render: function () {
 					var month     = $scope.view.moment.month(),
 						day       = $scope.view.moment.clone().startOf('month').startOf('week').hour(12),
-						weeks     = {},
+						rows      = {},
 						firstWeek = day.week(),
 						lastWeek  = firstWeek + 5;
 					
-					$scope.monthView.weeks = [];
+					$scope.monthView.rows = [];
 					for (var w = firstWeek; w <= lastWeek; w++)
-						weeks[w] = Array.apply(null, Array($scope.monthView.perLine)).map(function () {
+						rows[w] = Array.apply(null, Array($scope.monthView.perLine)).map(function () {
 							var selectable = $scope.limits.isSelectable(day, 'day'),
 								d = {
 									label: day.format(momentPicker.daysFormat),
@@ -431,33 +433,34 @@
 							return d;
 						});
 					// object to array - see https://github.com/indrimuska/angular-moment-picker/issues/9
-					angular.forEach(weeks, function (week) {
-						$scope.monthView.weeks.push(week);
+					angular.forEach(rows, function (row) {
+						$scope.monthView.rows.push(row);
 					});
 					// return title
 					return $scope.view.moment.format('MMMM YYYY');
 				},
 				setDay: function (day) {
 					if (!day.selectable) return;
-					$scope.view.update($scope.view.moment.year(day.year).month(day.month).date(day.date));
+					$scope.view.moment.year(day.year).month(day.month).date(day.date);
+					$scope.view.update();
 					$scope.view.change('day');
 				}
 			};
 			// day view
 			$scope.dayView = {
 				perLine: 4,
-				threeHours: [],
+				rows: [],
 				render: function () {
 					var hour = $scope.view.moment.clone().startOf('day');
 					
-					$scope.dayView.threeHours = [];
+					$scope.dayView.rows = [];
 					for (var h = 0; h < 24; h++) {
 						var index = Math.floor(h / $scope.dayView.perLine),
 							selectable = $scope.limits.isSelectable(hour, 'hour');
 						
-						if (!$scope.dayView.threeHours[index])
-							$scope.dayView.threeHours[index] = [];
-						$scope.dayView.threeHours[index].push({
+						if (!$scope.dayView.rows[index])
+							$scope.dayView.rows[index] = [];
+						$scope.dayView.rows[index].push({
 							label: hour.format(momentPicker.hoursFormat),
 							year:  hour.year(),
 							month: hour.month(),
@@ -476,27 +479,28 @@
 				},
 				setHour: function (hour) {
 					if (!hour.selectable) return;
-					$scope.view.update($scope.view.moment.year(hour.year).month(hour.month).date(hour.date).hour(hour.hour));
+					$scope.view.moment.year(hour.year).month(hour.month).date(hour.date).hour(hour.hour);
+					$scope.view.update();
 					$scope.view.change('hour');
 				}
 			};
 			// hour view
 			$scope.hourView = {
 				perLine: 4,
-				minutes: [],
+				rows: [],
 				render: function () {
 					var i = 0,
 						minute = $scope.view.moment.clone().startOf('hour'),
 						minutesFormat = momentPicker.minutesFormat || moment.localeData($scope.locale).longDateFormat('LT').replace(/[aA]/, '');
 					
-					$scope.hourView.minutes = [];
+					$scope.hourView.rows = [];
 					for (var m = 0; m < 60; m += momentPicker.minutesStep) {
 						var index = Math.floor(i / $scope.hourView.perLine),
 							selectable = $scope.limits.isSelectable(minute, 'minute');
 						
-						if (!$scope.hourView.minutes[index])
-							$scope.hourView.minutes[index] = [];
-						$scope.hourView.minutes[index].push({
+						if (!$scope.hourView.rows[index])
+							$scope.hourView.rows[index] = [];
+						$scope.hourView.rows[index].push({
 							label:  minute.format(minutesFormat),
 							year:   minute.year(),
 							month:  minute.month(),
@@ -518,13 +522,14 @@
 				},
 				setMinute: function (minute) {
 					if (!minute.selectable) return;
-					$scope.view.update($scope.view.moment.year(minute.year).month(minute.month).date(minute.date).hour(minute.hour).minute(minute.minute));
+					$scope.view.moment.year(minute.year).month(minute.month).date(minute.date).hour(minute.hour).minute(minute.minute);
+					$scope.view.update();
 					$scope.view.change('minute');
 				},
 				highlightClosest: function () {
 					var minutes = [], minute;
-					angular.forEach($scope.hourView.minutes, function (line) {
-						angular.forEach(line, function (value) {
+					angular.forEach($scope.hourView.rows, function (row) {
+						angular.forEach(row, function (value) {
 							if (Math.abs(value.minute - $scope.view.moment.minute()) < momentPicker.minutesStep) minutes.push(value);
 						});
 					});
@@ -532,26 +537,27 @@
 						return Math.abs(value1.minute - $scope.view.moment.minute()) > Math.abs(value2.minute - $scope.view.moment.minute());
 					})[0];
 					if (minute.minute - $scope.view.moment.minute() == 0) return;
-					$scope.view.update($scope.view.moment.year(minute.year).month(minute.month).date(minute.date).hour(minute.hour).minute(minute.minute));
+					$scope.view.moment.year(minute.year).month(minute.month).date(minute.date).hour(minute.hour).minute(minute.minute);
+					$scope.view.update();
 					if (minute.selectable) minute.class = (minute.class + ' highlighted').trim();
 				}
 			};
 			// minute view
 			$scope.minuteView = {
 				perLine: 6,
-				seconds: [],
+				rows: [],
 				render: function () {
 					var i = 0,
 						second = $scope.view.moment.clone().startOf('minute');
 					
-					$scope.minuteView.seconds = [];
+					$scope.minuteView.rows = [];
 					for (var s = 0; s < 60; s += momentPicker.secondsStep) {
 						var index = Math.floor(i / $scope.minuteView.perLine),
 							selectable = $scope.limits.isSelectable(second, 'second');
 						
-						if (!$scope.minuteView.seconds[index])
-							$scope.minuteView.seconds[index] = [];
-						$scope.minuteView.seconds[index].push({
+						if (!$scope.minuteView.rows[index])
+							$scope.minuteView.rows[index] = [];
+						$scope.minuteView.rows[index].push({
 							label:  second.format(momentPicker.secondsFormat),
 							year:   second.year(),
 							month:  second.month(),
@@ -574,13 +580,14 @@
 				},
 				setSecond: function (second) {
 					if (!second.selectable) return;
-					$scope.view.update($scope.view.moment.year(second.year).month(second.month).date(second.date).hour(second.hour).minute(second.minute).second(second.second));
+					$scope.view.moment.year(second.year).month(second.month).date(second.date).hour(second.hour).minute(second.minute).second(second.second);
+					$scope.view.update();
 					$scope.view.change('second');
 				},
 				highlightClosest: function () {
 					var seconds = [], second;
-					angular.forEach($scope.minuteView.seconds, function (line) {
-						angular.forEach(line, function (value) {
+					angular.forEach($scope.minuteView.rows, function (row) {
+						angular.forEach(row, function (value) {
 							if (Math.abs(value.second - $scope.view.moment.second()) < momentPicker.secondsStep) seconds.push(value);
 						});
 					});
@@ -588,7 +595,8 @@
 						return Math.abs(value1.second - $scope.view.moment.second()) > Math.abs(value2.second - $scope.view.moment.second());
 					})[0];
 					if (second.second - $scope.view.moment.second() == 0) return;
-					$scope.view.update($scope.view.moment.year(second.year).month(second.month).date(second.date).hour(second.hour).minute(second.minute).second(second.second));
+					$scope.view.moment.year(second.year).month(second.month).date(second.date).hour(second.hour).minute(second.minute).second(second.second);
+					$scope.view.update();
 					if (second.selectable) second.class = (second.class + ' highlighted').trim();
 				}
 			};
