@@ -62,20 +62,22 @@
 		function MomentPickerDirective(timeout, sce, compile, window, momentPickerProvider) {
 			this.restrict = 'A',
 			this.scope = {
-				model:     '=momentPicker',
-				locale:    '@?',
-				format:    '@?',
-				minView:   '@?',
-				maxView:   '@?',
-				startView: '@?',
-				minDate:   '=?',
-				maxDate:   '=?',
-				disabled:  '=?disable',
-				autoclose: '=?',
-				today:     '=?',
-				keyboard:  '=?',
-				change:    '&?'
+				model:      '=momentPicker',
+				locale:     '@?',
+				format:     '@?',
+				minView:    '@?',
+				maxView:    '@?',
+				startView:  '@?',
+				minDate:    '=?',
+				maxDate:    '=?',
+				disabled:   '=?disable',
+				autoclose:  '=?',
+				today:      '=?',
+				keyboard:   '=?',
+				change:     '&?',
+				selectable: '&?'
 			};
+
 			$timeout     = timeout;
 			$sce         = sce;
 			$compile     = compile;
@@ -169,7 +171,8 @@
 					return !angular.isDefined($scope.maxDateMoment) || value.isBefore($scope.maxDateMoment, precision) || value.isSame($scope.maxDateMoment, precision);
 				},
 				isSelectable: function (value, precision) {
-					return $scope.limits.isAfterOrEqualMin(value, precision) && $scope.limits.isBeforeOrEqualMax(value, precision);
+					var selectable = angular.isFunction($scope.selectable) ? $scope.selectable({ value: value, precision: precision }) : true;
+					return $scope.limits.isAfterOrEqualMin(value, precision) && $scope.limits.isBeforeOrEqualMax(value, precision) && selectable;
 				},
 				checkValue: function () {
 					if (!angular.isDefined($scope.valueMoment)) return;
