@@ -1,4 +1,4 @@
-/*! Angular Moment Picker - v0.6.4 - https://github.com/indrimuska/angular-moment-picker - (c) 2015 Indri Muska - MIT */
+/*! Angular Moment Picker - v0.6.5 - https://github.com/indrimuska/angular-moment-picker - (c) 2015 Indri Muska - MIT */
 (function (angular) {
 	'use strict';
 	
@@ -39,7 +39,7 @@
 		return momentPickerProvider;
 	})();
 	
-	var $timeout, $sce, $compile, $window, momentPicker;
+	var $timeout, $sce, $compile, $log, $window, momentPicker;
 	
 	var MomentPickerDirective = (function () {
 		
@@ -60,30 +60,33 @@
 		}
 		
 		// Directive
-		function MomentPickerDirective(timeout, sce, compile, window, momentPickerProvider) {
+		function MomentPickerDirective(timeout, sce, compile, log, window, momentPickerProvider) {
 			this.restrict = 'A',
 			this.scope = {
-				model:     '=momentPicker',
-				locale:    '@?',
-				format:    '@?',
-				minView:   '@?',
-				maxView:   '@?',
-				startView: '@?',
-				minDate:   '=?',
-				maxDate:   '=?',
-				disabled:  '=?disable',
-				autoclose: '=?',
-				today:     '=?',
-				keyboard:  '=?',
-				change:    '&?'
+				model:      '=momentPicker',
+				locale:     '@?',
+				format:     '@?',
+				minView:    '@?',
+				maxView:    '@?',
+				startView:  '@?',
+				minDate:    '=?',
+				maxDate:    '=?',
+				disabled:   '=?disable',
+				autoclose:  '=?',
+				today:      '=?',
+				keyboard:   '=?',
+				change:     '&?',
+				selectable: '&?'
 			};
+
 			$timeout     = timeout;
 			$sce         = sce;
 			$compile     = compile;
+			$log         = log;
 			$window      = window;
 			momentPicker = momentPickerProvider;
 		}
-		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$window', 'momentPicker'];
+		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$log', '$window', 'momentPicker'];
 		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs) {
 			$scope.template = (
 				'<div class="moment-picker-container {{view.selected}}-view" ' +
@@ -170,7 +173,13 @@
 					return !angular.isDefined($scope.maxDateMoment) || value.isBefore($scope.maxDateMoment, precision) || value.isSame($scope.maxDateMoment, precision);
 				},
 				isSelectable: function (value, precision) {
-					return $scope.limits.isAfterOrEqualMin(value, precision) && $scope.limits.isBeforeOrEqualMax(value, precision);
+					var selectable = true;
+					try {
+						if (angular.isFunction($scope.selectable)) selectable = $scope.selectable({ date: value, type: precision });
+					} catch (e) {
+						$log.error(e);
+					}
+					return $scope.limits.isAfterOrEqualMin(value, precision) && $scope.limits.isBeforeOrEqualMax(value, precision) && selectable;
 				},
 				checkValue: function () {
 					if (!angular.isDefined($scope.valueMoment)) return;
@@ -698,9 +707,9 @@
 			return new momentPickerProvider();
 		}])
 		.directive('momentPicker', [
-			'$timeout', '$sce', '$compile', '$window', 'momentPicker',
-			function ($timeout, $sce, $compile, $window, momentPicker) {
-				return new MomentPickerDirective($timeout, $sce, $compile, $window, momentPicker);
+			'$timeout', '$sce', '$compile', '$log', '$window', 'momentPicker',
+			function ($timeout, $sce, $compile, $log, $window, momentPicker) {
+				return new MomentPickerDirective($timeout, $sce, $compile, $log, $window, momentPicker);
 			}
 		]);
 	
