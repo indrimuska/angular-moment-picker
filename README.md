@@ -80,9 +80,30 @@ autoclose | `true` | Closes the picker after selecting a date.
 today | `false` | Highlights the current day.
 keyboard | `false` | Allows using the keyboard to navigate the picker.
 
+## Methods
+
+Append your method to your element and define its behavior in the controller.
+
+```html
+<div moment-picker="ctrl.exhibition" format="dddd D MMMM" selectable="ctrl.isSelectable(date, type)">
+	Next exhibition is on {{ ctrl.exhibition }}.
+</div>
+```
+
+```javascript
+ctrl.isSelectable = function (date, type) {
+	// disable all Sundays in the Month View
+	return type != 'day' || date.format('dddd') != 'Sunday';
+};
+```
+
+Method | Parameters | Description
+---|---|---
+selectable | `date`, `type` | Return `true` if the given date can be selected in the current view. **Please note** that this method is called for every date in the view, every time a view is rendered, so be careful, it may affect performances.
+
 ## Events
 
-As for the options, to bind an event you only need to append the right property to your picker.
+As for methods, to bind an event you only need to attach the right property to your picker.
 
 ```html
 <div moment-picker="ctrl.meeting" format="HH:mm A" change="ctrl.onChange(newValue, oldValue)">
@@ -90,34 +111,15 @@ As for the options, to bind an event you only need to append the right property 
 </div>
 ```
 
+```javascript
+ctrl.onChange = function (newValue, oldValue) {
+	$log.log('Meeting changed from ' + oldValue + ' to ' + newValue);
+};
+```
+
 Event | Parameters | Description
 ---|---|---
 change | `newValue`, `oldValue` | Function fired upon change in picker value.
-
-## Selectable callback
-
-You can use a callback to decide if a value should be selectable.
-
-
-```html
-<div moment-picker="ctrl.meeting" format="HH:mm A" selectable="ctrl.isSelectable(value, precision)">
-    The meeting starts at {{ ctrl.meeting }}.
-</div>
-```
-
-Parameters:
-  - `value` a Moment.js object
-  - `precision` a string (month, day, ...)
-  
-Return: `boolean`
-
-```js
-// In you controller
-$scope.isSelectable = function (value, precision) {
-    // disable every monday
-    return 'day' !== precision ? true : 1 !== value.day();
-};
-```
 
 ## momentPickerProvider
 
