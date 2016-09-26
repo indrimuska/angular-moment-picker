@@ -731,6 +731,18 @@
 		return MomentPickerDirective;
 	})();
 	
+	var MomentPickerFilter = (function () {
+		
+		function MomentPickerFilter(input, fn) {
+			var args = Array.prototype.slice.call(arguments, 2), date;
+			if (fn == 'parse') return moment.apply(moment, [input].concat(args));
+			date = moment(input);
+			return date[fn].apply(date, args);
+		}
+		
+		return MomentPickerFilter;
+	})();
+	
 	angular
 		.module('moment-picker', [])
 		.provider('momentPicker', [function () {
@@ -741,6 +753,9 @@
 			function ($timeout, $sce, $compile, $window, momentPicker) {
 				return new MomentPickerDirective($timeout, $sce, $compile, $window, momentPicker);
 			}
-		]);
+		])
+		.filter('moment', [function () {
+			return MomentPickerFilter;
+		}]);
 	
 })(window.angular);
