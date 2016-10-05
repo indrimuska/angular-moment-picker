@@ -330,7 +330,7 @@
 					
 					if (nextView < 0 || nextView > maxView) {
 						$scope.valueUpdate($scope.valueMoment = $scope.view.moment.clone());
-						if ($scope.autoclose) $timeout($scope.view.close);
+						if ($scope.autoclose) $scope.$evalAsync($scope.view.close);
 					} else if (nextView >= minView) $scope.view.selected = view;
 				}
 			};
@@ -689,9 +689,9 @@
 				$scope.input[0].focus();
 			};
 			$scope.input
-				.on('focus',   function () { $scope.$evalAsync($scope.view.open); })
-				.on('blur',    function () { $scope.$evalAsync($scope.view.close); })
-				.on('keydown', function (e) { if ($scope.keyboard) $scope.$evalAsync(function () { $scope.view.keydown(e); }); });
+				.on('focus click', function () { $scope.$evalAsync($scope.view.open); })
+				.on('blur',        function () { $scope.$evalAsync($scope.view.close); })
+				.on('keydown',     function (e) { if ($scope.keyboard) $scope.$evalAsync(function () { $scope.view.keydown(e); }); });
 			$scope.contents.on('mousedown', $scope.focusInput);
 			$scope.container.on('mousedown', $scope.focusInput);
 			angular.element($window).on('resize scroll', $scope.view.position);
