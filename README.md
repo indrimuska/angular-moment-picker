@@ -40,7 +40,7 @@ var myApp = angular.module('myApp', ['moment-picker']);
 
 Provide the attribute to your element:
 ```html
-<div moment-picker="myDate"> {{ myDate }} </div>
+<div moment-picker ng-model="myDate"> {{ myDate }} </div>
 ```
 
 ## Demo
@@ -60,14 +60,14 @@ Check out the demo page at [http://indrimuska.github.io/angular-moment-picker/](
 To configure Angular Moment Picker you have to append to your block or your input the attribute options you want to set.
 
 ```html
-<div moment-picker="ctrl.birthday" locale="fr" format="LL">
+<div moment-picker ng-model="ctrl.birthday" locale="fr" format="LL">
     Mon anniversaire est le {{ ctrl.birthday }}
 </div>
 ```
 
 Property | Default | Description
 ---|---|---
-moment-picker | | Two-way bindable model property, required to use the directive.
+ng-model | | Two-way bindable model property, required to use the directive.
 locale | `"en"` | Locale code. <sup>1</sup>
 format | `"L LTS"` | Format of the output value and min/max date. <sup>1</sup>
 min-view | `"decade"` | Minimum navigable view.
@@ -85,7 +85,7 @@ keyboard | `false` | Allows using the keyboard to navigate the picker.
 As for the options, to bind an event you only need to append the right property to your picker.
 
 ```html
-<div moment-picker="ctrl.meeting" format="HH:mm A" change="ctrl.onChange(newValue, oldValue)">
+<div moment-picker ng-model="ctrl.meeting" format="HH:mm A" change="ctrl.onChange(newValue, oldValue)">
     The meeting starts at {{ ctrl.meeting }}.
 </div>
 ```

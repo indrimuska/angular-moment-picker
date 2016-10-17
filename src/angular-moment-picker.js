@@ -60,9 +60,10 @@
 		
 		// Directive
 		function MomentPickerDirective(timeout, sce, compile, window, momentPickerProvider) {
-			this.restrict = 'A';
+			this.restrict = 'AE';
+			this.require = 'ngModel';
 			this.scope = {
-				model:     '=momentPicker',
+				model:     '=ngModel',
 				locale:    '@?',
 				format:    '@?',
 				minView:   '@?',
@@ -160,6 +161,7 @@
 			// utilities
 			$scope.isValidMoment = function (value) { return moment.isMoment(value) && value.isValid(); };
 			$scope.momentValue = function (value) {
+				if (!angular.isDefined(value)) return value;
 				// input: String or Moment object
 				// output: String or Timestamp
 				if (typeof value === 'string' && $scope.format) return value;
@@ -662,18 +664,18 @@
 				$scope.value.update();
 				$scope.limits.checkValue();
 			});
-			$scope.$watch('value.format', function (newFormat, oldFormat) {
-				var newMoment = $scope.formatted.moment(newFormat),
-					oldMoment = $scope.formatted.moment(oldFormat);
-				if ($scope.momentValue(newMoment) != $scope.momentValue(oldMoment) || typeof newFormat != typeof $scope.model)
+			$scope.$watch('value.format', function (newValue, oldValue) {
+				var newMoment = $scope.formatted.moment(newValue),
+					oldMoment = $scope.formatted.moment(oldValue);
+				if ($scope.momentValue(newMoment) != $scope.momentValue(oldMoment) || typeof newValue != typeof $scope.model)
 					$scope.$evalAsync(function () {
-						var model = $scope.model;
-						$scope.model = newFormat;
+						oldValue = $scope.model;
+						$scope.model = newValue;
 						$scope.view.moment = newMoment.clone();
 						$scope.view.update();
 						if (angular.isFunction($scope.change))
 							$timeout(function () {
-								$scope.change({ newValue: $scope.model, oldValue: model });
+								$scope.change({ newValue: newValue, oldValue: oldValue });
 							}, 0, false);
 					});
 			});
@@ -734,6 +736,7 @@
 	var MomentPickerFilter = (function () {
 		
 		function MomentPickerFilter(input, fn) {
+			if (!angular.isDefined(input)) return input;
 			var args = Array.prototype.slice.call(arguments, 2), date;
 			if (fn == 'parse') return moment.apply(moment, [input].concat(args));
 			date = moment(input);
@@ -754,7 +757,7 @@
 				return new MomentPickerDirective($timeout, $sce, $compile, $window, momentPicker);
 			}
 		])
-		.filter('moment', [function () {
+		.filter('momentPicker', [function () {
 			return MomentPickerFilter;
 		}]);
 	
