@@ -38,7 +38,7 @@
 		return momentPickerProvider;
 	})();
 	
-	var $timeout, $sce, $compile, $window, momentPicker;
+	var $timeout, $sce, $compile, $log, $window, momentPicker;
 	
 	var MomentPickerDirective = (function () {
 		
@@ -77,14 +77,16 @@
 				keyboard:  '=?',
 				change:    '&?'
 			};
+
 			$timeout     = timeout;
 			$sce         = sce;
 			$compile     = compile;
+			$log         = log;
 			$window      = window;
 			momentPicker = momentPickerProvider;
 		}
-		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$window', 'momentPicker'];
-		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs, $ctrl) {
+		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$log', '$window', 'momentPicker'];
+		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs) {
 			$scope.template = (
 				'<div class="moment-picker-container {{view.selected}}-view" ' +
 					'ng-show="view.isOpen && !disabled" ng-class="{\'moment-picker-disabled\': disabled, \'open\': view.isOpen}">' +
@@ -188,7 +190,13 @@
 					return !angular.isDefined($scope.maxDate) || value.isBefore($scope.maxDate, precision) || value.isSame($scope.maxDate, precision);
 				},
 				isSelectable: function (value, precision) {
-					return $scope.limits.isAfterOrEqualMin(value, precision) && $scope.limits.isBeforeOrEqualMax(value, precision);
+					var selectable = true;
+					try {
+						if (angular.isFunction($scope.selectable)) selectable = $scope.selectable({ date: value, type: precision });
+					} catch (e) {
+						$log.error(e);
+					}
+					return $scope.limits.isAfterOrEqualMin(value, precision) && $scope.limits.isBeforeOrEqualMax(value, precision) && selectable;
 				},
 				checkValue: function () {
 					if (!angular.isDefined($ctrl.$modelValue)) return;
@@ -706,9 +714,9 @@
 				$scope.input[0].focus();
 			};
 			$scope.input
-				.on('focus',   function () { $scope.$evalAsync($scope.view.open); })
-				.on('blur',    function () { $scope.$evalAsync($scope.view.close); })
-				.on('keydown', function (e) { if ($scope.keyboard) $scope.$apply(function () { $scope.view.keydown(e); }); });
+				.on('focus click', function () { $scope.$evalAsync($scope.view.open); })
+				.on('blur',        function () { $scope.$evalAsync($scope.view.close); })
+				.on('keydown',     function (e) { if ($scope.keyboard) $scope.$evalAsync(function () { $scope.view.keydown(e); }); });
 			$scope.contents.on('mousedown', $scope.focusInput);
 			$scope.container.on('mousedown', $scope.focusInput);
 			angular.element($window).on('resize scroll', $scope.view.position);
@@ -736,9 +744,9 @@
 			return new momentPickerProvider();
 		}])
 		.directive('momentPicker', [
-			'$timeout', '$sce', '$compile', '$window', 'momentPicker',
-			function ($timeout, $sce, $compile, $window, momentPicker) {
-				return new MomentPickerDirective($timeout, $sce, $compile, $window, momentPicker);
+			'$timeout', '$sce', '$compile', '$log', '$window', 'momentPicker',
+			function ($timeout, $sce, $compile, $log, $window, momentPicker) {
+				return new MomentPickerDirective($timeout, $sce, $compile, $log, $window, momentPicker);
 			}
 		])
 		.filter('momentPicker', [function () {
