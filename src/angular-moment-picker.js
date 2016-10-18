@@ -50,7 +50,7 @@
 			rect = element.getBoundingClientRect();
 			if (!rect.width && !rect.height) return rect;
 			doc = element.ownerDocument;
-			win = doc != null && doc === doc.window ? element : doc.nodeType === 9 && doc.defaultView;
+			win = doc !== null && doc === doc.window ? element : doc.nodeType === 9 && doc.defaultView;
 			docElem = doc.documentElement;
 			return {
 				top: rect.top + win.pageYOffset - docElem.clientTop,
@@ -59,7 +59,7 @@
 		}
 		
 		// Directive
-		function MomentPickerDirective(timeout, sce, compile, window, momentPickerProvider) {
+		function MomentPickerDirective(timeout, sce, compile, log, window, momentPickerProvider) {
 			this.restrict = 'AE';
 			this.require = 'ngModel';
 			this.scope = {
@@ -77,7 +77,7 @@
 				keyboard:  '=?',
 				change:    '&?'
 			};
-
+			
 			$timeout     = timeout;
 			$sce         = sce;
 			$compile     = compile;
@@ -86,7 +86,7 @@
 			momentPicker = momentPickerProvider;
 		}
 		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$log', '$window', 'momentPicker'];
-		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs) {
+		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs, $ctrl) {
 			$scope.template = (
 				'<div class="moment-picker-container {{view.selected}}-view" ' +
 					'ng-show="view.isOpen && !disabled" ng-class="{\'moment-picker-disabled\': disabled, \'open\': view.isOpen}">' +
@@ -658,7 +658,6 @@
 			$scope.limits.checkView();
 			
 			// properties listeners
-			$ctrl.$name = $attrs.ngModel;
 			$ctrl.$parsers.push(function (viewValue) { return $scope.utility.valueToMoment(viewValue); });
 			$ctrl.$formatters.push(function (modelValue) { return $scope.utility.momentToValue(modelValue); });
 			$scope.$watch(function () { return $scope.utility.momentToValue($ctrl.$modelValue); }, function (newViewValue, oldViewValue) {
