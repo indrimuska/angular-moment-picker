@@ -155,6 +155,9 @@ minutes-format | <sup>2</sub> | Minutes format in `hour` view.
 minutes-step | `5` | Step between each visible minute in `hour` view.
 seconds-format | `"ss"` | Seconds format in `minute` view.
 seconds-step | `1` | Step between each visible second in `minute` view.
+dayViewHoursStart | `0` | The first hour displayed in `day` view.
+dayViewHoursEnd | `23` | The last hour displayed in `day` view.
+showHeaderView | `true` | Show the header in the view.
 
 ## Notes
 
