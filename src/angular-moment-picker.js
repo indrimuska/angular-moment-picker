@@ -90,6 +90,7 @@
 			$scope.template = (
 				'<div class="moment-picker-container {{view.selected}}-view" ' +
 					'ng-show="view.isOpen && !disabled" ng-class="{\'moment-picker-disabled\': disabled, \'open\': view.isOpen}">' +
+					'<div class="btn btn-default" style="width:100%" ng-click="resetDatePicker()">Reset</div>' +
 					'<table class="header-view">' +
 						'<thead>' +
 							'<tr>' +
@@ -228,6 +229,10 @@
 					if (minView > $scope.views.all.indexOf($scope.minView)) $scope.minView = $scope.views.all[minView];
 					if (maxView < $scope.views.all.indexOf($scope.maxView)) $scope.maxView = $scope.views.all[maxView];
 				}
+			};
+			$scope.resetDatePicker = function () {
+				$scope.model = "";
+				$scope.view.close();
 			};
 			$scope.view = {
 				isOpen: false,
