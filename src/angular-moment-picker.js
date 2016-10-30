@@ -16,7 +16,7 @@
 				autoclose:      true,
 				today:          false,
 				keyboard:       false,
-				showHeader:     true
+				showHeader:     true,
 				leftArrow:      '&larr;',
 				rightArrow:     '&rarr;',
 				// Decade View
@@ -144,7 +144,7 @@
 						'<table ng-if="view.selected == \'day\'">' +
 							'<tbody>' +
 								'<tr ng-repeat="threeHours in dayView.threeHours">' +
-									'<td ng-repeat="hour in threeHours track by hour.hour" ' +
+									'<td ng-repeat="hour in threeHours track by hour.index" ' +
 										'ng-class="hour.class" ng-bind="hour.label" ng-click="dayView.setHour(hour)"></td>' +
 								'</tr>' +
 							'</tbody>' +
@@ -470,16 +470,17 @@
 				perLine: 4,
 				threeHours: [],
 				render: function () {
-					var hour = $scope.view.moment.clone().startOf('day').add(momentPicker.hoursStart, 'hours');
+					var hour = $scope.view.moment.clone().startOf('day').hour(momentPicker.hoursStart);
 					
 					$scope.dayView.threeHours = [];
-					for (var h = 0; h < momentPicker.hoursEnd - momentPicker.hoursStart; h++) {
+					for (var h = 0; h <= momentPicker.hoursEnd - momentPicker.hoursStart; h++) {
 						var index = Math.floor(h / $scope.dayView.perLine),
 							selectable = $scope.limits.isSelectable(hour, 'hour');
 						
 						if (!$scope.dayView.threeHours[index])
 							$scope.dayView.threeHours[index] = [];
 						$scope.dayView.threeHours[index].push({
+							index: h, // this is to prevent DST conflicts
 							label: hour.format(momentPicker.hoursFormat),
 							year:  hour.year(),
 							month: hour.month(),
@@ -509,11 +510,11 @@
 				minutes: [],
 				render: function () {
 					var i = 0,
-						minute = $scope.view.moment.clone().startOf('hour'),
+						minute = $scope.view.moment.clone().startOf('hour').minute(momentPicker.minutesStart),
 						minutesFormat = momentPicker.minutesFormat || moment.localeData($scope.locale).longDateFormat('LT').replace(/[aA]/, '');
 					
 					$scope.hourView.minutes = [];
-					for (var m = 0; m < 60; m += momentPicker.minutesStep) {
+					for (var m = 0; m <= momentPicker.minutesEnd - momentPicker.minutesStart; m += momentPicker.minutesStep) {
 						var index = Math.floor(i / $scope.hourView.perLine),
 							selectable = $scope.limits.isSelectable(minute, 'minute');
 						
@@ -565,10 +566,10 @@
 				seconds: [],
 				render: function () {
 					var i = 0,
-						second = $scope.view.moment.clone().startOf('minute');
+						second = $scope.view.moment.clone().startOf('minute').second(momentPicker.secondsStart);
 					
 					$scope.minuteView.seconds = [];
-					for (var s = 0; s < 60; s += momentPicker.secondsStep) {
+					for (var s = 0; s <= momentPicker.secondsEnd - momentPicker.secondsStart; s += momentPicker.secondsStep) {
 						var index = Math.floor(i / $scope.minuteView.perLine),
 							selectable = $scope.limits.isSelectable(second, 'second');
 						

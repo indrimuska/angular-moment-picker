@@ -152,8 +152,8 @@ yearsFormat | `"YYYY"` | Years format in `decade` view.
 months-format | `"MMM"` | Months format in `year` view.
 days-format | `"D"` | Days format in `month` view.
 hours-format | `"HH:[00]"` | Hours format in `day` view.
-hours-start | `0` | First rendered hour in `day` view.
-hours-end | `23` | Last rendered hour in `day` view.
+hours-start | `0` | First rendered hour in `day` view (24h format).
+hours-end | `23` | Last rendered hour in `day` view (24h format).
 minutes-format | <sup>2</sub> | Minutes format in `hour` view.
 minutes-step | `5` | Step between each visible minute in `hour` view.
 minutes-start | `0` | First rendered minute in `hour` view.
