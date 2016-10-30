@@ -8,23 +8,26 @@
 		
 		function momentPickerProvider() {
 			defaults = {
-				locale:        'en',
-				format:        'L LTS',
-				minView:       'decade',
-				maxView:       'minute',
-				startView:     'year',
-				autoclose:     true,
-				today:         false,
-				keyboard:      false,
-				leftArrow:     '&larr;',
-				rightArrow:    '&rarr;',
-				yearsFormat:   'YYYY',
-				monthsFormat:  'MMM',
-				daysFormat:    'D',
-				hoursFormat:   'HH:[00]',
-				secondsFormat: 'ss',
-				minutesStep:   5,
-				secondsStep:   1
+				locale:                 'en',
+				format:                 'L LTS',
+				minView:                'decade',
+				maxView:                'minute',
+				startView:              'year',
+				autoclose:              true,
+				today:                  false,
+				keyboard:               false,
+				leftArrow:              '&larr;',
+				rightArrow:             '&rarr;',
+				yearsFormat:            'YYYY',
+				monthsFormat:           'MMM',
+				daysFormat:             'D',
+				hoursFormat:            'HH:[00]',
+				secondsFormat:          'ss',
+				minutesStep:            5,
+				secondsStep:            1,
+				dayViewHoursStart:      0,
+				dayViewHoursEnd:        23,
+				showHeaderView:         true
 			};
 		}
 		momentPickerProvider.prototype.options = function (options) {
@@ -90,7 +93,7 @@
 			$scope.template = (
 				'<div class="moment-picker-container {{view.selected}}-view" ' +
 					'ng-show="view.isOpen && !disabled" ng-class="{\'moment-picker-disabled\': disabled, \'open\': view.isOpen}">' +
-					'<table class="header-view">' +
+					'<table class="header-view" ng-hide="!showHeaderView">' +
 						'<thead>' +
 							'<tr>' +
 								'<th ng-class="{disabled: !view.previous.selectable}" ng-bind-html="view.previous.label" ng-click="view.previous.set()"></th>' +
@@ -155,7 +158,7 @@
 			);
 			
 			// one-way binding attributes
-			angular.forEach(['locale', 'format', 'minView', 'maxView', 'startView', 'autoclose', 'today', 'keyboard', 'leftArrow', 'rightArrow'], function (attr) {
+			angular.forEach(['locale', 'format', 'minView', 'maxView', 'startView', 'autoclose', 'today', 'keyboard', 'leftArrow', 'rightArrow', 'showHeaderView'], function (attr) {
 				if (!angular.isDefined($scope[attr])) $scope[attr] = momentPicker[attr];
 				if (!angular.isDefined($attrs[attr])) $attrs[attr] = $scope[attr];
 			});
@@ -456,12 +459,13 @@
 			$scope.dayView = {
 				perLine: 4,
 				threeHours: [],
+				threeHoursIndex: 0,
 				render: function () {
-					var hour = $scope.view.moment.clone().startOf('day');
-					
+					var hour = $scope.view.moment.clone().startOf('day').add(momentPicker.dayViewHoursStart, 'hours');
+					$scope.dayView.threeHoursIndex = 0;
 					$scope.dayView.threeHours = [];
-					for (var h = 0; h < 24; h++) {
-						var index = Math.floor(h / $scope.dayView.perLine),
+					for (var h = momentPicker.dayViewHoursStart; h <= momentPicker.dayViewHoursEnd; h++) {
+						var index = $scope.dayView.threeHoursIndex,
 							selectable = $scope.limits.isSelectable(hour, 'hour');
 						
 						if (!$scope.dayView.threeHours[index])
@@ -479,7 +483,11 @@
 							selectable: selectable
 						});
 						hour.add(1, 'hours');
+
+						if ($scope.dayView.threeHours[index].length === $scope.dayView.perLine)
+							$scope.dayView.threeHoursIndex++;
 					}
+
 					// return title
 					return $scope.view.moment.format('LL');
 				},
