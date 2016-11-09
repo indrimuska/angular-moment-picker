@@ -79,6 +79,7 @@ disable | `false` | Disables the picker if truly.
 autoclose | `true` | Closes the picker after selecting a date.
 today | `false` | Highlights the current day.
 keyboard | `false` | Allows using the keyboard to navigate the picker.
+template | `"angular-moment-picker.html"` | Template url of the picker contents.
 
 ## Methods
 
@@ -148,6 +149,7 @@ keyboard | `false` | Allows using the keyboard to navigate the picker.
 showHeader | `true` | Shows the header in the view.
 left-arrow | `"&larr;"` | Left arrow string (HTML allowed).
 right-arrow | `"&rarr;"` | Right arrow string (HTML allowed).
+template | `"angular-moment-picker.html"` | Template url of the picker contents.
 yearsFormat | `"YYYY"` | Years format in `decade` view.
 months-format | `"MMM"` | Months format in `year` view.
 days-format | `"D"` | Days format in `month` view.

@@ -19,6 +19,7 @@
 				showHeader:     true,
 				leftArrow:      '&larr;',
 				rightArrow:     '&rarr;',
+				template:       'angular-moment-picker.html',
 				// Decade View
 				yearsFormat:    'YYYY',
 				// Year View
@@ -51,7 +52,7 @@
 		return momentPickerProvider;
 	})();
 	
-	var $timeout, $sce, $compile, $log, $window, momentPicker;
+	var $timeout, $sce, $log, $window, momentPicker;
 	
 	var MomentPickerDirective = (function () {
 		
@@ -72,8 +73,9 @@
 		}
 		
 		// Directive
-		function MomentPickerDirective(timeout, sce, compile, log, window, momentPickerProvider) {
-			this.restrict = 'A',
+		function MomentPickerDirective(timeout, sce, log, window, momentPickerProvider) {
+			this.restrict = 'A';
+			this.transclude = true;
 			this.scope = {
 				model:      '=momentPicker',
 				locale:     '@?',
@@ -87,88 +89,29 @@
 				autoclose:  '=?',
 				today:      '=?',
 				keyboard:   '=?',
+				template:   '@?',
 				change:     '&?',
 				selectable: '&?'
 			};
-
-			$timeout     = timeout;
-			$sce         = sce;
-			$compile     = compile;
-			$log         = log;
-			$window      = window;
-			momentPicker = momentPickerProvider;
-		}
-		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$compile', '$log', '$window', 'momentPicker'];
-		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs) {
-			$scope.template = (
-				'<div class="moment-picker-container {{view.selected}}-view" ' +
-					'ng-show="view.isOpen && !disabled" ng-class="{\'moment-picker-disabled\': disabled, \'open\': view.isOpen}">' +
-					'<table class="header-view" ng-if="showHeader">' +
-						'<thead>' +
-							'<tr>' +
-								'<th ng-class="{disabled: !view.previous.selectable}" ng-bind-html="view.previous.label" ng-click="view.previous.set()"></th>' +
-								'<th ng-bind="view.title" ng-click="view.setParentView()"></th>' +
-								'<th ng-class="{disabled: !view.next.selectable}" ng-bind-html="view.next.label" ng-click="view.next.set()"></th>' +
-							'</tr>' +
-						'</thead>' +
-					'</table>' +
-					'<div class="moment-picker-specific-views">' +
-						'<table ng-if="view.selected == \'decade\'">' +
-							'<tbody>' +
-								'<tr ng-repeat="fourYear in decadeView.fourYears">' +
-									'<td ng-repeat="year in fourYear track by year.year" ' +
-										'ng-class="year.class" ng-bind="year.label" ng-click="decadeView.setYear(year)"></td>' +
-								'</tr>' +
-							'</tbody>' +
-						'</table>' +
-						'<table ng-if="view.selected == \'year\'">' +
-							'<tbody>' +
-								'<tr ng-repeat="fourMonth in yearView.fourMonths">' +
-									'<td ng-repeat="month in fourMonth track by month.month" ' +
-										'ng-class="month.class" ng-bind="month.label" ng-click="yearView.setMonth(month)"></td>' +
-								'</tr>' +
-							'</tbody>' +
-						'</table>' +
-						'<table ng-if="view.selected == \'month\'">' +
-							'<thead>' +
-								'<tr>' +
-									'<th ng-repeat="day in monthView.days" ng-bind="day"></th>' +
-								'</tr>' +
-							'</thead>' +
-							'<tbody>' +
-								'<tr ng-repeat="days in monthView.weeks">' +
-									'<td ng-repeat="day in days track by day.date" ng-class="day.class" ng-bind="day.label" ng-click="monthView.setDay(day)"></td>' +
-								'</tr>' +
-							'</tbody>' +
-						'</table>' +
-						'<table ng-if="view.selected == \'day\'">' +
-							'<tbody>' +
-								'<tr ng-repeat="threeHours in dayView.threeHours">' +
-									'<td ng-repeat="hour in threeHours track by hour.index" ' +
-										'ng-class="hour.class" ng-bind="hour.label" ng-click="dayView.setHour(hour)"></td>' +
-								'</tr>' +
-							'</tbody>' +
-						'</table>' +
-						'<table ng-if="view.selected == \'hour\'">' +
-							'<tbody>' +
-								'<tr ng-repeat="minutes in hourView.minutes">' +
-									'<td ng-repeat="minute in minutes" ng-class="minute.class" ng-bind="minute.label" ng-click="hourView.setMinute(minute)"></td>' +
-								'</tr>' +
-							'</tbody>' +
-						'</table>' +
-						'<table ng-if="view.selected == \'minute\'">' +
-							'<tbody>' +
-								'<tr ng-repeat="seconds in minuteView.seconds">' +
-									'<td ng-repeat="second in seconds" ng-class="second.class" ng-bind="second.label" ng-click="minuteView.setSecond(second)"></td>' +
-								'</tr>' +
-							'</tbody>' +
-						'</table>' +
+			this.template = (
+				'<div class="moment-picker">' +
+					'<div class="moment-picker-container {{view.selected}}-view" ' +
+						'ng-show="view.isOpen && !disabled" ng-class="{\'moment-picker-disabled\': disabled, \'open\': view.isOpen}">' +
+						'<span ng-include="template"></span>' +
 					'</div>' +
 				'</div>'
 			);
-			
+			$timeout       = timeout;
+			$sce           = sce;
+			$log           = log;
+			$window        = window;
+			momentPicker   = momentPickerProvider;
+		}
+		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$templateCache', '$log', '$window', 'momentPicker'];
+		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs, $ctrl, $transclude) {
+			$transclude(function ($transElement) {
 			// one-way binding attributes
-			angular.forEach(['locale', 'format', 'minView', 'maxView', 'startView', 'autoclose', 'today', 'keyboard', 'showHeader', 'leftArrow', 'rightArrow'], function (attr) {
+			angular.forEach(['locale', 'format', 'minView', 'maxView', 'startView', 'autoclose', 'today', 'keyboard', 'showHeader', 'leftArrow', 'rightArrow', 'template'], function (attr) {
 				if (!angular.isDefined($scope[attr])) $scope[attr] = momentPicker[attr];
 				if (!angular.isDefined($attrs[attr])) $attrs[attr] = $scope[attr];
 			});
@@ -260,6 +203,7 @@
 					$scope.view.selected = $scope.startView;
 				},
 				position: function () {
+					if (!$scope.view.isOpen) return;
 					$scope.picker.removeClass('top').removeClass('left');
 					
 					var container = $scope.container[0],
@@ -555,7 +499,7 @@
 					minute = minutes.sort(function (value1, value2) {
 						return Math.abs(value1.minute - $scope.view.moment.minute()) > Math.abs(value2.minute - $scope.view.moment.minute());
 					})[0];
-					if (minute.minute - $scope.view.moment.minute() == 0) return;
+					if (!minute || minute.minute - $scope.view.moment.minute() == 0) return;
 					$scope.view.update($scope.view.moment.year(minute.year).month(minute.month).date(minute.date).hour(minute.hour).minute(minute.minute));
 					if (minute.selectable) minute.class = (minute.class + ' highlighted').trim();
 				}
@@ -611,19 +555,18 @@
 					second = seconds.sort(function (value1, value2) {
 						return Math.abs(value1.second - $scope.view.moment.second()) > Math.abs(value2.second - $scope.view.moment.second());
 					})[0];
-					if (second.second - $scope.view.moment.second() == 0) return;
+					if (!second || second.second - $scope.view.moment.second() == 0) return;
 					$scope.view.update($scope.view.moment.year(second.year).month(second.month).date(second.date).hour(second.hour).minute(second.minute).second(second.second));
 					if (second.selectable) second.class = (second.class + ' highlighted').trim();
 				}
 			};
 			
 			// creation
-			$scope.picker = angular.element('<span class="moment-picker"></span>');
+			$scope.picker = angular.element($element[0].querySelectorAll('.moment-picker'));
 			$element.after($scope.picker);
-			$scope.contents = $element.addClass('moment-picker-contents').removeAttr('moment-picker');
-			$scope.container = $compile($scope.template)($scope);
-			$scope.picker.append($scope.contents);
-			$scope.picker.append($scope.container);
+			$scope.picker.prepend($element);
+			$scope.contents = $element.append($transElement).addClass('moment-picker-contents');
+			$scope.container = angular.element($scope.picker[0].querySelectorAll('.moment-picker-container'));
 			$scope.input = $scope.contents[0].tagName.toLowerCase() != 'input' && $scope.contents[0].querySelectorAll('input').length > 0
 				? angular.element($scope.contents[0].querySelectorAll('input'))
 				: angular.element($scope.contents[0]);
@@ -710,6 +653,7 @@
 			$scope.contents.on('mousedown', $scope.focusInput);
 			$scope.container.on('mousedown', $scope.focusInput);
 			angular.element($window).on('resize scroll', $scope.view.position);
+			});
 		};
 		
 		return MomentPickerDirective;
@@ -717,13 +661,78 @@
 	
 	angular
 		.module('moment-picker', [])
+		.run(['$templateCache', function ($templateCache) {
+			$templateCache.put('angular-moment-picker.html',
+				'<table class="header-view" ng-if="showHeader">' +
+					'<thead>' +
+						'<tr>' +
+							'<th ng-class="{disabled: !view.previous.selectable}" ng-bind-html="view.previous.label" ng-click="view.previous.set()"></th>' +
+							'<th ng-bind="view.title" ng-click="view.setParentView()"></th>' +
+							'<th ng-class="{disabled: !view.next.selectable}" ng-bind-html="view.next.label" ng-click="view.next.set()"></th>' +
+						'</tr>' +
+					'</thead>' +
+				'</table>' +
+				'<div class="moment-picker-specific-views">' +
+					'<table ng-if="view.selected == \'decade\'">' +
+						'<tbody>' +
+							'<tr ng-repeat="fourYear in decadeView.fourYears">' +
+								'<td ng-repeat="year in fourYear track by year.year" ' +
+									'ng-class="year.class" ng-bind="year.label" ng-click="decadeView.setYear(year)"></td>' +
+							'</tr>' +
+						'</tbody>' +
+					'</table>' +
+					'<table ng-if="view.selected == \'year\'">' +
+						'<tbody>' +
+							'<tr ng-repeat="fourMonth in yearView.fourMonths">' +
+								'<td ng-repeat="month in fourMonth track by month.month" ' +
+									'ng-class="month.class" ng-bind="month.label" ng-click="yearView.setMonth(month)"></td>' +
+							'</tr>' +
+						'</tbody>' +
+					'</table>' +
+					'<table ng-if="view.selected == \'month\'">' +
+						'<thead>' +
+							'<tr>' +
+								'<th ng-repeat="day in monthView.days" ng-bind="day"></th>' +
+							'</tr>' +
+						'</thead>' +
+						'<tbody>' +
+							'<tr ng-repeat="days in monthView.weeks">' +
+								'<td ng-repeat="day in days track by day.date" ng-class="day.class" ng-bind="day.label" ng-click="monthView.setDay(day)"></td>' +
+							'</tr>' +
+						'</tbody>' +
+					'</table>' +
+					'<table ng-if="view.selected == \'day\'">' +
+						'<tbody>' +
+							'<tr ng-repeat="threeHours in dayView.threeHours">' +
+								'<td ng-repeat="hour in threeHours track by hour.index" ' +
+									'ng-class="hour.class" ng-bind="hour.label" ng-click="dayView.setHour(hour)"></td>' +
+							'</tr>' +
+						'</tbody>' +
+					'</table>' +
+					'<table ng-if="view.selected == \'hour\'">' +
+						'<tbody>' +
+							'<tr ng-repeat="minutes in hourView.minutes">' +
+								'<td ng-repeat="minute in minutes" ng-class="minute.class" ng-bind="minute.label" ng-click="hourView.setMinute(minute)"></td>' +
+							'</tr>' +
+						'</tbody>' +
+					'</table>' +
+					'<table ng-if="view.selected == \'minute\'">' +
+						'<tbody>' +
+							'<tr ng-repeat="seconds in minuteView.seconds">' +
+								'<td ng-repeat="second in seconds" ng-class="second.class" ng-bind="second.label" ng-click="minuteView.setSecond(second)"></td>' +
+							'</tr>' +
+						'</tbody>' +
+					'</table>' +
+				'</div>'
+			);
+		}])
 		.provider('momentPicker', [function () {
 			return new momentPickerProvider();
 		}])
 		.directive('momentPicker', [
-			'$timeout', '$sce', '$compile', '$log', '$window', 'momentPicker',
-			function ($timeout, $sce, $compile, $log, $window, momentPicker) {
-				return new MomentPickerDirective($timeout, $sce, $compile, $log, $window, momentPicker);
+			'$timeout', '$sce', '$log', '$window', 'momentPicker',
+			function ($timeout, $sce, $log, $window, momentPicker) {
+				return new MomentPickerDirective($timeout, $sce, $log, $window, momentPicker);
 			}
 		]);
 	
