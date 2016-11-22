@@ -653,8 +653,16 @@
 				$scope.limits.checkValue();
 			});
 			$scope.$watch('value', function () {
+
 				var oldValue = $scope.model,
-					newValue = $scope.valueMoment && $scope.valueMoment.format($scope.format);
+					newValue;
+
+                if (!$scope.valueMoment) {
+                    return;
+                }
+
+                newValue = $scope.valueMoment.format($scope.format);
+
 				if (newValue != oldValue)
 					$timeout(function () {
 						$scope.view.update($scope.view.moment = $scope.valueMoment.clone());
