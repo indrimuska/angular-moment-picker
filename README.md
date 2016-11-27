@@ -79,6 +79,7 @@ disable | `false` | Disables the picker if truly.
 autoclose | `true` | Closes the picker after selecting a date.
 today | `false` | Highlights the current day.
 keyboard | `false` | Allows using the keyboard to navigate the picker.
+additions | `{ top: undefined, bottom: undefined }` | Template url for custom contents above and below each picker views (inside the dialog).
 
 ## Methods
 
@@ -145,16 +146,24 @@ start-view | `"year"` | Initial view after picker opening.
 autoclose | `true` | Closes the picker after selecting a date.
 today | `false` | Highlights the current day.
 keyboard | `false` | Allows using the keyboard to navigate the picker.
+showHeader | `true` | Shows the header in the view.
 left-arrow | `"&larr;"` | Left arrow string (HTML allowed).
 right-arrow | `"&rarr;"` | Right arrow string (HTML allowed).
+additions | `{ top: undefined, bottom: undefined }` | Template url for custom contents above and below each picker views (inside the dialog).
 yearsFormat | `"YYYY"` | Years format in `decade` view.
 months-format | `"MMM"` | Months format in `year` view.
 days-format | `"D"` | Days format in `month` view.
 hours-format | `"HH:[00]"` | Hours format in `day` view.
+hours-start | `0` | First rendered hour in `day` view (24h format).
+hours-end | `23` | Last rendered hour in `day` view (24h format).
 minutes-format | <sup>2</sub> | Minutes format in `hour` view.
 minutes-step | `5` | Step between each visible minute in `hour` view.
+minutes-start | `0` | First rendered minute in `hour` view.
+minutes-end | `59` | Last rendered minute in `hour` view.
 seconds-format | `"ss"` | Seconds format in `minute` view.
 seconds-step | `1` | Step between each visible second in `minute` view.
+seconds-start | `0` | First rendered second in `minute` view.
+seconds-end | `59` | Last rendered second in `minute` view.
 
 ## Notes
 
