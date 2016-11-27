@@ -111,16 +111,16 @@
 						'<div class="moment-picker-specific-views">' +
 							'<table ng-if="view.selected == \'decade\'">' +
 								'<tbody>' +
-									'<tr ng-repeat="fourYear in decadeView.fourYears">' +
-										'<td ng-repeat="year in fourYear track by year.year" ' +
+									'<tr ng-repeat="row in decadeView.rows">' +
+										'<td ng-repeat="year in row track by year.year" ' +
 											'ng-class="year.class" ng-bind="year.label" ng-click="decadeView.setYear(year)"></td>' +
 									'</tr>' +
 								'</tbody>' +
 							'</table>' +
 							'<table ng-if="view.selected == \'year\'">' +
 								'<tbody>' +
-									'<tr ng-repeat="fourMonth in yearView.fourMonths">' +
-										'<td ng-repeat="month in fourMonth track by month.month" ' +
+									'<tr ng-repeat="row in yearView.rows">' +
+										'<td ng-repeat="month in row track by month.month" ' +
 											'ng-class="month.class" ng-bind="month.label" ng-click="yearView.setMonth(month)"></td>' +
 									'</tr>' +
 								'</tbody>' +
@@ -132,30 +132,30 @@
 									'</tr>' +
 								'</thead>' +
 								'<tbody>' +
-									'<tr ng-repeat="days in monthView.weeks">' +
-										'<td ng-repeat="day in days track by day.date" ng-class="day.class" ng-bind="day.label" ng-click="monthView.setDay(day)"></td>' +
+									'<tr ng-repeat="row in monthView.rows">' +
+										'<td ng-repeat="day in row track by day.date" ng-class="day.class" ng-bind="day.label" ng-click="monthView.setDay(day)"></td>' +
 									'</tr>' +
 								'</tbody>' +
 							'</table>' +
 							'<table ng-if="view.selected == \'day\'">' +
 								'<tbody>' +
-									'<tr ng-repeat="threeHours in dayView.threeHours">' +
-										'<td ng-repeat="hour in threeHours track by hour.index" ' +
+									'<tr ng-repeat="row in dayView.rows">' +
+										'<td ng-repeat="hour in row track by hour.index" ' +
 											'ng-class="hour.class" ng-bind="hour.label" ng-click="dayView.setHour(hour)"></td>' +
 									'</tr>' +
 								'</tbody>' +
 							'</table>' +
 							'<table ng-if="view.selected == \'hour\'">' +
 								'<tbody>' +
-									'<tr ng-repeat="minutes in hourView.minutes">' +
-										'<td ng-repeat="minute in minutes" ng-class="minute.class" ng-bind="minute.label" ng-click="hourView.setMinute(minute)"></td>' +
+									'<tr ng-repeat="row in hourView.rows">' +
+										'<td ng-repeat="minute in row" ng-class="minute.class" ng-bind="minute.label" ng-click="hourView.setMinute(minute)"></td>' +
 									'</tr>' +
 								'</tbody>' +
 							'</table>' +
 							'<table ng-if="view.selected == \'minute\'">' +
 								'<tbody>' +
-									'<tr ng-repeat="seconds in minuteView.seconds">' +
-										'<td ng-repeat="second in seconds" ng-class="second.class" ng-bind="second.label" ng-click="minuteView.setSecond(second)"></td>' +
+									'<tr ng-repeat="row in minuteView.rows">' +
+										'<td ng-repeat="second in row" ng-class="second.class" ng-bind="second.label" ng-click="minuteView.setSecond(second)"></td>' +
 									'</tr>' +
 								'</tbody>' +
 							'</table>' +
@@ -288,6 +288,7 @@
 						$scope.view.selected = $scope.startView;
 					},
 					position: function () {
+						if (!$scope.view.isOpen) return;
 						$scope.picker.removeClass('top').removeClass('left');
 						
 						var container = $scope.container[0],
@@ -509,17 +510,18 @@
 					perLine: 4,
 					rows: [],
 					render: function () {
-						var hour = $scope.view.moment.clone().startOf('day');
+						var hour = $scope.view.moment.clone().startOf('day').hour(momentPicker.hoursStart);
 						
 						$scope.dayView.rows = [];
-						for (var h = 0; h < 24; h++) {
+						for (var h = 0; h <= momentPicker.hoursEnd - momentPicker.hoursStart; h++) {
 							var index = Math.floor(h / $scope.dayView.perLine),
 								selectable = $scope.limits.isSelectable(hour, 'hour');
 							
 							if (!$scope.dayView.rows[index])
 								$scope.dayView.rows[index] = [];
 							$scope.dayView.rows[index].push({
-								label: hour.format(momentPicker.hoursFormat),
+								index: h, // this is to prevent DST conflicts
+                                label: hour.format(momentPicker.hoursFormat),
 								year:  hour.year(),
 								month: hour.month(),
 								date:  hour.date(),
@@ -548,11 +550,11 @@
 					rows: [],
 					render: function () {
 						var i = 0,
-							minute = $scope.view.moment.clone().startOf('hour'),
+							minute = $scope.view.moment.clone().startOf('hour').minute(momentPicker.minutesStart),
 							minutesFormat = momentPicker.minutesFormat || moment.localeData($scope.locale).longDateFormat('LT').replace(/[aA]/, '');
 						
 						$scope.hourView.rows = [];
-						for (var m = 0; m < 60; m += momentPicker.minutesStep) {
+						for (var m = 0; m <= momentPicker.minutesEnd - momentPicker.minutesStart; m += momentPicker.minutesStep) {
 							var index = Math.floor(i / $scope.hourView.perLine),
 								selectable = $scope.limits.isSelectable(minute, 'minute');
 							
@@ -594,7 +596,7 @@
 						minute = minutes.sort(function (value1, value2) {
 							return Math.abs(value1.minute - $scope.view.moment.minute()) > Math.abs(value2.minute - $scope.view.moment.minute());
 						})[0];
-						if (minute.minute - $scope.view.moment.minute() == 0) return;
+						if (!minute || minute.minute - $scope.view.moment.minute() == 0) return;
 						$scope.view.moment.year(minute.year).month(minute.month).date(minute.date).hour(minute.hour).minute(minute.minute);
 						$scope.view.update();
 						if (minute.selectable) minute.class = (minute.class + ' highlighted').trim();
@@ -606,10 +608,10 @@
 					rows: [],
 					render: function () {
 						var i = 0,
-							second = $scope.view.moment.clone().startOf('minute');
+							second = $scope.view.moment.clone().startOf('minute').second(momentPicker.secondsStart);
 						
 						$scope.minuteView.rows = [];
-						for (var s = 0; s < 60; s += momentPicker.secondsStep) {
+						for (var s = 0; s <= momentPicker.secondsEnd - momentPicker.secondsStart; s += momentPicker.secondsStep) {
 							var index = Math.floor(i / $scope.minuteView.perLine),
 								selectable = $scope.limits.isSelectable(second, 'second');
 							
@@ -652,7 +654,7 @@
 						second = seconds.sort(function (value1, value2) {
 							return Math.abs(value1.second - $scope.view.moment.second()) > Math.abs(value2.second - $scope.view.moment.second());
 						})[0];
-						if (second.second - $scope.view.moment.second() == 0) return;
+						if (!second || second.second - $scope.view.moment.second() == 0) return;
 						$scope.view.moment.year(second.year).month(second.month).date(second.date).hour(second.hour).minute(second.minute).second(second.second);
 						$scope.view.update();
 						if (second.selectable) second.class = (second.class + ' highlighted').trim();
@@ -675,54 +677,54 @@
 				$scope.limits.checkView();
 				
 				// properties listeners
-			$ctrl.$parsers.push(function (viewValue) { return $scope.utility.valueToMoment(viewValue); });
-			$ctrl.$formatters.push(function (modelValue) { return $scope.utility.momentToValue(modelValue); });
-			$scope.$watch(function () { return $scope.utility.momentToValue($ctrl.$modelValue); }, function (newViewValue, oldViewValue) {
-				if (newViewValue == oldViewValue) return;
-				
-				var newModelValue = $scope.utility.valueToMoment(newViewValue);
-				$scope.utility.setValue(newModelValue);
-				$scope.limits.checkValue();
-				$scope.view.moment = newModelValue.clone();
-				$scope.view.update();
-				if (angular.isFunction($scope.change)) {
-					var oldModelValue = $scope.utility.valueToMoment(oldViewValue);
-					$timeout(function () {
-						$scope.change({ newValue: newModelValue, oldValue: oldModelValue });
-					}, 0, false);
-				}
-			});
-			$scope.$watchGroup(['view.selected', 'view.value'], $scope.view.render);
-			$scope.$watchGroup(['minView', 'maxView'], function () {
-				// auto-detect minView/maxView
-				$scope.views.detectMinMax();
-				// limit startView
-				$scope.startView = $scope.views.all[
-					Math.max(
-						Math.min(
-							$scope.views.all.indexOf($scope.startView),
-							$scope.views.all.indexOf($scope.maxView)
-						),
-						$scope.views.all.indexOf($scope.minView)
-					)
-				];
-				$scope.view.selected = $scope.startView;
-			});
-			$scope.$watchGroup([
-				function () { return $scope.utility.momentToValue($scope.minDate); },
-				function () { return $scope.utility.momentToValue($scope.maxDate); }
-			], function () {
-				$scope.limits.checkValue();
-				$scope.limits.checkView();
-				$scope.view.render();
-			}, true);
-			$scope.$watch('locale', function (locale, previous) {
-				if (!angular.isDefined(previous) || locale == previous) return;
-				if ($scope.isValidMoment($ctrl.$modelValue)) $scope.utility.setValue($ctrl.$modelValue.locale(locale));
-				if ($scope.isValidMoment($scope.minDate)) $scope.minDate = $scope.minDate.locale(locale);
-				if ($scope.isValidMoment($scope.maxDate)) $scope.maxDate = $scope.maxDate.locale(locale);
-				$scope.view.render();
-			});
+    			$ctrl.$parsers.push(function (viewValue) { return $scope.utility.valueToMoment(viewValue); });
+    			$ctrl.$formatters.push(function (modelValue) { return $scope.utility.momentToValue(modelValue); });
+    			$scope.$watch(function () { return $scope.utility.momentToValue($ctrl.$modelValue); }, function (newViewValue, oldViewValue) {
+    				if (newViewValue == oldViewValue) return;
+    				
+    				var newModelValue = $scope.utility.valueToMoment(newViewValue);
+    				$scope.utility.setValue(newModelValue);
+    				$scope.limits.checkValue();
+    				$scope.view.moment = newModelValue.clone();
+    				$scope.view.update();
+    				if (angular.isFunction($scope.change)) {
+    					var oldModelValue = $scope.utility.valueToMoment(oldViewValue);
+    					$timeout(function () {
+    						$scope.change({ newValue: newModelValue, oldValue: oldModelValue });
+    					}, 0, false);
+    				}
+    			});
+    			$scope.$watchGroup(['view.selected', 'view.value'], $scope.view.render);
+    			$scope.$watchGroup(['minView', 'maxView'], function () {
+    				// auto-detect minView/maxView
+    				$scope.views.detectMinMax();
+    				// limit startView
+    				$scope.startView = $scope.views.all[
+    					Math.max(
+    						Math.min(
+    							$scope.views.all.indexOf($scope.startView),
+    							$scope.views.all.indexOf($scope.maxView)
+    						),
+    						$scope.views.all.indexOf($scope.minView)
+    					)
+    				];
+    				$scope.view.selected = $scope.startView;
+    			});
+    			$scope.$watchGroup([
+    				function () { return $scope.utility.momentToValue($scope.minDate); },
+    				function () { return $scope.utility.momentToValue($scope.maxDate); }
+    			], function () {
+    				$scope.limits.checkValue();
+    				$scope.limits.checkView();
+    				$scope.view.render();
+    			}, true);
+    			$scope.$watch('locale', function (locale, previous) {
+    				if (!angular.isDefined(previous) || locale == previous) return;
+    				if ($scope.isValidMoment($ctrl.$modelValue)) $scope.utility.setValue($ctrl.$modelValue.locale(locale));
+    				if ($scope.isValidMoment($scope.minDate)) $scope.minDate = $scope.minDate.locale(locale);
+    				if ($scope.isValidMoment($scope.maxDate)) $scope.maxDate = $scope.maxDate.locale(locale);
+    				$scope.view.render();
+    			});
 				
 				// event listeners
 				$scope.focusInput = function (e) {
