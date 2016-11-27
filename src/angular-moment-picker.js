@@ -94,7 +94,7 @@
 			};
 			this.template = (
 				'<div class="moment-picker">' +
-					'<span class="moment-picker-contents" ng-transclude></span>' +
+					'<span class="moment-picker-contents"></span>' +
 					'<div class="moment-picker-container {{view.selected}}-view" ' +
 						'ng-show="view.isOpen && !disabled" ng-class="{\'moment-picker-disabled\': disabled, \'open\': view.isOpen}">' +
 						'<div ng-if="additions.top" ng-include="additions.top"></div>' +
@@ -170,7 +170,8 @@
 			momentPicker   = momentPickerProvider;
 		}
 		MomentPickerDirective.prototype.$inject = ['$timeout', '$sce', '$templateCache', '$log', '$window', 'momentPicker'];
-		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs) {
+		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs, $ctrl, $transclude) {
+			$transclude(function ($transElement, $transScope) {
 			// one-way binding attributes
 			angular.forEach(['locale', 'format', 'minView', 'maxView', 'startView', 'autoclose', 'today', 'keyboard', 'showHeader', 'leftArrow', 'rightArrow', 'additions'], function (attr) {
 				if (!angular.isDefined($scope[attr])) $scope[attr] = momentPicker[attr];
@@ -628,8 +629,10 @@
 			
 			// creation
 			$scope.picker = angular.element($element[0].querySelectorAll('.moment-picker'));
+            $element.after($scope.picker);
 			$scope.contents = angular.element($scope.picker[0].querySelectorAll('.moment-picker-contents'));
 			$scope.container = angular.element($scope.picker[0].querySelectorAll('.moment-picker-container'));
+			$scope.contents.append($element.append($transElement));
 			$scope.input = $scope.contents[0].tagName.toLowerCase() != 'input' && $scope.contents[0].querySelectorAll('input').length > 0
 				? angular.element($scope.contents[0].querySelectorAll('input'))
 				: angular.element($scope.contents[0]);
@@ -655,7 +658,7 @@
 			$scope.$watch('value', function () {
 				var oldValue = $scope.model,
 					newValue = $scope.valueMoment && $scope.valueMoment.format($scope.format);
-				if (newValue != oldValue)
+				if (newValue != oldValue && $scope.valueMoment)
 					$timeout(function () {
 						$scope.view.update($scope.view.moment = $scope.valueMoment.clone());
 						$scope.model = newValue;
@@ -714,6 +717,7 @@
 			$scope.contents.on('mousedown', $scope.focusInput);
 			$scope.container.on('mousedown', $scope.focusInput);
 			angular.element($window).on('resize scroll', $scope.view.position);
+			});
 		};
 		
 		return MomentPickerDirective;
