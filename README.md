@@ -65,9 +65,8 @@ To configure Angular Moment Picker you have to append to your block or your inpu
 </div>
 ```
 
-```
-Invoice date:
-<input moment-picker ng-model="ctrl.date" format="DD/MM/YYYY">
+```html
+<input moment-picker="ctrl.dateFormatted" ng-model="ctrl.momentDate" format="DD/MM/YYYY">
 ```
 
 Property | Default | Description
@@ -79,8 +78,8 @@ format | `"L LTS"` | Format of the output value and min/max date. <sup>1</sup>
 min-view | `"decade"` | Minimum navigable view.
 max-view | `"minute"` | Maximum navigable view.
 start-view | `"year"` | Initial view when the picker is open.
-min-date | | Two-way bindable property representing the minimum selectable date in the same format of the value.
-max-date | | Two-way bindable property representing the maximum selectable date in the same format of the value.
+min-date | | Two-way bindable property representing the minimum selectable date (as String in the same format of the value, or as a Moment.js object).
+max-date | | Two-way bindable property representing the maximum selectable date (as String in the same format of the value, or as a Moment.js object).
 disable | `false` | Disables the picker if truly.
 autoclose | `true` | Closes the picker after selecting a date.
 today | `false` | Highlights the current day.

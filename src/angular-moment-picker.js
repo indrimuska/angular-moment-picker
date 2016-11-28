@@ -186,6 +186,16 @@
 				// utilities
 				$scope.utility = {
 					isValidMoment: function (value) { return moment.isMoment(value) && value.isValid(); },
+					toValue: function (date) {
+						var momentDate = date;
+						if (!$scope.utility.isValidMoment(date)) momentDate = $scope.utility.toMoment(date);
+						return $scope.utility.momentToValue(momentDate);
+					},
+					toMoment: function (date) {
+						var momentDate = moment(date, $scope.format, $scope.locale);
+						if (!$scope.utility.isValidMoment(momentDate)) momentDate = undefined;
+						return momentDate;
+					},
 					momentToValue: function (momentObject) {
 						if (!$scope.utility.isValidMoment(momentObject)) return undefined;
 						return !$scope.format ? momentObject.valueOf() : momentObject.format($scope.format);
@@ -210,11 +220,13 @@
 				
 				// limits
 				$scope.limits = {
+					minDate: undefined,
+					maxDate: undefined,
 					isAfterOrEqualMin: function (value, precision) {
-						return !angular.isDefined($scope.minDate) || value.isAfter($scope.minDate, precision) || value.isSame($scope.minDate, precision);
+						return !angular.isDefined($scope.limits.minDate) || value.isAfter($scope.limits.minDate, precision) || value.isSame($scope.limits.minDate, precision);
 					},
 					isBeforeOrEqualMax: function (value, precision) {
-						return !angular.isDefined($scope.maxDate) || value.isBefore($scope.maxDate, precision) || value.isSame($scope.maxDate, precision);
+						return !angular.isDefined($scope.limits.maxDate) || value.isBefore($scope.limits.maxDate, precision) || value.isSame($scope.limits.maxDate, precision);
 					},
 					isSelectable: function (value, precision) {
 						var selectable = true;
@@ -227,13 +239,13 @@
 					},
 					checkValue: function () {
 						if (!angular.isDefined($ctrl.$modelValue)) return;
-						if (!$scope.limits.isAfterOrEqualMin($ctrl.$modelValue)) $scope.utility.setValue($scope.minDate);
-						if (!$scope.limits.isBeforeOrEqualMax($ctrl.$modelValue)) $scope.utility.setValue($scope.maxDate);
+						if (!$scope.limits.isAfterOrEqualMin($ctrl.$modelValue)) $scope.utility.setValue($scope.limits.minDate);
+						if (!$scope.limits.isBeforeOrEqualMax($ctrl.$modelValue)) $scope.utility.setValue($scope.limits.maxDate);
 					},
 					checkView: function () {
 						if (!angular.isDefined($scope.view.moment)) $scope.view.moment = moment().locale($scope.locale);
-						if (!$scope.limits.isAfterOrEqualMin($scope.view.moment)) $scope.view.moment = $scope.minDate.clone();
-						if (!$scope.limits.isBeforeOrEqualMax($scope.view.moment)) $scope.view.moment = $scope.maxDate.clone();
+						if (!$scope.limits.isAfterOrEqualMin($scope.view.moment)) $scope.view.moment = $scope.limits.minDate.clone();
+						if (!$scope.limits.isBeforeOrEqualMax($scope.view.moment)) $scope.view.moment = $scope.limits.maxDate.clone();
 						$scope.view.update();
 					}
 				};
@@ -313,26 +325,29 @@
 						var view       = $scope.view.selected + 'View',
 							precision  = { decade: 'year', year: 'month', month: 'day', day: 'hour', hour: 'minute', minute: 'second' }[$scope.view.selected],
 							singleUnit = momentPicker[precision + 'sStep'] || 1,
-							operation  = [KEYS.up, KEYS.left].indexOf(e.keyCode) >= 0 ? 'subtract' : 'add';
+							operation  = [KEYS.up, KEYS.left].indexOf(e.keyCode) >= 0 ? 'subtract' : 'add',
+							highlight  = function (vertical) {
+								var unitMultiplier = vertical ? $scope[view].perLine : 1,
+									nextDate = $scope.view.moment.clone()[operation](singleUnit * unitMultiplier, precision);
+								if ($scope.limits.isSelectable(nextDate, precision)) {
+									$scope.view.moment = nextDate;
+									$scope.view.update();
+									$scope.view.render();
+								}
+							};
 						
 						switch (e.keyCode) {
 							case KEYS.up:
 							case KEYS.down:
 								e.preventDefault();
 								if (!$scope.view.isOpen) $scope.view.open();
-								else {
-									$scope.view.moment[operation](singleUnit * $scope[view].perLine, precision);
-									$scope.view.update();
-									$scope.view.render();
-								}
+								else highlight(true);
 								break;
 							case KEYS.left:
 							case KEYS.right:
 								if (!$scope.view.isOpen) break;
-								$scope.view.moment[operation](singleUnit, precision);
-								$scope.view.update();
-								$scope.view.render();
 								e.preventDefault();
+								highlight();
 								break;
 							case KEYS.enter:
 								if (!$scope.view.isOpen) break;
@@ -678,7 +693,7 @@
 				$scope.input = $scope.contents[0].tagName.toLowerCase() != 'input' && $scope.contents[0].querySelectorAll('input').length > 0
 					? angular.element($scope.contents[0].querySelectorAll('input'))
 					: angular.element($scope.contents[0]);
-				$scope.input.attr('tabindex', 0);
+				$scope.input.addClass('moment-picker-input').attr('tabindex', 0);
 				
 				// initialization
 				$scope.views.detectMinMax();
@@ -724,9 +739,12 @@
 					$scope.view.selected = $scope.startView;
 				});
 				$scope.$watchGroup([
-					function () { return $scope.utility.momentToValue($scope.minDate); },
-					function () { return $scope.utility.momentToValue($scope.maxDate); }
+					function () { return $scope.utility.toValue($scope.minDate); },
+					function () { return $scope.utility.toValue($scope.maxDate); }
 				], function () {
+					angular.forEach(['minDate', 'maxDate'], function (field) {
+						$scope.limits[field] = $scope.utility.toMoment($scope[field]);
+					});
 					$scope.limits.checkValue();
 					$scope.limits.checkView();
 					$scope.view.render();
@@ -734,8 +752,8 @@
 				$scope.$watch('locale', function (locale, previous) {
 					if (!angular.isDefined(previous) || locale == previous) return;
 					if ($scope.isValidMoment($ctrl.$modelValue)) $scope.utility.setValue($ctrl.$modelValue.locale(locale));
-					if ($scope.isValidMoment($scope.minDate)) $scope.minDate = $scope.minDate.locale(locale);
-					if ($scope.isValidMoment($scope.maxDate)) $scope.maxDate = $scope.maxDate.locale(locale);
+					if ($scope.isValidMoment($scope.limits.minDate)) $scope.limits.minDate = $scope.limits.minDate.locale(locale);
+					if ($scope.isValidMoment($scope.limits.maxDate)) $scope.limits.maxDate = $scope.limits.maxDate.locale(locale);
 					$scope.view.render();
 				});
 				
@@ -747,7 +765,11 @@
 				$scope.input
 					.on('focus click', function () { $scope.$evalAsync($scope.view.open); })
 					.on('blur',        function () { $scope.$evalAsync($scope.view.close); })
-					.on('keydown',     function (e) { if ($scope.keyboard) $scope.$evalAsync(function () { $scope.view.keydown(e); }); });
+					.on('keydown',     function (e) {
+						if (!$scope.keyboard) return;
+						e.preventDefault();
+						$scope.$evalAsync(function () { $scope.view.keydown(e); });
+					});
 				$scope.contents.on('mousedown', $scope.focusInput);
 				$scope.container.on('mousedown', $scope.focusInput);
 				angular.element($window).on('resize scroll', $scope.view.position);

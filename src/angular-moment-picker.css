@@ -1,5 +1,5 @@
 .moment-picker { position: relative; display: block; }
-.moment-picker .moment-picker-contents { cursor: pointer; }
+.moment-picker .moment-picker-input { cursor: pointer; }
 .moment-picker .moment-picker-container { color: #404040; min-width: 15em; background: #fff; padding: 4px; border: 1px solid #f0f3f4; border-radius: 4px; position: absolute;
 	top: 100%; margin-top: 4px; margin-left: -.5em; box-shadow: 0 2px 4px rgba(0, 0, 0, .075); z-index: 5; }
 .moment-picker .moment-picker-container:before,
