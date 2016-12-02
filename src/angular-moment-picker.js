@@ -705,14 +705,14 @@
 					$ctrl.$formatters.push(function (modelValue) { return $scope.utility.momentToValue(modelValue); });
 				}
 				
-                // model controller is initialized after linking funciton
-                $timeout(function () {
-                    if (!$scope.utility.isValidMoment($ctrl.$modelValue)) return;
-                    $scope.view.moment = $ctrl.$modelValue.clone();
-                    $scope.view.update();
-                });
-                
-                // properties listeners
+				// model controller is initialized after linking funciton
+				$timeout(function () {
+					if (!$scope.utility.isValidMoment($ctrl.$modelValue)) return;
+					$scope.view.moment = $ctrl.$modelValue.clone();
+					$scope.view.update();
+				});
+				
+				// properties listeners
 				$scope.$watch(function () { return $scope.utility.momentToValue($ctrl.$modelValue); }, function (newViewValue, oldViewValue) {
 					if (newViewValue == oldViewValue) return;
 					
