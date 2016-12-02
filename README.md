@@ -151,11 +151,11 @@ start-view | `"year"` | Initial view after picker opening.
 autoclose | `true` | Closes the picker after selecting a date.
 today | `false` | Highlights the current day.
 keyboard | `false` | Allows using the keyboard to navigate the picker.
-showHeader | `true` | Shows the header in the view.
+show-header | `true` | Shows the header in the view.
 left-arrow | `"&larr;"` | Left arrow string (HTML allowed).
 right-arrow | `"&rarr;"` | Right arrow string (HTML allowed).
 additions | `{ top: undefined, bottom: undefined }` | Template url for custom contents above and below each picker views (inside the dialog).
-yearsFormat | `"YYYY"` | Years format in `decade` view.
+years-format | `"YYYY"` | Years format in `decade` view.
 months-format | `"MMM"` | Months format in `year` view.
 days-format | `"D"` | Days format in `month` view.
 hours-format | `"HH:[00]"` | Hours format in `day` view.
