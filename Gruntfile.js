@@ -60,10 +60,18 @@ module.exports = function(grunt) {
 					"bower.json": "package.json"
 				}
 			}
+		},
+		karma:{
+			unit: {
+				options:{
+					configFile:'karma.conf.js'
+				}
+			}
 		}
 	});
 	
-	// Default tasks.
-	grunt.registerTask('default', ['eslint', 'copy', 'uglify', 'cssmin', 'header', 'sync-json']);
+	// Grunt tasks
+	grunt.registerTask('test', ['karma']);
+	grunt.registerTask('default', ['eslint', 'test', 'copy', 'uglify', 'cssmin', 'header', 'sync-json']);
 	
 };
