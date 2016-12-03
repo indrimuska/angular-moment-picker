@@ -1,0 +1,8 @@
+language: node_js
+node_js:
+  - 'iojs'
+  - 'node'
+install:
+  - npm install
+script:
+  - grunt test
