@@ -71,7 +71,8 @@ module.exports = function(grunt) {
 	});
 	
 	// Grunt tasks
+	grunt.registerTask('default', ['eslint', 'test']);
 	grunt.registerTask('test', ['karma']);
-	grunt.registerTask('default', ['eslint', 'test', 'copy', 'uglify', 'cssmin', 'header', 'sync-json']);
+	grunt.registerTask('build', ['default', 'test', 'copy', 'uglify', 'cssmin', 'header', 'sync-json']);
 	
 };

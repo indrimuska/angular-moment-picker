@@ -22,6 +22,9 @@
     "url": "https://github.com/indrimuska/angular-moment-picker/issues"
   },
   "homepage": "http://indrimuska.github.io/angular-moment-picker",
+  "scripts": {
+    "test": "grunt test"
+  }
   "dependencies": {
     "angular": "^1.3",
     "moment": "^2.16.0"
