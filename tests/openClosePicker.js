@@ -52,9 +52,9 @@ describe('Open / close picker', function () {
 	it('should close a picker when clicking to another picker', function () {
 		$inputContent.ngTrigger('click');
 		expect(isVisible($inputPicker)).toBe(true);
-	
+		
 		$divContent.ngTrigger('click');
 		expect(isVisible($divPicker)).toBe(true);
-		// expect(isVisible($inputPicker)).toBe(false);
+		expect(isVisible($inputPicker)).toBe(false);
 	});
 });

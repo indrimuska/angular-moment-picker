@@ -1,4 +1,5 @@
 var $rootScope, $compile;
+var mpId = 0;
 
 var initTest = function () {
 	// load the moment-picker module, which contains the directive
@@ -23,7 +24,7 @@ var buildTemplate = function (tag, options, content) {
 	var template = '<' + tag;
 	// build attributes map
 	if (!options) options = {};
-	if (!options.momentPicker) options.momentPicker = 'mpTestFormattedString';
+	if (!options.momentPicker) options.momentPicker = 'mpTestFormattedString' + (++mpId);
 	angular.forEach(options, function (value, name) {
 		template += ' ' + name.replace(/([A-Z])/g, '-$1').toLowerCase() + '="' + value + '"';
 	});
@@ -50,7 +51,14 @@ angular.element.prototype.find = function (query) {
 	return angular.element(this[0].querySelectorAll(query));
 };
 angular.element.prototype.ngTrigger = function (event) {
-	if (this.trigger) this.trigger(event);
-	this.triggerHandler(event);
+	// use jquey trigger method to propagate event to parent nodes
+	this.trigger(event);
 	$digest();
 };
+
+// fix PhantomJS missing blur-on-clickout features
+var lastFocused;
+angular.element(document.body).on('click', function (e) {
+	if (lastFocused) lastFocused.ngTrigger('blur');
+	lastFocused = angular.element(e.target);
+});
