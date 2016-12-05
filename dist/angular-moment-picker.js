@@ -420,6 +420,7 @@
 						if (!$scope.utility.isValidMoment($scope.startDate)) {
 							year = $scope.view.moment.clone();
 						} else {
+							$scope.view.moment = $scope.startDate;
 							year = $scope.startDate;
 						}
 
