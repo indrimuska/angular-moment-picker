@@ -93,7 +93,8 @@
 				keyboard:   '=?',
 				additions:  '=?',
 				change:     '&?',
-				selectable: '&?'
+				selectable: '&?',
+				startDate: 	'=?'
 			};
 			this.template   = (
 				'<div class="moment-picker">' +
@@ -413,9 +414,17 @@
 					perLine: 4,
 					rows: {},
 					render: function () {
-						var year      = $scope.view.moment.clone(),
-							firstYear = Math.floor(year.year() / 10) * 10 - 1;
-						
+						var year,
+							firstYear;
+
+						if (!$scope.utility.isValidMoment($scope.startDate)) {
+							year = $scope.view.moment.clone();
+						} else {
+							year = $scope.startDate;
+						}
+
+						firstYear = Math.floor(year.year() / 10) * 10 - 1;
+
 						year.year(firstYear);
 						$scope.decadeView.rows = {};
 						for (var y = 0; y < 12; y++) {

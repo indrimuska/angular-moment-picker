@@ -416,10 +416,10 @@
 						var year,
 							firstYear;
 
-						if (!$scope.utility.isValidMoment($scope.startDate)){
-							year = $scope.view.moment.clone()
-						}else {
-							year = moment($scope.startDate);
+						if (!$scope.utility.isValidMoment($scope.startDate)) {
+							year = $scope.view.moment.clone();
+						} else {
+							year = $scope.startDate;
 						}
 
 						firstYear = Math.floor(year.year() / 10) * 10 - 1;
