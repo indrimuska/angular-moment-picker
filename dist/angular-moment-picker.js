@@ -767,7 +767,7 @@
 				
 				// event listeners
 				$scope.focusInput = function (e) {
-					e.preventDefault();
+					if (e) e.preventDefault();
 					$scope.input[0].focus();
 				};
 				$scope.input
@@ -778,8 +778,8 @@
 						e.preventDefault();
 						$scope.$evalAsync(function () { $scope.view.keydown(e); });
 					});
-				$scope.contents.on('mousedown', $scope.focusInput);
-				$scope.container.on('mousedown', $scope.focusInput);
+				$scope.contents.on('mousedown', function () { $scope.focusInput(); });
+				$scope.container.on('mousedown', function (e) { $scope.focusInput(e); });
 				angular.element($window).on('resize scroll', $scope.view.position);
 			});
 		};
