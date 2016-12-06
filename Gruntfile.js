@@ -12,6 +12,16 @@ module.exports = function(grunt) {
 			},
 			target: ['src/angular-moment-picker.js']
 		},
+		karma:{
+			unit: {
+				options:{
+					configFile:'karma.conf.js'
+				}
+			}
+		},
+		bumpup: {
+			file: 'package.json'
+		},
 		copy: {
 			main: {
 				files: {
@@ -60,19 +70,12 @@ module.exports = function(grunt) {
 					'bower.json': 'package.json'
 				}
 			}
-		},
-		karma:{
-			unit: {
-				options:{
-					configFile:'karma.conf.js'
-				}
-			}
 		}
 	});
 	
 	// Grunt tasks
 	grunt.registerTask('default', ['eslint', 'test']);
 	grunt.registerTask('test', ['karma']);
-	grunt.registerTask('build', ['default', 'test', 'copy', 'uglify', 'cssmin', 'header', 'sync-json']);
+	grunt.registerTask('build', ['default', 'bumpup', 'copy', 'uglify', 'cssmin', 'header', 'sync-json']);
 	
 };
