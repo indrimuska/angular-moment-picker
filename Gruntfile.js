@@ -1,4 +1,4 @@
-module.exports = function(grunt) {
+module.exports = function (grunt) {
 	
 	// Load plugins
 	require('load-grunt-tasks')(grunt);
@@ -12,10 +12,21 @@ module.exports = function(grunt) {
 			},
 			target: ['src/angular-moment-picker.js']
 		},
-		karma:{
+		karma: {
 			unit: {
-				options:{
-					configFile:'karma.conf.js'
+				options: {
+					files: [
+						'node_modules/jquery/dist/jquery.js',
+						'node_modules/angular/angular.js',
+						'node_modules/angular-mocks/angular-mocks.js',
+						'node_modules/moment/min/moment-with-locales.js',
+						'src/*.js',
+						'tests/utility.js',
+						'tests/<%= grunt.task.current.args[0] || "*" %>.js'
+					],
+					frameworks: ['jasmine'],
+					browsers: ['PhantomJS'],
+					singleRun: true
 				}
 			}
 		},
@@ -74,8 +85,8 @@ module.exports = function(grunt) {
 	});
 	
 	// Grunt tasks
+	grunt.registerTask('test', ['karma:unit']);
 	grunt.registerTask('default', ['eslint', 'test']);
-	grunt.registerTask('test', ['karma']);
 	grunt.registerTask('build', ['default', 'bumpup', 'copy', 'uglify', 'cssmin', 'header', 'sync-json']);
 	
 };

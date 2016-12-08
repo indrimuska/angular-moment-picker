@@ -72,8 +72,8 @@ To configure Angular Moment Picker you have to append to your block or your inpu
 
 Property | Default | Description
 ---|---|---
-moment-picker | | Two-way bindable property as datetime string value.
-ng-model | | Two-way bindable property as Moment.js object.
+moment-picker | | Two-way bindable property as **formatted datetime string**.
+ng-model | | Two-way bindable property as **Moment.js object**.
 locale | `"en"` | Locale code. <sup>1</sup>
 format | `"L LTS"` | Format of the output value and min/max date. <sup>1</sup>
 min-view | `"decade"` | Minimum navigable view.
