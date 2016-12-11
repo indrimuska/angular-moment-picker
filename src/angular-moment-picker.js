@@ -86,6 +86,7 @@
 				startView:  '@?',
 				minDate:    '=?',
 				maxDate:    '=?',
+				startDate:  '=?',
 				disabled:   '=?disable',
 				autoclose:  '=?',
 				today:      '=?',
@@ -707,8 +708,8 @@
 				
 				// model controller is initialized after linking funciton
 				$timeout(function () {
-					if (!$scope.utility.isValidMoment($ctrl.$modelValue)) return;
-					$scope.view.moment = $ctrl.$modelValue.clone();
+					if ($scope.startDate) $scope.view.moment = $scope.utility.toMoment($scope.startDate);
+					else if ($scope.utility.isValidMoment($ctrl.$modelValue)) $scope.view.moment = $ctrl.$modelValue.clone();
 					$scope.view.update();
 				});
 				

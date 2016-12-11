@@ -81,6 +81,7 @@ max-view | `"minute"` | Maximum navigable view.
 start-view | `"year"` | Initial view when the picker is open.
 min-date | | Two-way bindable property representing the minimum selectable date (as String in the same format of the value, or as a Moment.js object).
 max-date | | Two-way bindable property representing the maximum selectable date (as String in the same format of the value, or as a Moment.js object).
+start-date | | Two-way bindable property representing the initial date to be shown in picker (as String in the same format of the value, or as a Moment.js object).
 disable | `false` | Disables the picker if truly.
 autoclose | `true` | Closes the picker after selecting a date.
 today | `false` | Highlights the current day.

@@ -74,7 +74,7 @@ module.exports = function (grunt) {
 		},
 		'sync-json': {
 			options: {
-				include: ['name', 'description', 'version', 'dependencies']
+				include: ['name', 'version', 'description', 'homepage', 'license', 'keywords', 'dependencies']
 			},
 			bower: {
 				files: {
