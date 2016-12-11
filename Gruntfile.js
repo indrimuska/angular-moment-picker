@@ -31,6 +31,11 @@ module.exports = function (grunt) {
 			}
 		},
 		bumpup: {
+			options: {
+				updateProps: {
+					pkg: 'package.json'
+				}
+			},
 			file: 'package.json'
 		},
 		copy: {
@@ -87,6 +92,6 @@ module.exports = function (grunt) {
 	// Grunt tasks
 	grunt.registerTask('test', ['karma:unit']);
 	grunt.registerTask('default', ['eslint', 'test']);
-	grunt.registerTask('build', ['default', 'bumpup', 'copy', 'uglify', 'cssmin', 'header', 'sync-json']);
+	grunt.registerTask('build', ['default', 'bumpup', 'sync-json', 'copy', 'uglify', 'cssmin', 'header']);
 	
 };
