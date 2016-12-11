@@ -20,9 +20,9 @@ module.exports = function (grunt) {
 						'node_modules/angular/angular.js',
 						'node_modules/angular-mocks/angular-mocks.js',
 						'node_modules/moment/min/moment-with-locales.js',
-						'src/*.js',
+						'src/**.*',
 						'tests/utility.js',
-						'tests/<%= grunt.task.current.args[0] || "*" %>.js'
+						'tests/<%= grunt.task.current.args[0] || "**/*" %>.js'
 					],
 					frameworks: ['jasmine'],
 					browsers: ['PhantomJS'],

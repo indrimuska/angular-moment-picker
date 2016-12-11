@@ -706,7 +706,7 @@
 					$ctrl.$formatters.push(function (modelValue) { return $scope.utility.momentToValue(modelValue); });
 				}
 				
-				// model controller is initialized after linking funciton
+				// view initialization (model controller is initialized after linking function)
 				$timeout(function () {
 					if ($scope.startDate) $scope.view.moment = $scope.utility.toMoment($scope.startDate);
 					else if ($scope.utility.isValidMoment($ctrl.$modelValue)) $scope.view.moment = $ctrl.$modelValue.clone();

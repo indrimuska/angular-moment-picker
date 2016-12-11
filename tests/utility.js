@@ -1,5 +1,4 @@
-var $rootScope, $compile;
-var mpId = 0;
+var $compile, $timeout, $rootScope, momentPickerProvider;
 
 var initTest = function () {
 	// load the moment-picker module, which contains the directive
@@ -7,10 +6,12 @@ var initTest = function () {
 	
 	// store references to $rootScope and $compile
 	// so they are available to all tests in this describe block
-	beforeEach(inject(function (_$rootScope_, _$compile_) {
+	beforeEach(inject(function (_$compile_, _$timeout_, _$rootScope_, _momentPicker_) {
 		// The injector unwraps the underscores (_) from around the parameter names when matching
-		$rootScope = _$rootScope_;
 		$compile = _$compile_;
+		$timeout = _$timeout_;
+		$rootScope = _$rootScope_;
+		momentPickerProvider = _momentPicker_;
 	}));
 }
 
@@ -19,14 +20,16 @@ var $digest = function () {
 }
 
 var buildTemplate = function (tag, options, content) {
-	var $template, $container, $element;
+	var $template, $container, $element, $scope = $rootScope.$new();
 	// template string
 	var template = '<' + tag;
 	// build attributes map
 	if (!options) options = {};
-	if (!options.momentPicker) options.momentPicker = 'mpTestFormattedString' + (++mpId);
+	if (!options.momentPicker) options.momentPicker = 'mpTestFormattedString';
 	angular.forEach(options, function (value, name) {
-		template += ' ' + name.replace(/([A-Z])/g, '-$1').toLowerCase() + '="' + value + '"';
+		var valueStr = typeof value === 'string' ? value : name;
+		$scope[name] = value;
+		template += ' ' + name.replace(/([A-Z])/g, '-$1').toLowerCase() + '="' + valueStr + '"';
 	});
 	// close template
 	template += tag.toLowerCase() === 'input' ? '>' : '></div>';
@@ -40,9 +43,10 @@ var buildTemplate = function (tag, options, content) {
 	angular.element(document.body).append($container);
 	$container.append($template);
 	// return compiled element
-	$compile($container)($rootScope);
+	$compile($container)($scope);
 	$element = angular.element($container.children()[0]);
 	$digest();
+	$timeout.flush();
 	return $element;
 };
 
