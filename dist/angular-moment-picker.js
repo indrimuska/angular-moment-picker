@@ -1,4 +1,4 @@
-/*! Angular Moment Picker - v0.8.1 - https://github.com/indrimuska/angular-moment-picker - (c) 2015 Indri Muska - MIT */
+/*! Angular Moment Picker - v0.8.2 - https://github.com/indrimuska/angular-moment-picker - (c) 2015 Indri Muska - MIT */
 (function (angular) {
 	'use strict';
 	
@@ -87,6 +87,7 @@
 				startView:  '@?',
 				minDate:    '=?',
 				maxDate:    '=?',
+				startDate:  '=?',
 				disabled:   '=?disable',
 				autoclose:  '=?',
 				today:      '=?',
@@ -706,10 +707,10 @@
 					$ctrl.$formatters.push(function (modelValue) { return $scope.utility.momentToValue(modelValue); });
 				}
 				
-				// model controller is initialized after linking funciton
+				// view initialization (model controller is initialized after linking function)
 				$timeout(function () {
-					if (!$scope.utility.isValidMoment($ctrl.$modelValue)) return;
-					$scope.view.moment = $ctrl.$modelValue.clone();
+					if ($scope.startDate) $scope.view.moment = $scope.utility.toMoment($scope.startDate);
+					else if ($scope.utility.isValidMoment($ctrl.$modelValue)) $scope.view.moment = $ctrl.$modelValue.clone();
 					$scope.view.update();
 				});
 				
@@ -759,9 +760,9 @@
 				}, true);
 				$scope.$watch('locale', function (locale, previous) {
 					if (!angular.isDefined(previous) || locale == previous) return;
-					if ($scope.isValidMoment($ctrl.$modelValue)) $scope.utility.setValue($ctrl.$modelValue.locale(locale));
-					if ($scope.isValidMoment($scope.limits.minDate)) $scope.limits.minDate = $scope.limits.minDate.locale(locale);
-					if ($scope.isValidMoment($scope.limits.maxDate)) $scope.limits.maxDate = $scope.limits.maxDate.locale(locale);
+					if ($scope.utility.isValidMoment($ctrl.$modelValue)) $scope.utility.setValue($ctrl.$modelValue.locale(locale));
+					if ($scope.utility.isValidMoment($scope.limits.minDate)) $scope.limits.minDate = $scope.limits.minDate.locale(locale);
+					if ($scope.utility.isValidMoment($scope.limits.maxDate)) $scope.limits.maxDate = $scope.limits.maxDate.locale(locale);
 					$scope.view.render();
 				});
 				
