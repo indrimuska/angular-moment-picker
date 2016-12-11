@@ -759,9 +759,9 @@
 				}, true);
 				$scope.$watch('locale', function (locale, previous) {
 					if (!angular.isDefined(previous) || locale == previous) return;
-					if ($scope.isValidMoment($ctrl.$modelValue)) $scope.utility.setValue($ctrl.$modelValue.locale(locale));
-					if ($scope.isValidMoment($scope.limits.minDate)) $scope.limits.minDate = $scope.limits.minDate.locale(locale);
-					if ($scope.isValidMoment($scope.limits.maxDate)) $scope.limits.maxDate = $scope.limits.maxDate.locale(locale);
+					if ($scope.utility.isValidMoment($ctrl.$modelValue)) $scope.utility.setValue($ctrl.$modelValue.locale(locale));
+					if ($scope.utility.isValidMoment($scope.limits.minDate)) $scope.limits.minDate = $scope.limits.minDate.locale(locale);
+					if ($scope.utility.isValidMoment($scope.limits.maxDate)) $scope.limits.maxDate = $scope.limits.maxDate.locale(locale);
 					$scope.view.render();
 				});
 				
