@@ -21,7 +21,7 @@ describe('Properties: `startDate`', function () {
 	
 	// test all views
 	angular.forEach(expectedHeaders, function (expectedHeader, view) {
-		var viewName = view.toUpperCase(),
+		var viewName = view[0].toUpperCase() + view.slice(1);
 			title    = 'should open ' + viewName + ' View in ' + expectedHeader;
 		
 		it(title, function () {

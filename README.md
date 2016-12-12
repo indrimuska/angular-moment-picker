@@ -83,6 +83,7 @@ min-date | | Two-way bindable property representing the minimum selectable date 
 max-date | | Two-way bindable property representing the maximum selectable date (as String in the same format of the value, or as a Moment.js object).
 start-date | | Two-way bindable property representing the initial date to be shown in picker (as String in the same format of the value, or as a Moment.js object).
 disable | `false` | Disables the picker if truly.
+validate | `true` | Forces picker value between the range `minDate` and `maxDate`.
 autoclose | `true` | Closes the picker after selecting a date.
 today | `false` | Highlights the current day.
 keyboard | `false` | Allows using the keyboard to navigate the picker.
@@ -150,6 +151,7 @@ format | `"L LTS"` | Format of the output value and min/max date. <sup>1</sup>
 min-view | `"decade"` | Minimum navigable view.
 max-view | `"minute"` | Maximum navigable view.
 start-view | `"year"` | Initial view after picker opening.
+validate | `true` | Forces picker value between the range `minDate` and `maxDate`.
 autoclose | `true` | Closes the picker after selecting a date.
 today | `false` | Highlights the current day.
 keyboard | `false` | Allows using the keyboard to navigate the picker.
