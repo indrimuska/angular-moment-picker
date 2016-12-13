@@ -1,4 +1,4 @@
-/*! Angular Moment Picker - v0.8.3 - https://github.com/indrimuska/angular-moment-picker - (c) 2015 Indri Muska - MIT */
+/*! Angular Moment Picker - v0.8.4 - https://github.com/indrimuska/angular-moment-picker - (c) 2015 Indri Muska - MIT */
 (function (angular) {
 	'use strict';
 	
@@ -14,6 +14,7 @@
 				minView:        'decade',
 				maxView:        'minute',
 				startView:      'year',
+				validate:       true,
 				autoclose:      true,
 				today:          false,
 				keyboard:       false,
@@ -89,6 +90,7 @@
 				maxDate:    '=?',
 				startDate:  '=?',
 				disabled:   '=?disable',
+				validate:   '=?',
 				autoclose:  '=?',
 				today:      '=?',
 				keyboard:   '=?',
@@ -177,7 +179,9 @@
 		MomentPickerDirective.prototype.link = function ($scope, $element, $attrs, $ctrl, $transclude) {
 			$transclude(function ($transElement) {
 				// one-way binding attributes
-				angular.forEach(['locale', 'format', 'minView', 'maxView', 'startView', 'autoclose', 'today', 'keyboard', 'showHeader', 'leftArrow', 'rightArrow', 'additions'], function (attr) {
+				angular.forEach([
+					'locale', 'format', 'minView', 'maxView', 'startView', 'validate', 'autoclose', 'today', 'keyboard', 'showHeader', 'leftArrow', 'rightArrow', 'additions'
+				], function (attr) {
 					if (!angular.isDefined($scope[attr])) $scope[attr] = momentPicker[attr];
 					if (!angular.isDefined($attrs[attr])) $attrs[attr] = $scope[attr];
 				});
@@ -212,18 +216,17 @@
 							viewValue = $scope.utility.momentToValue(modelValue);
 						$scope.model = modelValue;
 						$ctrl.$modelValue = modelValue;
-						if ($attrs.ngModel != $attrs.momentPicker) $scope.value = viewValue;
 						if ($attrs.ngModel) {
 							$ctrl.$setViewValue(viewValue);
-							$ctrl.$render();
+							$ctrl.$render(); // render input value
 						}
 					}
 				};
 				
 				// limits
 				$scope.limits = {
-					minDate: undefined,
-					maxDate: undefined,
+					minDate: $scope.utility.toMoment($scope.minDate),
+					maxDate: $scope.utility.toMoment($scope.maxDate),
 					isAfterOrEqualMin: function (value, precision) {
 						return !angular.isDefined($scope.limits.minDate) || value.isAfter($scope.limits.minDate, precision) || value.isSame($scope.limits.minDate, precision);
 					},
@@ -240,7 +243,7 @@
 						return $scope.limits.isAfterOrEqualMin(value, precision) && $scope.limits.isBeforeOrEqualMax(value, precision) && selectable;
 					},
 					checkValue: function () {
-						if (!angular.isDefined($ctrl.$modelValue)) return;
+						if (!$scope.utility.isValidMoment($ctrl.$modelValue) || !$scope.validate) return;
 						if (!$scope.limits.isAfterOrEqualMin($ctrl.$modelValue)) $scope.utility.setValue($scope.limits.minDate);
 						if (!$scope.limits.isBeforeOrEqualMax($ctrl.$modelValue)) $scope.utility.setValue($scope.limits.maxDate);
 					},
@@ -700,19 +703,23 @@
 				// initialization
 				$scope.views.detectMinMax();
 				$scope.limits.checkView();
-				
-				// model <-> view conversion
-				if ($attrs.ngModel) {
-					$ctrl.$parsers.push(function (viewValue) { return $scope.utility.valueToMoment(viewValue); });
-					$ctrl.$formatters.push(function (modelValue) { return $scope.utility.momentToValue(modelValue); });
-				}
-				
-				// view initialization (model controller is initialized after linking function)
+				// model controller is initialized after linking function
 				$timeout(function () {
+					if ($attrs.ngModel) $ctrl.$commitViewValue();
+					// view initialization
 					if ($scope.startDate) $scope.view.moment = $scope.utility.toMoment($scope.startDate);
 					else if ($scope.utility.isValidMoment($ctrl.$modelValue)) $scope.view.moment = $ctrl.$modelValue.clone();
 					$scope.view.update();
 				});
+				
+				// model <-> view conversion
+				if ($attrs.ngModel) {
+					$ctrl.$parsers.push(function (viewValue) { return ($scope.model = $scope.utility.valueToMoment(viewValue)) || true; });
+					$ctrl.$formatters.push(function (modelValue) { return ($scope.value = $scope.utility.momentToValue(modelValue)) || ''; });
+					$ctrl.$viewChangeListeners.push(function () { if ($attrs.ngModel != $attrs.momentPicker) $scope.value = $ctrl.$viewValue; });
+					$ctrl.$validators.minDate = function (value) { return $scope.validate || !$scope.utility.isValidMoment(value) || $scope.limits.isAfterOrEqualMin(value); };
+					$ctrl.$validators.maxDate = function (value) { return $scope.validate || !$scope.utility.isValidMoment(value) || $scope.limits.isBeforeOrEqualMax(value); };
+				}
 				
 				// properties listeners
 				$scope.$watch(function () { return $scope.utility.momentToValue($ctrl.$modelValue); }, function (newViewValue, oldViewValue) {
@@ -757,7 +764,7 @@
 					$scope.limits.checkValue();
 					$scope.limits.checkView();
 					$scope.view.render();
-				}, true);
+				});
 				$scope.$watch('locale', function (locale, previous) {
 					if (!angular.isDefined(previous) || locale == previous) return;
 					if ($scope.utility.isValidMoment($ctrl.$modelValue)) $scope.utility.setValue($ctrl.$modelValue.locale(locale));
@@ -765,6 +772,7 @@
 					if ($scope.utility.isValidMoment($scope.limits.maxDate)) $scope.limits.maxDate = $scope.limits.maxDate.locale(locale);
 					$scope.view.render();
 				});
+				$scope.$watch('validate', $scope.limits.checkValue);
 				
 				// event listeners
 				$scope.focusInput = function (e) {
