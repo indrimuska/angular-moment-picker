@@ -19,31 +19,34 @@ var $digest = function () {
 	$rootScope.$digest();
 }
 
-var buildTemplate = function (tag, options, content) {
-	var $template, $container, $element, $scope = $rootScope.$new();
+var buildTemplate = function (tag, options, content, $parent, $scope) {
+	var $template, $container, $element;
+	if (!$scope) $scope = $rootScope.$new();
+	tag = tag.toLowerCase();
 	// template string
 	var template = '<' + tag;
 	// build attributes map
 	if (!options) options = {};
 	if (!options.momentPicker) options.momentPicker = 'mpTestFormattedString';
+	if (tag === 'input' && !options.ngModel) options.ngModel = 'mpTestMomentObject';
 	angular.forEach(options, function (value, name) {
-		var valueStr = typeof value === 'string' ? value : name;
-		$scope[name] = value;
+		var valueStr = name;
+		if (typeof value === 'string') valueStr = value;
+		else $scope[name] = value;
 		template += ' ' + name.replace(/([A-Z])/g, '-$1').toLowerCase() + '="' + valueStr + '"';
 	});
 	// close template
-	template += tag.toLowerCase() === 'input' ? '>' : '></div>';
+	template += tag === 'input' ? '>' : '></div>';
 	$template = angular.element(template);
-	if (tag.toLowerCase() !== 'input') {
+	if (tag !== 'input') {
 		if (content) $template.append(content);
 		else $template.append('{{' + options.momentPicker + '}}');
 	}
 	// append template to DOM
-	$container = angular.element('<div></div>');
-	angular.element(document.body).append($container);
-	$container.append($template);
+	$container = angular.element('<div></div>').append($template);
+	angular.element($parent || document.body).append($container);
 	// return compiled element
-	$compile($container)($scope);
+	$compile($parent || $container)($scope);
 	$element = angular.element($container.children()[0]);
 	$digest();
 	$timeout.flush();

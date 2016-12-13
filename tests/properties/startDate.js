@@ -1,4 +1,4 @@
-describe('Properties: `startDate`', function () {
+describe('Property `startDate`', function () {
 	
 	var format          = 'YYYY-MM-DD HH:mm:ss',
 		startDate       = moment('2005-05-15 13:20:15', format),
