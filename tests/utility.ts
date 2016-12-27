@@ -1,36 +1,41 @@
-var $compile, $timeout, $rootScope, momentPickerProvider;
+import * as angular from 'angular';
 
-var initTest = function () {
+let $compile, $timeout, $rootScope;
+
+export const bootstrap = (): any => { // tslint:disable-line:no-any
 	// load the moment-picker module, which contains the directive
-	beforeEach(module('moment-picker'));
+	beforeEach(angular.mock.module('moment-picker'));
 	
 	// store references to $rootScope and $compile
 	// so they are available to all tests in this describe block
-	beforeEach(inject(function (_$compile_, _$timeout_, _$rootScope_, _momentPicker_) {
+	beforeEach(inject((
+		_$compile_: ng.ICompileService, // tslint:disable-line:variable-name
+		_$timeout_: ng.ITimeoutService, // tslint:disable-line:variable-name
+		_$rootScope_: ng.IRootScopeService, // tslint:disable-line:variable-name
+		// _momentPicker_: momentPicker.Provider // tslint:disable-line:variable-name
+		_momentPicker_: any // tslint:disable-line
+	) => {
 		// The injector unwraps the underscores (_) from around the parameter names when matching
 		$compile = _$compile_;
 		$timeout = _$timeout_;
 		$rootScope = _$rootScope_;
-		momentPickerProvider = _momentPicker_;
 	}));
-}
+};
 
-var $digest = function () {
-	$rootScope.$digest();
-}
+export const $digest = () => $rootScope.$digest();
 
-var buildTemplate = function (tag, options, content, $parent, $scope) {
-	var $template, $container, $element;
+export const buildTemplate = (tag: string, options?: any, content?: any, $parent?: ng.IAugmentedJQuery, $scope?: ng.IScope) => { // tslint:disable-line:no-any
+	let $template, $container, $element;
 	if (!$scope) $scope = $rootScope.$new();
 	tag = tag.toLowerCase();
 	// template string
-	var template = '<' + tag;
+	let template = '<' + tag;
 	// build attributes map
 	if (!options) options = {};
 	if (!options.momentPicker) options.momentPicker = 'mpTestFormattedString';
 	if (tag === 'input' && !options.ngModel) options.ngModel = 'mpTestMomentObject';
-	angular.forEach(options, function (value, name) {
-		var valueStr = name;
+	angular.forEach(options, (value, name) => {
+		let valueStr = name;
 		if (typeof value === 'string') valueStr = value;
 		else $scope[name] = value;
 		template += ' ' + name.replace(/([A-Z])/g, '-$1').toLowerCase() + '="' + valueStr + '"';
@@ -53,19 +58,9 @@ var buildTemplate = function (tag, options, content, $parent, $scope) {
 	return $element;
 };
 
-// extending jQLite
-angular.element.prototype.find = function (query) {
-	return angular.element(this[0].querySelectorAll(query));
-};
-angular.element.prototype.ngTrigger = function (event) {
+// wrap jquery trigger fn: event trigger + digest stimulation
+export const trigger = (element: ng.IAugmentedJQuery, event: string) => {
 	// use jquey trigger method to propagate event to parent nodes
-	this.trigger(event);
+	angular.element(element).trigger(event);
 	$digest();
 };
-
-// fix PhantomJS missing blur-on-clickout features
-var lastFocused;
-angular.element(document.body).on('click', function (e) {
-	if (lastFocused) lastFocused.ngTrigger('blur');
-	lastFocused = angular.element(e.target);
-});

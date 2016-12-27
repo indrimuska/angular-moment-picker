@@ -1,11 +1,14 @@
-describe('Element creation', function () {
+import * as angular from 'angular';
+import * as test from './utility';
+
+describe('Element creation', () => {
 	
 	// init test
-	initTest();
+	test.bootstrap();
 	
 	// creating directive
-	it('should create a .moment-picker element that transclude content', function () {
-		var $element = buildTemplate('div', { class: 'my-content' }),
+	it('should create a .moment-picker element that transclude content', () => {
+		let $element = test.buildTemplate('div', { class: 'my-content' }),
 			$children = [],
 			content;
 		
@@ -14,7 +17,7 @@ describe('Element creation', function () {
 		
 		// it should have 2 children
 		expect($element.children().length).toEqual(2);
-		angular.forEach($element.children(), function (element) { $children.push(angular.element(element)); });
+		angular.forEach($element.children(), (element: ng.IAugmentedJQuery) => $children.push(angular.element(element)));
 		
 		// first child contains transcluded content
 		expect($children[0].hasClass('moment-picker-contents')).toBe(true);
@@ -27,8 +30,8 @@ describe('Element creation', function () {
 	});
 	
 	// check transcluded DIV content
-	it('should transclude DIV content', function () {
-		var $element = buildTemplate('div', { class: 'my-content' }, 'My content'),
+	it('should transclude DIV content', () => {
+		let $element = test.buildTemplate('div', { class: 'my-content' }, 'My content'),
 			$contents = $element.find('.moment-picker-contents').children();
 		
 		expect($contents.length).toEqual(1);
@@ -37,8 +40,8 @@ describe('Element creation', function () {
 	});
 	
 	// check transcluded INPUT content
-	it('should transclude INPUT content', function () {
-		var $element = buildTemplate('input', { class: 'my-content' }),
+	it('should transclude INPUT content', () => {
+		let $element = test.buildTemplate('input', { class: 'my-content' }),
 			$contents = $element.find('.moment-picker-contents').children();
 		
 		expect($contents.length).toEqual(1);
