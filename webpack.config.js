@@ -3,10 +3,13 @@ let webpack = require('webpack');
 var autoprefixer = require('autoprefixer');
 let extractTextPlugin = require('extract-text-webpack-plugin');
 
-let filename = 'angular-moment-picker' + (process.argv.filter(arg => arg == '-p').length > 0 ? '.min' : '');
+let filename = 'angular-moment-picker' + (process.argv.indexOf('-p') != -1 ? '.min' : '');
 
 module.exports = {
-	entry: './src/index.ts',
+	entry: [
+		'./src/index.ts',
+		'./src/index.less'
+	],
 	output: {
 		path: './dist/',
 		filename: filename + '.js'
@@ -31,6 +34,6 @@ module.exports = {
 		new webpack.BannerPlugin('Angular Moment Picker - v' + pkg.version + ' - ' + pkg.homepage + ' - (c) 2015 Indri Muska - ' + pkg.license)
 	],
 	postcss: [
-		autoprefixer
+		autoprefixer({ browsers: ['> 0%'] })
 	]
 };

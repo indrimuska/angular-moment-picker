@@ -9,7 +9,6 @@ import { isValidMoment, toValue, toMoment, momentToValue, valueToMoment, setValu
 const KEYS = { up: 38, down: 40, left: 37, right: 39, escape: 27, enter: 13 };
 
 const template = require('./template.tpl.html');
-require('./index.less');
 
 export default class Directive implements ng.IDirective {
 	public restrict   = 'AE';
@@ -129,12 +128,12 @@ export default class Directive implements ng.IDirective {
 					if (maxView < $scope.views.all.indexOf($scope.maxView)) $scope.maxView = $scope.views.all[maxView];
 				},
 				// specific views
-				decade: new DecadeView($scope, $ctrl, this.provider),
-				year: new YearView($scope, $ctrl, this.provider),
-				month: new MonthView($scope, $ctrl, this.provider),
-				day: new DayView($scope, $ctrl, this.provider),
-				hour: new HourView($scope, $ctrl, this.provider),
-				minute: new MinuteView($scope, $ctrl, this.provider),
+				decade:	new DecadeView	($scope, $ctrl, this.provider),
+				year:	new YearView	($scope, $ctrl, this.provider),
+				month:	new MonthView	($scope, $ctrl, this.provider),
+				day:	new DayView		($scope, $ctrl, this.provider),
+				hour:	new HourView	($scope, $ctrl, this.provider),
+				minute:	new MinuteView	($scope, $ctrl, this.provider),
 			};
 			$scope.view = {
 				moment: undefined,
