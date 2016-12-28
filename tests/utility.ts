@@ -24,7 +24,7 @@ export const bootstrap = (): any => { // tslint:disable-line:no-any
 
 export const $digest = () => $rootScope.$digest();
 
-export const buildTemplate = (tag: string, options?: any, content?: any, $parent?: ng.IAugmentedJQuery, $scope?: ng.IScope) => { // tslint:disable-line:no-any
+export const buildTemplate = (tag: string, options?: any, content?: any, $scope?: ng.IScope, $parent?: ng.IAugmentedJQuery) => { // tslint:disable-line:no-any
 	let $template, $container, $element;
 	if (!$scope) $scope = $rootScope.$new();
 	tag = tag.toLowerCase();

@@ -85,6 +85,7 @@ start-date | | Two-way bindable property representing the initial date to be sho
 disable | `false` | Disables the picker if truly.
 validate | `true` | Forces picker value between the range `minDate` and `maxDate`.
 autoclose | `true` | Closes the picker after selecting a date.
+is-open | | Open/closes the picker when set to `true` or `false`.
 today | `false` | Highlights the current day.
 keyboard | `false` | Allows using the keyboard to navigate the picker.
 additions | `{ top: undefined, bottom: undefined }` | Template url for custom contents above and below each picker views (inside the dialog).

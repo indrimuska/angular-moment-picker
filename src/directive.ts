@@ -29,6 +29,7 @@ export default class Directive implements ng.IDirective {
 		disabled:   '=?disable',
 		validate:   '=?',
 		autoclose:  '=?',
+		isOpen:     '=?',
 		today:      '=?',
 		keyboard:   '=?',
 		additions:  '=?',
@@ -145,12 +146,14 @@ export default class Directive implements ng.IDirective {
 				open: () => {
 					if ($scope.disabled || $scope.view.isOpen) return;
 
+					$scope.isOpen = true;
 					$scope.view.isOpen = true;
 					this.$timeout($scope.view.position, 0, false);
 				},
 				close: () => {
 					if (!$scope.view.isOpen) return;
 
+					$scope.isOpen = false;
 					$scope.view.isOpen = false;
 					$scope.view.selected = $scope.startView;
 				},
@@ -337,6 +340,9 @@ export default class Directive implements ng.IDirective {
 				$scope.view.render();
 			});
 			$scope.$watch('validate', $scope.limits.checkValue);
+			$scope.$watch('isOpen', (isOpen: boolean) => {
+				if (angular.isDefined(isOpen) && isOpen != $scope.view.isOpen) $scope.view.toggle();
+			});
 
 			// event listeners
 			let focusInput = (e?: JQueryEventObject) => {

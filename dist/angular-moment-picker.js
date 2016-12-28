@@ -1,4 +1,4 @@
-/*! Angular Moment Picker - v0.9.0 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
+/*! Angular Moment Picker - v0.9.1 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -168,6 +168,7 @@
 	            disabled: '=?disable',
 	            validate: '=?',
 	            autoclose: '=?',
+	            isOpen: '=?',
 	            today: '=?',
 	            keyboard: '=?',
 	            additions: '=?',
@@ -291,12 +292,14 @@
 	                open: function () {
 	                    if ($scope.disabled || $scope.view.isOpen)
 	                        return;
+	                    $scope.isOpen = true;
 	                    $scope.view.isOpen = true;
 	                    _this.$timeout($scope.view.position, 0, false);
 	                },
 	                close: function () {
 	                    if (!$scope.view.isOpen)
 	                        return;
+	                    $scope.isOpen = false;
 	                    $scope.view.isOpen = false;
 	                    $scope.view.selected = $scope.startView;
 	                },
@@ -471,6 +474,10 @@
 	                $scope.view.render();
 	            });
 	            $scope.$watch('validate', $scope.limits.checkValue);
+	            $scope.$watch('isOpen', function (isOpen) {
+	                if (angular.isDefined(isOpen) && isOpen != $scope.view.isOpen)
+	                    $scope.view.toggle();
+	            });
 	            // event listeners
 	            var focusInput = function (e) {
 	                if (e)

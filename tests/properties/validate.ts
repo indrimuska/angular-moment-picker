@@ -9,7 +9,7 @@ describe('Property `validate`', () => {
 	// init test
 	test.bootstrap();
 
-	// get 
+	// get $rootScope service
 	beforeEach(inject((_$rootScope_: ng.IRootScopeService) => { // tslint:disable-line:variable-name
 		// The injector unwraps the underscores (_) from around the parameter names when matching
 		$rootScope = _$rootScope_;
@@ -18,7 +18,7 @@ describe('Property `validate`', () => {
 	const buildFormScope = (options) => {
 		let $scope = $rootScope.$new(),
 			$form  = angular.element('<form name="form">').appendTo(document.body),
-			$input = test.buildTemplate('input', options, undefined, $form, $scope);
+			$input = test.buildTemplate('input', options, undefined, $scope, $form);
 		return $scope;
 	};
 	

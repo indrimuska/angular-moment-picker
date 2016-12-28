@@ -20,6 +20,7 @@ export interface IDirectiveScope extends ng.IScope {
 	disabled?: boolean;
 	validate?: boolean;
 	autoclose?: boolean;
+	isOpen?: boolean;
 	today?: boolean;
 	keyboard?: boolean;
 	additions?: {
