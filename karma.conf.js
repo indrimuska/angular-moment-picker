@@ -1,5 +1,8 @@
 let webpackConfig = require('./webpack.config');
+let generateJsonPlugin = require('generate-json-webpack-plugin');
+
 webpackConfig.entry = {};
+webpackConfig.plugins = webpackConfig.plugins.filter(plugin => !(plugin instanceof generateJsonPlugin));
 
 module.exports = function (config) {
 	config.set({
@@ -8,8 +11,9 @@ module.exports = function (config) {
 			'node_modules/angular/angular.js',
 			'node_modules/angular-mocks/angular-mocks.js',
 			'node_modules/moment/min/moment-with-locales.js',
-			'src2/index.ts',
-			'tests/**/!(utility).ts'
+			'src/index.ts',
+			'tests/hacks.ts',
+			'tests/**/!(hacks|utility).ts'
 		],
 		preprocessors: {
 			'**/*.ts': ['webpack']
@@ -24,6 +28,6 @@ module.exports = function (config) {
 		},
 		frameworks: ['jasmine'],
 		browsers: ['PhantomJS'],
-		singleRun: false
+		singleRun: true
 	});
 };

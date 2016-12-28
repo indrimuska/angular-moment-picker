@@ -26,18 +26,18 @@ export default class MonthView implements IView {
 			rows[week] = Array.apply(null, Array(this.perLine)).map(() => {
 				let selectable = this.$scope.limits.isSelectable(day, 'day');
 				let date = <IViewItem>{
-						index: day.date(),
-						label: day.format(this.provider.daysFormat),
-						year: day.year(),
-						month: day.month(),
-						date: day.date(),
-						class: [
-							this.$scope.keyboard && day.isSame(this.$scope.view.moment, 'day') ? 'highlighted' : '',
-							!!this.$scope.today && day.isSame(new Date(), 'day') ? 'today' : '',
-							!selectable || day.month() != month ? 'disabled' : isValidMoment(this.$ctrl.$modelValue) && day.isSame(this.$ctrl.$modelValue, 'day') ? 'selected' : ''
-						].join(' ').trim(),
-						selectable: selectable
-					};
+					index: day.date(),
+					label: day.format(this.provider.daysFormat),
+					year: day.year(),
+					month: day.month(),
+					date: day.date(),
+					class: [
+						this.$scope.keyboard && day.isSame(this.$scope.view.moment, 'day') ? 'highlighted' : '',
+						!!this.$scope.today && day.isSame(new Date(), 'day') ? 'today' : '',
+						!selectable || day.month() != month ? 'disabled' : isValidMoment(this.$ctrl.$modelValue) && day.isSame(this.$ctrl.$modelValue, 'day') ? 'selected' : ''
+					].join(' ').trim(),
+					selectable: selectable
+				};
 				day.add(1, 'days');
 				return date;
 			});

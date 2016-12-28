@@ -185,5 +185,12 @@ Try the online [Angular Moment Picker Builder](http://indrimuska.github.io/angul
 
 [http://indrimuska.github.io/angular-moment-picker/#builder](http://indrimuska.github.io/angular-moment-picker/#builder).
 
+## Dev scripts
+
+ - `npm run build`: compile sources and generate built files in `dist` folder.
+ - `npm run minify`: generate built files and minified ones.
+ - `npm run release`: increase package version and compile the project.
+ - `npm run test`: run all tests in the `tests` folder.
+
 ## License
 Copyright (c) 2015 Indri Muska. Licensed under the MIT license.

@@ -4,5 +4,5 @@
 	"version": "0.1.0",
 	"command": "npm",
 	"isShellCommand": true,
-	"args": ["run", "compile"]
+	"args": ["run", "build"]
 }
