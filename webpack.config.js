@@ -1,3 +1,5 @@
+'use strict';
+
 let pkg = require('./package');
 let bower = require('./bower');
 let semver = require('semver');
