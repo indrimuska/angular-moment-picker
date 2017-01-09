@@ -332,9 +332,11 @@ export default class Directive implements ng.IDirective {
 				$scope.limits.checkView();
 				$scope.view.render();
 			});
+			$attrs.$observe('locale', (locale: string) => $scope.locale = locale);
 			$scope.$watch('locale', (locale: string, previous: string) => {
 				if (!angular.isDefined(previous) || locale == previous) return;
 				if (isValidMoment($ctrl.$modelValue)) setValue($ctrl.$modelValue.locale(locale), $scope, $ctrl, $attrs);
+				if (isValidMoment($scope.view.moment)) $scope.view.moment = $scope.view.moment.locale(locale);
 				if (isValidMoment($scope.limits.minDate)) $scope.limits.minDate = $scope.limits.minDate.locale(locale);
 				if (isValidMoment($scope.limits.maxDate)) $scope.limits.maxDate = $scope.limits.maxDate.locale(locale);
 				$scope.view.render();

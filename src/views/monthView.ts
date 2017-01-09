@@ -6,8 +6,8 @@ import { isValidMoment } from '../utility';
 
 export default class MonthView implements IView {
 	public perLine: number = moment.weekdays().length;
-	public headers: string[] = moment.weekdays().map((day: string, i: number) => moment().locale(this.$scope.locale).startOf('week').add(i, 'day').format('dd'));
 	public rows: { [index: number]: IViewItem[] } = [];
+	public headers: string[];
 
 	constructor(
 		private $scope: IDirectiveScopeInternal,
@@ -43,6 +43,8 @@ export default class MonthView implements IView {
 			});
 		// object to array - see https://github.com/indrimuska/angular-moment-picker/issues/9
 		angular.forEach(rows, (row: IViewItem[]) => (<IViewItem[][]>this.rows).push(row));
+		// render headers
+		this.headers = moment.weekdays().map((d: string, i: number) => moment().locale(this.$scope.locale).startOf('week').add(i, 'day').format('dd'));
 		// return title
 		return this.$scope.view.moment.format('MMMM YYYY');
 	}
