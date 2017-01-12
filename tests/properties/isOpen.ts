@@ -1,5 +1,4 @@
 import * as angular from 'angular';
-import * as moment from 'moment';
 import * as test from '../utility';
 
 describe('Property `isOpen`', () => {
@@ -18,18 +17,18 @@ describe('Property `isOpen`', () => {
 	const isVisible = ($element: ng.IAugmentedJQuery) => !$element.find('.moment-picker-container').hasClass('ng-hide');
 	
 	it('should open the picker when set to `true`', () => {
-		let $picker = test.buildTemplate('input', { class: 'input-picker', isOpen: true });
+		let $picker = test.buildTemplate('input', { isOpen: true });
 		expect(isVisible($picker)).toBe(true);
 	});
 
 	it('should close the picker when set to `false`', () => {
-		let $picker = test.buildTemplate('input', { class: 'input-picker', isOpen: false });
+		let $picker = test.buildTemplate('input', { isOpen: false });
 		expect(isVisible($picker)).toBe(false);
 	});
 
 	it('should open and close the picker again when toggling value', () => {
 		let $scope  = $rootScope.$new(),
-			$picker = test.buildTemplate('input', { class: 'input-picker', isOpen: 'isOpen' }, undefined, $scope);
+			$picker = test.buildTemplate('input', { isOpen: 'isOpen' }, undefined, $scope);
 		
 		// value to toggle
 		[true, false, true].forEach((value: boolean) => {

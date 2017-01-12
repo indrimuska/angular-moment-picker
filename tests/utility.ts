@@ -12,8 +12,6 @@ export const bootstrap = (): any => { // tslint:disable-line:no-any
 		_$compile_: ng.ICompileService, // tslint:disable-line:variable-name
 		_$timeout_: ng.ITimeoutService, // tslint:disable-line:variable-name
 		_$rootScope_: ng.IRootScopeService, // tslint:disable-line:variable-name
-		// _momentPicker_: momentPicker.Provider // tslint:disable-line:variable-name
-		_momentPicker_: any // tslint:disable-line
 	) => {
 		// The injector unwraps the underscores (_) from around the parameter names when matching
 		$compile = _$compile_;
