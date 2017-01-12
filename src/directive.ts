@@ -291,6 +291,9 @@ export default class Directive implements ng.IDirective {
 			}
 
 			// properties listeners
+			$scope.$watch('value', (newValue: string, oldValue: string) => {
+				if (newValue !== oldValue) setValue(newValue, $scope, $ctrl, $attrs);
+			});
 			$scope.$watch(() => momentToValue($ctrl.$modelValue, $scope.format), (newViewValue, oldViewValue) => {
 				if (newViewValue == oldViewValue) return;
 
