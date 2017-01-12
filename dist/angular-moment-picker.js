@@ -1,4 +1,4 @@
-/*! Angular Moment Picker - v0.9.1 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
+/*! Angular Moment Picker - v0.9.2 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -462,11 +462,14 @@
 	                $scope.limits.checkView();
 	                $scope.view.render();
 	            });
+	            $attrs.$observe('locale', function (locale) { return $scope.locale = locale; });
 	            $scope.$watch('locale', function (locale, previous) {
 	                if (!angular.isDefined(previous) || locale == previous)
 	                    return;
 	                if (utility_1.isValidMoment($ctrl.$modelValue))
 	                    utility_1.setValue($ctrl.$modelValue.locale(locale), $scope, $ctrl, $attrs);
+	                if (utility_1.isValidMoment($scope.view.moment))
+	                    $scope.view.moment = $scope.view.moment.locale(locale);
 	                if (utility_1.isValidMoment($scope.limits.minDate))
 	                    $scope.limits.minDate = $scope.limits.minDate.locale(locale);
 	                if (utility_1.isValidMoment($scope.limits.maxDate))
@@ -645,7 +648,9 @@
 	    var modelValue = exports.isValidMoment(value) ? value.clone() : exports.valueToMoment(value, $scope.format, $scope.locale), viewValue = exports.momentToValue(modelValue, $scope.format);
 	    $scope.model = modelValue;
 	    $ctrl.$modelValue = modelValue;
-	    if ($attrs['ngModel']) {
+	    if (!$attrs['ngModel'])
+	        $scope.value = viewValue;
+	    else {
 	        $ctrl.$setViewValue(viewValue);
 	        $ctrl.$render(); // render input value
 	    }
@@ -714,12 +719,10 @@
 	var utility_1 = __webpack_require__(9);
 	var MonthView = (function () {
 	    function MonthView($scope, $ctrl, provider) {
-	        var _this = this;
 	        this.$scope = $scope;
 	        this.$ctrl = $ctrl;
 	        this.provider = provider;
 	        this.perLine = moment.weekdays().length;
-	        this.headers = moment.weekdays().map(function (day, i) { return moment().locale(_this.$scope.locale).startOf('week').add(i, 'day').format('dd'); });
 	        this.rows = [];
 	    }
 	    MonthView.prototype.render = function () {
@@ -747,6 +750,8 @@
 	            });
 	        // object to array - see https://github.com/indrimuska/angular-moment-picker/issues/9
 	        angular.forEach(rows, function (row) { return _this.rows.push(row); });
+	        // render headers
+	        this.headers = moment.weekdays().map(function (d, i) { return moment().locale(_this.$scope.locale).startOf('week').add(i, 'day').format('dd'); });
 	        // return title
 	        return this.$scope.view.moment.format('MMMM YYYY');
 	    };
