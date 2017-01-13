@@ -14,6 +14,7 @@ export interface IProviderOptions {
 	showHeader?: boolean;
 	leftArrow?: string;
 	rightArrow?: string;
+	parsers?:Array<string>;
 	
 	// Decade View
 	yearsFormat?: string;
@@ -56,6 +57,7 @@ export default class Provider implements angular.IServiceProvider {
 		showHeader: true,
 		leftArrow: '&larr;',
 		rightArrow: '&rarr;',
+		parsers: [],
 		
 		// Decade View
 		yearsFormat: 'YYYY',
@@ -81,6 +83,7 @@ export default class Provider implements angular.IServiceProvider {
 		secondsStep: 1,
 		secondsStart: 0,
 		secondsEnd: 59
+
 	};
 	
 	public options(options: IProviderOptions): IProviderOptions {

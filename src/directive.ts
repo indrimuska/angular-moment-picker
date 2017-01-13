@@ -34,7 +34,8 @@ export default class Directive implements ng.IDirective {
 		keyboard:   '=?',
 		additions:  '=?',
 		change:     '&?',
-		selectable: '&?'
+		selectable: '&?',
+		parsers:    '=?'
 	};
 
 	constructor(
@@ -272,6 +273,8 @@ export default class Directive implements ng.IDirective {
 			// initialization
 			$scope.views.detectMinMax();
 			$scope.limits.checkView();
+			if(!Array.isArray($scope.parsers)) $scope.parsers = [$scope.parsers]
+			if($scope.parsers.indexOf($scope.format) === -1) [$scope.format].concat($scope.parsers)
 			// model controller is initialized after linking function
 			this.$timeout(() => {
 				if ($attrs['ngModel']) $ctrl.$commitViewValue();
@@ -283,7 +286,7 @@ export default class Directive implements ng.IDirective {
 
 			// model <-> view conversion
 			if ($attrs['ngModel']) {
-				$ctrl.$parsers.push((viewValue) => ($scope.model = valueToMoment(viewValue, $scope.format, $scope.locale)) || true);
+				$ctrl.$parsers.push((viewValue) => ($scope.model = valueToMoment(viewValue, $scope.parsers, $scope.locale)) || true);
 				$ctrl.$formatters.push((modelValue) => ($scope.value = momentToValue(modelValue, $scope.format)) || '');
 				$ctrl.$viewChangeListeners.push(() => { if ($attrs['ngModel'] != $attrs['momentPicker']) $scope.value = $ctrl.$viewValue; });
 				$ctrl.$validators.minDate = (value) => $scope.validate || !isValidMoment(value) || $scope.limits.isAfterOrEqualMin(value);
@@ -297,14 +300,14 @@ export default class Directive implements ng.IDirective {
 			$scope.$watch(() => momentToValue($ctrl.$modelValue, $scope.format), (newViewValue, oldViewValue) => {
 				if (newViewValue == oldViewValue) return;
 
-				let newModelValue = valueToMoment(newViewValue, $scope.format, $scope.locale);
+				let newModelValue = valueToMoment(newViewValue, $scope.parsers, $scope.locale);
 				setValue(newModelValue, $scope, $ctrl, $attrs);
 				$scope.limits.checkValue();
 				$scope.view.moment = (newModelValue || moment().locale($scope.locale)).clone();
 				$scope.view.update();
 				$scope.view.render();
 				if (angular.isFunction($scope.change)) {
-					let oldModelValue = valueToMoment(oldViewValue, $scope.format, $scope.locale);
+					let oldModelValue = valueToMoment(oldViewValue, $scope.parsers, $scope.locale);
 					this.$timeout(() => $scope.change({ newValue: newModelValue, oldValue: oldModelValue }), 0, false);
 				}
 			});
