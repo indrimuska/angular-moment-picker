@@ -29,7 +29,7 @@ export const valueToMoment = (formattedValue: Value, parsers: Array<string>, loc
 };
 
 export const setValue = (value: moment.Moment | Value, $scope: IDirectiveScopeInternal, $ctrl: IModelController, $attrs: ng.IAttributes): void => {
-	let modelValue = isValidMoment(value) ? (<moment.Moment>value).clone() : valueToMoment(<Value>value, $scope.format, $scope.locale),
+	let modelValue = isValidMoment(value) ? (<moment.Moment>value).clone() : valueToMoment(<Value>value, $scope.parsers, $scope.locale),
 		viewValue = momentToValue(modelValue, $scope.format);
 	$scope.model = modelValue;
 	$ctrl.$modelValue = modelValue;
