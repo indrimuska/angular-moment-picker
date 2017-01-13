@@ -29,6 +29,7 @@ export interface IDirectiveScope extends ng.IScope {
 	};
 	change?: (context: any) => boolean;
 	selectable?: (context: any) => boolean;
+	parsers?: Array<string>;
 }
 
 export interface IUtility {

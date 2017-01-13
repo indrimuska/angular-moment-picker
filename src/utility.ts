@@ -23,14 +23,13 @@ export const momentToValue = (momentObject: moment.Moment, format: string): Valu
 	return !format ? momentObject.valueOf() : momentObject.format(format);
 };
 
-export const valueToMoment = (formattedValue: Value, format: string, locale: string): moment.Moment => {
+export const valueToMoment = (formattedValue: Value, parsers: Array<string>, locale: string): moment.Moment => {
 	if (!formattedValue) return undefined;
-	if (!format) return moment(formattedValue);
-	return moment(formattedValue, format, locale);
+	return moment(formattedValue, parsers, locale);
 };
 
 export const setValue = (value: moment.Moment | Value, $scope: IDirectiveScopeInternal, $ctrl: IModelController, $attrs: ng.IAttributes): void => {
-	let modelValue = isValidMoment(value) ? (<moment.Moment>value).clone() : valueToMoment(<Value>value, $scope.format, $scope.locale),
+	let modelValue = isValidMoment(value) ? (<moment.Moment>value).clone() : valueToMoment(<Value>value, $scope.parsers, $scope.locale),
 		viewValue = momentToValue(modelValue, $scope.format);
 	$scope.model = modelValue;
 	$ctrl.$modelValue = modelValue;
