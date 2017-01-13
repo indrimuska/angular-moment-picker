@@ -1,4 +1,4 @@
-/*! Angular Moment Picker - v0.9.2 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
+/*! Angular Moment Picker - v0.9.3 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -429,6 +429,10 @@
 	                $ctrl.$validators.maxDate = function (value) { return $scope.validate || !utility_1.isValidMoment(value) || $scope.limits.isBeforeOrEqualMax(value); };
 	            }
 	            // properties listeners
+	            $scope.$watch('value', function (newValue, oldValue) {
+	                if (newValue !== oldValue)
+	                    utility_1.setValue(newValue, $scope, $ctrl, $attrs);
+	            });
 	            $scope.$watch(function () { return utility_1.momentToValue($ctrl.$modelValue, $scope.format); }, function (newViewValue, oldViewValue) {
 	                if (newViewValue == oldViewValue)
 	                    return;
