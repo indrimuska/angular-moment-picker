@@ -284,16 +284,21 @@ export default class Directive implements ng.IDirective {
 			// model <-> view conversion
 			if ($attrs['ngModel']) {
 				$ctrl.$parsers.push((viewValue) => ($scope.model = valueToMoment(viewValue, $scope.format, $scope.locale)) || true);
-				$ctrl.$formatters.push((modelValue) => ($scope.value = momentToValue(modelValue, $scope.format)) || '');
+				$ctrl.$formatters.push((modelValue) => {
+					let viewValue = momentToValue(modelValue, $scope.format);
+					if ($attrs['ngModel'] != $attrs['momentPicker']) $scope.value = viewValue;
+					return viewValue || '';
+				});
 				$ctrl.$viewChangeListeners.push(() => { if ($attrs['ngModel'] != $attrs['momentPicker']) $scope.value = $ctrl.$viewValue; });
 				$ctrl.$validators.minDate = (value) => $scope.validate || !isValidMoment(value) || $scope.limits.isAfterOrEqualMin(value);
 				$ctrl.$validators.maxDate = (value) => $scope.validate || !isValidMoment(value) || $scope.limits.isBeforeOrEqualMax(value);
 			}
 
 			// properties listeners
-			$scope.$watch('value', (newValue: string, oldValue: string) => {
-				if (newValue !== oldValue) setValue(newValue, $scope, $ctrl, $attrs);
-			});
+			if ($attrs['ngModel'] != $attrs['momentPicker'])
+				$scope.$watch('value', (newValue: string, oldValue: string) => {
+					if (newValue !== oldValue) setValue(newValue, $scope, $ctrl, $attrs);
+				});
 			$scope.$watch(() => momentToValue($ctrl.$modelValue, $scope.format), (newViewValue, oldViewValue) => {
 				if (newViewValue == oldViewValue) return;
 
