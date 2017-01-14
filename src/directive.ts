@@ -359,7 +359,6 @@ export default class Directive implements ng.IDirective {
 				.on('blur', () => $scope.$evalAsync($scope.view.close))
 				.on('keydown', (e: JQueryEventObject) => {
 					if (!$scope.keyboard) return;
-					e.preventDefault();
 					$scope.$evalAsync(() => $scope.view.keydown(e));
 				});
 			$scope.contents.on('mousedown', () => focusInput());
