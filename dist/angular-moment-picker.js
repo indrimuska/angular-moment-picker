@@ -1,4 +1,4 @@
-/*! Angular Moment Picker - v0.9.3 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
+/*! Angular Moment Picker - v0.9.4 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -141,7 +141,6 @@
 	var helpers_1 = __webpack_require__(6);
 	var views_1 = __webpack_require__(7);
 	var utility_1 = __webpack_require__(9);
-	var KEYS = { up: 38, down: 40, left: 37, right: 39, escape: 27, enter: 13 };
 	var template = __webpack_require__(15);
 	var Directive = (function () {
 	    function Directive($timeout, $sce, $log, $window, provider) {
@@ -171,6 +170,7 @@
 	            isOpen: '=?',
 	            today: '=?',
 	            keyboard: '=?',
+	            showHeader: '=?',
 	            additions: '=?',
 	            change: '&?',
 	            selectable: '&?'
@@ -314,7 +314,7 @@
 	                        $scope.picker.addClass('left');
 	                },
 	                keydown: function (e) {
-	                    var view = $scope.views[$scope.view.selected], precision = { decade: 'year', year: 'month', month: 'day', day: 'hour', hour: 'minute', minute: 'second' }[$scope.view.selected], singleUnit = _this.provider[precision + 'sStep'] || 1, operation = [KEYS.up, KEYS.left].indexOf(e.keyCode) >= 0 ? 'subtract' : 'add', highlight = function (vertical) {
+	                    var view = $scope.views[$scope.view.selected], precision = { decade: 'year', year: 'month', month: 'day', day: 'hour', hour: 'minute', minute: 'second' }[$scope.view.selected], singleUnit = _this.provider[precision + 'sStep'] || 1, operation = [utility_1.KEYS.up, utility_1.KEYS.left].indexOf(e.keyCode) >= 0 ? 'subtract' : 'add', highlight = function (vertical) {
 	                        var unitMultiplier = vertical ? view.perLine : 1, nextDate = $scope.view.moment.clone()[operation](singleUnit * unitMultiplier, precision);
 	                        if ($scope.limits.isSelectable(nextDate, precision)) {
 	                            $scope.view.moment = nextDate;
@@ -323,28 +323,28 @@
 	                        }
 	                    };
 	                    switch (e.keyCode) {
-	                        case KEYS.up:
-	                        case KEYS.down:
+	                        case utility_1.KEYS.up:
+	                        case utility_1.KEYS.down:
 	                            e.preventDefault();
 	                            if (!$scope.view.isOpen)
 	                                $scope.view.open();
 	                            else
 	                                highlight(true);
 	                            break;
-	                        case KEYS.left:
-	                        case KEYS.right:
+	                        case utility_1.KEYS.left:
+	                        case utility_1.KEYS.right:
 	                            if (!$scope.view.isOpen)
 	                                break;
 	                            e.preventDefault();
 	                            highlight();
 	                            break;
-	                        case KEYS.enter:
+	                        case utility_1.KEYS.enter:
 	                            if (!$scope.view.isOpen)
 	                                break;
 	                            $scope.view.change(precision);
 	                            e.preventDefault();
 	                            break;
-	                        case KEYS.escape:
+	                        case utility_1.KEYS.escape:
 	                            $scope.view.toggle();
 	                            break;
 	                    }
@@ -422,17 +422,23 @@
 	            // model <-> view conversion
 	            if ($attrs['ngModel']) {
 	                $ctrl.$parsers.push(function (viewValue) { return ($scope.model = utility_1.valueToMoment(viewValue, $scope.format, $scope.locale)) || true; });
-	                $ctrl.$formatters.push(function (modelValue) { return ($scope.value = utility_1.momentToValue(modelValue, $scope.format)) || ''; });
+	                $ctrl.$formatters.push(function (modelValue) {
+	                    var viewValue = utility_1.momentToValue(modelValue, $scope.format);
+	                    if ($attrs['ngModel'] != $attrs['momentPicker'])
+	                        $scope.value = viewValue;
+	                    return viewValue || '';
+	                });
 	                $ctrl.$viewChangeListeners.push(function () { if ($attrs['ngModel'] != $attrs['momentPicker'])
 	                    $scope.value = $ctrl.$viewValue; });
 	                $ctrl.$validators.minDate = function (value) { return $scope.validate || !utility_1.isValidMoment(value) || $scope.limits.isAfterOrEqualMin(value); };
 	                $ctrl.$validators.maxDate = function (value) { return $scope.validate || !utility_1.isValidMoment(value) || $scope.limits.isBeforeOrEqualMax(value); };
 	            }
 	            // properties listeners
-	            $scope.$watch('value', function (newValue, oldValue) {
-	                if (newValue !== oldValue)
-	                    utility_1.setValue(newValue, $scope, $ctrl, $attrs);
-	            });
+	            if ($attrs['ngModel'] != $attrs['momentPicker'])
+	                $scope.$watch('value', function (newValue, oldValue) {
+	                    if (newValue !== oldValue)
+	                        utility_1.setValue(newValue, $scope, $ctrl, $attrs);
+	                });
 	            $scope.$watch(function () { return utility_1.momentToValue($ctrl.$modelValue, $scope.format); }, function (newViewValue, oldViewValue) {
 	                if (newViewValue == oldViewValue)
 	                    return;
@@ -494,12 +500,7 @@
 	            $scope.input
 	                .on('focus click', function () { return $scope.$evalAsync($scope.view.open); })
 	                .on('blur', function () { return $scope.$evalAsync($scope.view.close); })
-	                .on('keydown', function (e) {
-	                if (!$scope.keyboard)
-	                    return;
-	                e.preventDefault();
-	                $scope.$evalAsync(function () { return $scope.view.keydown(e); });
-	            });
+	                .on('keydown', function (e) { return $scope.keyboard && $scope.$evalAsync(function () { return $scope.view.keydown(e); }); });
 	            $scope.contents.on('mousedown', function () { return focusInput(); });
 	            $scope.container.on('mousedown', function (e) { return focusInput(e); });
 	            angular.element(_this.$window).on('resize scroll', $scope.view.position);
@@ -621,6 +622,7 @@
 
 	"use strict";
 	var moment = __webpack_require__(5);
+	exports.KEYS = { up: 38, down: 40, left: 37, right: 39, escape: 27, enter: 13 };
 	exports.isValidMoment = function (value) {
 	    return moment.isMoment(value) && value.isValid();
 	};
@@ -841,7 +843,7 @@
 	        this.rows = {};
 	    }
 	    HourView.prototype.render = function () {
-	        var i = 0, minute = this.$scope.view.moment.clone().startOf('hour').minute(this.provider.minutesStart), minutesFormat = this.provider.minutesFormat || moment.localeData(this.$scope.locale).longDateFormat('LT').replace(/[aA]/, '');
+	        var i = 0, minute = this.$scope.view.moment.clone().startOf('hour').minute(this.provider.minutesStart), minutesFormat = this.provider.minutesFormat || moment.localeData(this.$scope.locale).longDateFormat('LT').replace(/[aA]/, '').trim();
 	        this.rows = {};
 	        for (var m = 0; m <= this.provider.minutesEnd - this.provider.minutesStart; m += this.provider.minutesStep) {
 	            var index = Math.floor(i / this.perLine), selectable = this.$scope.limits.isSelectable(minute, 'minute');
