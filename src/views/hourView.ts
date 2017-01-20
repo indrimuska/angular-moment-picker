@@ -16,7 +16,7 @@ export default class HourView implements IView {
 	public render(): string {
 		let i = 0,
 			minute = this.$scope.view.moment.clone().startOf('hour').minute(this.provider.minutesStart),
-			minutesFormat = this.provider.minutesFormat || moment.localeData(this.$scope.locale).longDateFormat('LT').replace(/[aA]/, '');
+			minutesFormat = this.provider.minutesFormat || moment.localeData(this.$scope.locale).longDateFormat('LT').replace(/[aA]/, '').trim();
 
 		this.rows = {};
 		for (let m = 0; m <= this.provider.minutesEnd - this.provider.minutesStart; m += this.provider.minutesStep) {

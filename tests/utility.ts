@@ -57,8 +57,8 @@ export const buildTemplate = (tag: string, options?: any, content?: any, $scope?
 };
 
 // wrap jquery trigger fn: event trigger + digest stimulation
-export const trigger = (element: ng.IAugmentedJQuery, event: string) => {
+export const trigger = (element: ng.IAugmentedJQuery, event: string | JQueryEventObject) => {
 	// use jquey trigger method to propagate event to parent nodes
-	angular.element(element).trigger(event);
+	angular.element(element).trigger(<string>event);
 	$digest();
 };

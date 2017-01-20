@@ -2,6 +2,8 @@ import * as angular from 'angular';
 import * as moment from 'moment';
 import { Value, IDirectiveScopeInternal, IModelController } from './definitions';
 
+export const KEYS = { up: 38, down: 40, left: 37, right: 39, escape: 27, enter: 13 };
+
 export const isValidMoment = (value: moment.Moment | Value): boolean => {
 	return moment.isMoment(value) && value.isValid();
 };

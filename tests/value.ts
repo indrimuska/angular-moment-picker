@@ -4,7 +4,7 @@ import * as test from './utility';
 describe('Value', () => {
 
 	let $scope: ng.IScope;
-	let $picker: ng.IAugmentedJQuery;
+	let $input: ng.IAugmentedJQuery;
 	let format = 'YYYY-MM-DD';
 
 	// init test
@@ -12,8 +12,8 @@ describe('Value', () => {
 
 	// same picker settings for all tests in this suite
 	beforeEach(inject(($rootScope: ng.IRootScopeService) => {
-		$scope  = $rootScope.$new();
-		$picker = test.buildTemplate('input', { momentPicker: 'dateStr', ngModel: 'dateObj', format: format, class: 'my-input' }, undefined, $scope);
+		$scope = $rootScope.$new();
+		$input = test.buildTemplate('input', { momentPicker: 'dateStr', ngModel: 'dateObj', format: format, class: 'input-picker' }, undefined, $scope).find('.input-picker');
 	}));
 	
 	// set Model Value from View Value
@@ -51,7 +51,7 @@ describe('Value', () => {
 		$scope['dateObj'] = dateObj;
 		$scope.$digest();
 		expect($scope['dateStr']).toBe(dateStr);
-		expect($picker.find('.my-input').val()).toBe(dateStr);
+		expect($input.val()).toBe(dateStr);
 	});
 	
 	// update View Value
@@ -69,7 +69,7 @@ describe('Value', () => {
 		$scope['dateObj'] = dateObj;
 		$scope.$digest();
 		expect($scope['dateStr']).toBe(dateStr);
-		expect($picker.find('.my-input').val()).toBe(dateStr);
+		expect($input.val()).toBe(dateStr);
 	});
 	
 	// same property for View Value and Model Value
@@ -77,8 +77,8 @@ describe('Value', () => {
 		let date = moment('2017-01-12', format);
 		
 		$scope['date'] = date;
-		$picker = test.buildTemplate('input', { momentPicker: 'date', ngModel: 'date', format: format, class: 'my-input' }, undefined, $scope);
+		$input = test.buildTemplate('input', { momentPicker: 'date', ngModel: 'date', format: format, class: 'input-picker' }, undefined, $scope).find('.input-picker');
 		expect($scope['date'].isSame(date)).toBe(true);
-		expect($picker.find('.my-input').val()).toBe(date.format(format));
+		expect($input.val()).toBe(date.format(format));
 	});
 });

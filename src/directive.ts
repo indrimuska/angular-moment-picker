@@ -4,9 +4,7 @@ import { getOffset } from './helpers';
 import { IProviderOptions } from './provider';
 import { ViewString, IView, IViewItem, IDirectiveScopeInternal, IModelController } from './definitions';
 import { DecadeView, YearView, MonthView, DayView, HourView, MinuteView } from './views';
-import { isValidMoment, toValue, toMoment, momentToValue, valueToMoment, setValue } from './utility';
-
-const KEYS = { up: 38, down: 40, left: 37, right: 39, escape: 27, enter: 13 };
+import { isValidMoment, toValue, toMoment, momentToValue, valueToMoment, setValue, KEYS } from './utility';
 
 const template = require('./template.tpl.html');
 
@@ -356,17 +354,14 @@ export default class Directive implements ng.IDirective {
 			});
 
 			// event listeners
-			let focusInput = (e?: JQueryEventObject) => {
+			const focusInput = (e?: JQueryEventObject) => {
 				if (e) e.preventDefault();
 				$scope.input[0].focus();
 			};
 			$scope.input
 				.on('focus click', () => $scope.$evalAsync($scope.view.open))
-				.on('blur', () => $scope.$evalAsync($scope.view.close))
-				.on('keydown', (e: JQueryEventObject) => {
-					if (!$scope.keyboard) return;
-					$scope.$evalAsync(() => $scope.view.keydown(e));
-				});
+				.on('blur',        () => $scope.$evalAsync($scope.view.close))
+				.on('keydown',     (e) => $scope.keyboard && $scope.$evalAsync(() => $scope.view.keydown(e)));
 			$scope.contents.on('mousedown', () => focusInput());
 			$scope.container.on('mousedown', (e: JQueryEventObject) => focusInput(e));
 			angular.element(this.$window).on('resize scroll', $scope.view.position);
