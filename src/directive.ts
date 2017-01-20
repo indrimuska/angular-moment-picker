@@ -32,6 +32,7 @@ export default class Directive implements ng.IDirective {
 		isOpen:     '=?',
 		today:      '=?',
 		keyboard:   '=?',
+		showHeader: '=?',
 		additions:  '=?',
 		change:     '&?',
 		selectable: '&?'
