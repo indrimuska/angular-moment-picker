@@ -4,7 +4,7 @@ import { getOffset } from './helpers';
 import { IProviderOptions } from './provider';
 import { ViewString, IView, IViewItem, IDirectiveScopeInternal, IModelController } from './definitions';
 import { DecadeView, YearView, MonthView, DayView, HourView, MinuteView } from './views';
-import { isValidMoment, toValue, toMoment, momentToValue, valueToMoment, setValue, KEYS } from './utility';
+import { isValidMoment, toValue, toMoment, momentToValue, valueToMoment, setValue, updateMoment, KEYS } from './utility';
 
 const template = require('./template.tpl.html');
 
@@ -43,8 +43,7 @@ export default class Directive implements ng.IDirective {
 		private $window: ng.IWindowService,
 		private provider: IProviderOptions) { }
 
-	public link = this.linkFn.bind(this);
-	private linkFn($scope: IDirectiveScopeInternal, $element: ng.IAugmentedJQuery, $attrs: ng.IAttributes, $ctrl: IModelController, $transclude: ng.ITranscludeFunction): void {
+	public link = ($scope: IDirectiveScopeInternal, $element: ng.IAugmentedJQuery, $attrs: ng.IAttributes, $ctrl: IModelController, $transclude: ng.ITranscludeFunction) => {
 		$transclude(($transElement: ng.IAugmentedJQuery) => {
 			// one-way binding attributes
 			angular.forEach([
@@ -87,11 +86,13 @@ export default class Directive implements ng.IDirective {
 					if (!$scope.limits.isAfterOrEqualMin($scope.view.moment)) $scope.view.moment = $scope.limits.minDate.clone();
 					if (!$scope.limits.isBeforeOrEqualMax($scope.view.moment)) $scope.view.moment = $scope.limits.maxDate.clone();
 					$scope.view.update();
+					$scope.view.render();
 				}
 			};
 
 			$scope.views = {
 				all: ['decade', 'year', 'month', 'day', 'hour', 'minute'],
+				precisions: { decade: 'year', year: 'month', month: 'date', day: 'hour', hour: 'minute', minute: 'second' },
 				// for each view, `$scope.views.formats` object contains the available moment formats
 				// formats present in more views are used to perform min/max view detection (i.e. 'LTS', 'LT', ...)
 				formats: {
@@ -172,13 +173,13 @@ export default class Directive implements ng.IDirective {
 				},
 				keydown: (e) => {
 					let view: IView = $scope.views[$scope.view.selected],
-						precision = <moment.unitOfTime.StartOf>{ decade: 'year', year: 'month', month: 'day', day: 'hour', hour: 'minute', minute: 'second' }[$scope.view.selected],
-						singleUnit = this.provider[precision + 'sStep'] || 1,
-						operation = [KEYS.up, KEYS.left].indexOf(e.keyCode) >= 0 ? 'subtract' : 'add',
-						highlight = (vertical?: boolean) => {
+						precision   = $scope.views.precisions[$scope.view.selected].replace('date', 'day'),
+						singleUnit  = this.provider[precision + 'sStep'] || 1,
+						operation   = [KEYS.up, KEYS.left].indexOf(e.keyCode) >= 0 ? 'subtract' : 'add',
+						highlight   = (vertical?: boolean) => {
 							let unitMultiplier = vertical ? view.perLine : 1,
 								nextDate = $scope.view.moment.clone()[operation](singleUnit * unitMultiplier, precision);
-							if ($scope.limits.isSelectable(nextDate, precision)) {
+							if ($scope.limits.isSelectable(nextDate, <moment.unitOfTime.StartOf>precision)) {
 								$scope.view.moment = nextDate;
 								$scope.view.update();
 								$scope.view.render();
@@ -220,6 +221,7 @@ export default class Directive implements ng.IDirective {
 						if ($scope.view.previous.selectable) {
 							$scope.view.moment.subtract($scope.view.unit(), $scope.view.precision());
 							$scope.view.update();
+							$scope.view.render();
 						}
 					}
 				},
@@ -230,14 +232,15 @@ export default class Directive implements ng.IDirective {
 						if ($scope.view.next.selectable) {
 							$scope.view.moment.add($scope.view.unit(), $scope.view.precision());
 							$scope.view.update();
+							$scope.view.render();
 						}
 					}
 				},
 				setParentView: () => { $scope.view.change($scope.views.all[Math.max(0, $scope.views.all.indexOf($scope.view.selected) - 1)]); },
 				// body
 				render: () => {
-					let momentPrevious = $scope.view.moment.clone().startOf(<moment.unitOfTime.StartOf>$scope.view.precision()).subtract($scope.view.unit(), $scope.view.precision()),
-						momentNext = $scope.view.moment.clone().endOf(<moment.unitOfTime.StartOf>$scope.view.precision()).add($scope.view.unit(), $scope.view.precision());
+					let momentPrevious = $scope.view.moment.clone().startOf($scope.view.precision()).subtract($scope.view.unit(), $scope.view.precision()),
+						momentNext = $scope.view.moment.clone().endOf($scope.view.precision()).add($scope.view.unit(), $scope.view.precision());
 
 					$scope.view.previous.selectable = $scope.limits.isAfterOrEqualMin(momentPrevious, $scope.view.precision());
 					$scope.view.previous.label = this.$sce.trustAsHtml($scope.view.previous.selectable ? $scope.leftArrow : '&nbsp;');
@@ -247,11 +250,12 @@ export default class Directive implements ng.IDirective {
 				},
 				change: (view) => {
 					let nextView = $scope.views.all.indexOf(view),
-						minView = $scope.views.all.indexOf($scope.minView),
-						maxView = $scope.views.all.indexOf($scope.maxView);
+						minView  = $scope.views.all.indexOf($scope.minView),
+						maxView  = $scope.views.all.indexOf($scope.maxView);
 
 					if (nextView < 0 || nextView > maxView) {
 						setValue($scope.view.moment, $scope, $ctrl, $attrs);
+						$scope.view.update();
 						if ($scope.autoclose) this.$timeout($scope.view.close);
 					} else if (nextView >= minView) $scope.view.selected = view;
 				}
@@ -278,16 +282,13 @@ export default class Directive implements ng.IDirective {
 				if ($scope.startDate) $scope.view.moment = toMoment($scope.startDate, $scope.format, $scope.locale);
 				else if (isValidMoment($ctrl.$modelValue)) $scope.view.moment = $ctrl.$modelValue.clone();
 				$scope.view.update();
+				$scope.view.render();
 			});
 
 			// model <-> view conversion
 			if ($attrs['ngModel']) {
-				$ctrl.$parsers.push((viewValue) => ($scope.model = valueToMoment(viewValue, $scope.format, $scope.locale)) || true);
-				$ctrl.$formatters.push((modelValue) => {
-					let viewValue = momentToValue(modelValue, $scope.format);
-					if ($attrs['ngModel'] != $attrs['momentPicker']) $scope.value = viewValue;
-					return viewValue || '';
-				});
+				$ctrl.$parsers.push((viewValue) => updateMoment($ctrl.$modelValue, valueToMoment(viewValue, $scope), $scope) || true);
+				$ctrl.$formatters.push((modelValue) => momentToValue(modelValue, $scope.format) || '');
 				$ctrl.$viewChangeListeners.push(() => { if ($attrs['ngModel'] != $attrs['momentPicker']) $scope.value = $ctrl.$viewValue; });
 				$ctrl.$validators.minDate = (value) => $scope.validate || !isValidMoment(value) || $scope.limits.isAfterOrEqualMin(value);
 				$ctrl.$validators.maxDate = (value) => $scope.validate || !isValidMoment(value) || $scope.limits.isBeforeOrEqualMax(value);
@@ -301,18 +302,26 @@ export default class Directive implements ng.IDirective {
 			$scope.$watch(() => momentToValue($ctrl.$modelValue, $scope.format), (newViewValue, oldViewValue) => {
 				if (newViewValue == oldViewValue) return;
 
-				let newModelValue = valueToMoment(newViewValue, $scope.format, $scope.locale);
+				let newModelValue = valueToMoment(newViewValue, $scope);
 				setValue(newModelValue, $scope, $ctrl, $attrs);
 				$scope.limits.checkValue();
 				$scope.view.moment = (newModelValue || moment().locale($scope.locale)).clone();
 				$scope.view.update();
 				$scope.view.render();
 				if (angular.isFunction($scope.change)) {
-					let oldModelValue = valueToMoment(oldViewValue, $scope.format, $scope.locale);
+					let oldModelValue = valueToMoment(oldViewValue, $scope);
 					this.$timeout(() => $scope.change({ newValue: newModelValue, oldValue: oldModelValue }), 0, false);
 				}
 			});
-			$scope.$watchGroup(['view.selected', 'view.value'], $scope.view.render);
+			$scope.$watch(() => $ctrl.$modelValue && $ctrl.$modelValue.valueOf(), () => {
+				let viewMoment = ($ctrl.$modelValue || moment().locale($scope.locale)).clone();
+				if (!viewMoment.isSame($scope.view.moment)) {
+					$scope.view.moment = viewMoment;
+					$scope.view.update();
+					$scope.view.render();
+				}
+			});
+			$scope.$watch('view.selected', () => $scope.view.render());
 			$scope.$watchGroup(['minView', 'maxView'], () => {
 				// auto-detect minView/maxView
 				$scope.views.detectMinMax();

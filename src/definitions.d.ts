@@ -83,6 +83,7 @@ export interface IDirectiveScopeInternal extends IDirectiveScope, IProviderOptio
 	// views
 	views: {
 		all: ViewString[];
+		precisions: { [viewString: string]: moment.unitOfTime.StartOf };
 		formats: { [viewString: string]: string };
 		detectMinMax: () => void;
 
@@ -137,4 +138,6 @@ export interface IModelValidators extends ng.IModelValidators {
 
 export interface IModelController extends ng.INgModelController {
 	$validators: IModelValidators;
+	$modelValue: moment.Moment;
+	$viewValue: string;
 }
