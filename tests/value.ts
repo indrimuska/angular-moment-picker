@@ -17,7 +17,7 @@ describe('Value', () => {
 	}));
 	
 	// set Model Value from View Value
-	it('should set Model Value from View Value', () => {
+	it('should initialize Model Value from View Value', () => {
 		let dateObj = moment('2017-01-12', format),
 			dateStr = dateObj.format(format);
 		
@@ -26,8 +26,19 @@ describe('Value', () => {
 		expect($scope['dateObj'].isSame(dateObj)).toBe(true);
 	});
 	
+	// set View Value from Model Value
+	it('should initialize View Value from Model Value', () => {
+		let dateObj = moment('2017-01-12', format),
+			dateStr = dateObj.format(format);
+		
+		$scope['dateObj'] = dateObj;
+		$scope.$digest();
+		expect($scope['dateStr']).toBe(dateStr);
+		expect($input.val()).toBe(dateStr);
+	});
+	
 	// update Model Value
-	it('should update View Value after Model Value update', () => {
+	it('should update Model Value after View Value update', () => {
 		let dateObj = moment('2017-01-12', format),
 			dateStr = dateObj.format(format);
 		
@@ -36,22 +47,11 @@ describe('Value', () => {
 		$scope['dateStr'] = dateStr;
 		$scope.$digest();
 		// then change it and listen for value update
-		dateObj = moment('2016-12-12', format);
+		dateObj = moment('2016-11-23', format);
 		dateStr = dateObj.format(format);
 		$scope['dateStr'] = dateStr;
 		$scope.$digest();
 		expect($scope['dateObj'].isSame(dateObj)).toBe(true);
-	});
-	
-	// set View Value from Model Value
-	it('should set View Value from Model Value', () => {
-		let dateObj = moment('2017-01-12', format),
-			dateStr = dateObj.format(format);
-		
-		$scope['dateObj'] = dateObj;
-		$scope.$digest();
-		expect($scope['dateStr']).toBe(dateStr);
-		expect($input.val()).toBe(dateStr);
 	});
 	
 	// update View Value
@@ -64,7 +64,7 @@ describe('Value', () => {
 		$scope['dateStr'] = dateStr;
 		$scope.$digest();
 		// then change it and listen for value update
-		dateObj = moment('2016-12-12', format);
+		dateObj = moment('2016-11-23', format);
 		dateStr = dateObj.format(format);
 		$scope['dateObj'] = dateObj;
 		$scope.$digest();
@@ -73,12 +73,39 @@ describe('Value', () => {
 	});
 	
 	// same property for View Value and Model Value
-	it('should update View Value after Model Value update when using the same property', () => {
+	it('should update (View) Value when using the same property value', () => {
 		let date = moment('2017-01-12', format);
 		
 		$scope['date'] = date;
 		$input = test.buildTemplate('input', { momentPicker: 'date', ngModel: 'date', format: format, class: 'input-picker' }, undefined, $scope).find('.input-picker');
 		expect($scope['date'].isSame(date)).toBe(true);
 		expect($input.val()).toBe(date.format(format));
+	});
+
+	// sync model across pickers
+	it('should sync model updates across pickers', () => {
+		let dateFormat = 'YYYY-MM-DD',
+			timeFormat = 'HH:mm',
+			$date = test.buildTemplate('input', { momentPicker: 'date', ngModel: 'datetime', format: dateFormat, class: 'date-picker' }, undefined, $scope).find('.date-picker'),
+			$time = test.buildTemplate('input', { momentPicker: 'time', ngModel: 'datetime', format: timeFormat, class: 'time-picker' }, undefined, $scope).find('.time-picker');
+		
+		$scope['datetime'] = moment('2017-01-12 20:32', dateFormat + ' ' + timeFormat);
+		$scope.$digest();
+		expect($date.val()).toBe($scope['datetime'].format(dateFormat));
+		expect($time.val()).toBe($scope['datetime'].format(timeFormat));
+		expect($scope['date']).toBe($scope['datetime'].format(dateFormat));
+		expect($scope['time']).toBe($scope['datetime'].format(timeFormat));
+
+		$scope['date'] = '2015-08-29';
+		$scope.$digest();
+		expect($date.val()).toBe($scope['date']);
+		expect($scope['datetime'].format(dateFormat)).toBe($scope['date']);
+
+		$scope['time'] = '23:11';
+		$scope.$digest();
+		expect($time.val()).toBe($scope['time']);
+		expect($scope['datetime'].format(timeFormat)).toBe($scope['time']);
+
+		expect($scope['datetime'].format(dateFormat + ' ' + timeFormat)).toBe('2015-08-29 23:11');
 	});
 });
