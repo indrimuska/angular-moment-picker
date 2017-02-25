@@ -128,9 +128,9 @@ ctrl.onChange = function (newValue, oldValue) {
 };
 ```
 
-Event | Parameters | Description
----|---|---
-change | `newValue`, `oldValue` | Function fired upon change in picker value.
+Event | Parameters | Description | Sample
+---|---|---|---
+change | `newValue`, `oldValue` | Function fired upon change in picker value. | [Plunker](https://embed.plnkr.co/IIhjjv)
 
 ## momentPickerProvider
 
