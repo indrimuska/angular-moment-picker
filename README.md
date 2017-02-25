@@ -70,25 +70,26 @@ To configure Angular Moment Picker you have to append to your block or your inpu
 <input moment-picker="ctrl.dateFormatted" ng-model="ctrl.momentDate" format="DD/MM/YYYY">
 ```
 
-Property | Default | Description
----|---|---
-moment-picker | | Two-way bindable property as **formatted datetime string**.
-ng-model | | Two-way bindable property as **Moment.js object**.
-locale | `"en"` | Locale code. <sup>1</sup>
-format | `"L LTS"` | Format of the output value and min/max date. <sup>1</sup>
-min-view | `"decade"` | Minimum navigable view.
-max-view | `"minute"` | Maximum navigable view.
-start-view | `"year"` | Initial view when the picker is open.
-min-date | | Two-way bindable property representing the minimum selectable date (as String in the same format of the value, or as a Moment.js object).
-max-date | | Two-way bindable property representing the maximum selectable date (as String in the same format of the value, or as a Moment.js object).
-start-date | | Two-way bindable property representing the initial date to be shown in picker (as String in the same format of the value, or as a Moment.js object).
-disable | `false` | Disables the picker if truly.
-validate | `true` | Forces picker value between the range `minDate` and `maxDate`.
-autoclose | `true` | Closes the picker after selecting a date.
-is-open | | Open/closes the picker when set to `true` or `false`.
-today | `false` | Highlights the current day.
-keyboard | `false` | Allows using the keyboard to navigate the picker.
-additions | `{ top: undefined, bottom: undefined }` | Template url for custom contents above and below each picker views (inside the dialog).
+Property | Default | Description | Sample
+---|---|---|---
+moment-picker | | Two-way bindable property as **formatted datetime string**. | [Plunker](https://embed.plnkr.co/nPGbO3KkmmPqf7mfN2PC/)
+ng-model | | Two-way bindable property as **Moment.js object**. | [Plunker](https://embed.plnkr.co/hs10SM)
+locale | `"en"` | Locale code. <sup>1</sup> | [Plunker](https://embed.plnkr.co/z3KSxy)
+format | `"L LTS"` | Format of the output value and min/max date. <sup>1</sup> | [Plunker](https://embed.plnkr.co/rWtdhO)
+min-view | `"decade"` | Minimum navigable view. | [Plunker](https://embed.plnkr.co/wAGqtl)
+max-view | `"minute"` | Maximum navigable view. | [Plunker](https://embed.plnkr.co/GYRv7J)
+start-view | `"year"` | Initial view when the picker is open. | [Plunker](https://embed.plnkr.co/wFXcGL)
+min-date | | Two-way bindable property representing the minimum selectable date (as String in the same format of the value, or as a Moment.js object). | [Plunker](https://embed.plnkr.co/L9dOc4)
+max-date | | Two-way bindable property representing the maximum selectable date (as String in the same format of the value, or as a Moment.js object). | [Plunker](https://embed.plnkr.co/OvvfAQ)
+start-date | | Two-way bindable property representing the initial date to be shown in picker (as String in the same format of the value, or as a Moment.js object). | [Plunker](https://embed.plnkr.co/rjFk9d)
+disable | `false` | Disables the picker if truly. | [Plunker](https://embed.plnkr.co/Zeaxd3)
+validate | `true` | Forces picker value between the range `minDate` and `maxDate`. | [Plunker](https://embed.plnkr.co/hFTyMV)
+autoclose | `true` | Closes the picker after selecting a date. | [Plunker](https://embed.plnkr.co/z7M6WK)
+is-open | | Open/closes the picker when set to `true` or `false`. | [Plunker](https://embed.plnkr.co/7T4sbs)
+today | `false` | Highlights the current day. | [Plunker](https://embed.plnkr.co/YYbV4C)
+keyboard | `false` | Allows using the keyboard to navigate the picker. | [Plunker](https://embed.plnkr.co/OdUhHx)
+show-header | `true` | Shows the header in the view. | [Plunker](https://embed.plnkr.co/PCL4mh)
+additions | `{ top: undefined, bottom: undefined }` | Template url for custom contents above and below each picker views (inside the dialog). | [Plunker](https://embed.plnkr.co/CXOH5U)
 
 ## Methods
 
