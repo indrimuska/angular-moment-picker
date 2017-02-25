@@ -297,7 +297,14 @@ export default class Directive implements ng.IDirective {
 			// properties listeners
 			if ($attrs['ngModel'] != $attrs['momentPicker'])
 				$scope.$watch('value', (newValue: string, oldValue: string) => {
-					if (newValue !== oldValue) setValue(newValue, $scope, $ctrl, $attrs);
+					if (newValue !== oldValue) {
+						let oldModelValue = angular.copy($ctrl.$modelValue);
+						setValue(newValue, $scope, $ctrl, $attrs);
+						if (angular.isFunction($scope.change)) {
+							let newModelValue = angular.copy($ctrl.$modelValue);
+							this.$timeout(() => $scope.change({ newValue: newModelValue, oldValue: oldModelValue }), 0, false);
+						}
+					}
 				});
 			$scope.$watch(() => momentToValue($ctrl.$modelValue, $scope.format), (newViewValue, oldViewValue) => {
 				if (newViewValue == oldViewValue) return;
