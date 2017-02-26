@@ -1,4 +1,4 @@
-/*! Angular Moment Picker - v0.9.6 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
+/*! Angular Moment Picker - v0.9.7 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -391,6 +391,8 @@
 	                        if (nextView < 0 || nextView > maxView) {
 	                            utility_1.setValue($scope.view.moment, $scope, $ctrl, $attrs);
 	                            $scope.view.update();
+	                            if ($attrs['ngModel'])
+	                                $ctrl.$commitViewValue();
 	                            if ($scope.autoclose)
 	                                _this.$timeout($scope.view.close);
 	                        }
@@ -435,14 +437,8 @@
 	                // properties listeners
 	                if ($attrs['ngModel'] != $attrs['momentPicker'])
 	                    $scope.$watch('value', function (newValue, oldValue) {
-	                        if (newValue !== oldValue) {
-	                            var oldModelValue_1 = angular.copy($ctrl.$modelValue);
+	                        if (newValue !== oldValue)
 	                            utility_1.setValue(newValue, $scope, $ctrl, $attrs);
-	                            if (angular.isFunction($scope.change)) {
-	                                var newModelValue_1 = angular.copy($ctrl.$modelValue);
-	                                _this.$timeout(function () { return $scope.change({ newValue: newModelValue_1, oldValue: oldModelValue_1 }); }, 0, false);
-	                            }
-	                        }
 	                    });
 	                $scope.$watch(function () { return utility_1.momentToValue($ctrl.$modelValue, $scope.format); }, function (newViewValue, oldViewValue) {
 	                    if (newViewValue == oldViewValue)
@@ -454,12 +450,12 @@
 	                    $scope.view.update();
 	                    $scope.view.render();
 	                    if (angular.isFunction($scope.change)) {
-	                        var oldModelValue_2 = utility_1.valueToMoment(oldViewValue, $scope);
-	                        _this.$timeout(function () { return $scope.change({ newValue: newModelValue, oldValue: oldModelValue_2 }); }, 0, false);
+	                        var oldModelValue_1 = utility_1.valueToMoment(oldViewValue, $scope);
+	                        $scope.$evalAsync(function () { return $scope.change({ newValue: newModelValue, oldValue: oldModelValue_1 }); });
 	                    }
 	                });
 	                $scope.$watch(function () { return $ctrl.$modelValue && $ctrl.$modelValue.valueOf(); }, function () {
-	                    var viewMoment = ($ctrl.$modelValue || moment().locale($scope.locale)).clone();
+	                    var viewMoment = (utility_1.isValidMoment($ctrl.$modelValue) ? $ctrl.$modelValue : moment().locale($scope.locale)).clone();
 	                    if (!viewMoment.isSame($scope.view.moment)) {
 	                        $scope.view.moment = viewMoment;
 	                        $scope.view.update();
