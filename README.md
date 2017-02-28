@@ -108,9 +108,9 @@ ctrl.isSelectable = function (date, type) {
 };
 ```
 
-Method | Parameters | Description
----|---|---
-selectable | `date`, `type` | Return `true` if the given date can be selected in the current view. **Please note** that this method is called for every date in the view, every time a view is rendered, so be careful, it may affect performances.
+Method | Parameters | Description | Sample
+---|---|---|---
+selectable | `date`, `type` | Return `true` if the given date can be selected in the current view. **Please note** that this method is called for every date in the view, every time a view is rendered, so be careful, it may affect performances. | [Plunker](https://embed.plnkr.co/6wxtMn)
 
 ## Events
 
