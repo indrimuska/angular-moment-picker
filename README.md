@@ -22,7 +22,7 @@ Check out the homepage at [http://indrimuska.github.io/angular-moment-picker/](h
 Get Angular Moment Picker from [**npm**](https://www.npmjs.com/), [**bower**](http://bower.io/) or [**git**](https://git-scm.com/):
 ```
   npm install angular-moment-picker
-bower install moment-picker
+  bower install moment-picker
   git clone   https://github.com/indrimuska/angular-moment-picker.git
 ```
 
