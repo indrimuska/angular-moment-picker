@@ -6,13 +6,13 @@ import { ViewString, IView, IViewItem, IDirectiveScopeInternal, IModelController
 import { DecadeView, YearView, MonthView, DayView, HourView, MinuteView } from './views';
 import { isValidMoment, toValue, toMoment, momentToValue, valueToMoment, setValue, updateMoment, KEYS } from './utility';
 
-const template = require('./template.tpl.html');
+const templateHtml = require('./template.tpl.html');
 
 export default class Directive implements ng.IDirective {
 	public restrict   = 'AE';
 	public require    = '?ngModel';
 	public transclude = true;
-	public template   = template;
+	public template   = templateHtml;
 	public scope      = {
 		value:      '=?momentPicker',
 		model:      '=?ngModel',
@@ -41,7 +41,9 @@ export default class Directive implements ng.IDirective {
 		private $sce: ng.ISCEService,
 		private $log: ng.ILogService,
 		private $window: ng.IWindowService,
-		private provider: IProviderOptions) { }
+		private provider: IProviderOptions,
+		private $compile: ng.ICompileService,
+		private $templateCache: ng.ITemplateCacheService) { }
 
 	public link = ($scope: IDirectiveScopeInternal, $element: ng.IAugmentedJQuery, $attrs: ng.IAttributes, $ctrl: IModelController, $transclude: ng.ITranscludeFunction) => {
 		$transclude(($transElement: ng.IAugmentedJQuery) => {
@@ -277,6 +279,16 @@ export default class Directive implements ng.IDirective {
 				? angular.element($scope.contents[0].querySelectorAll('input'))
 				: angular.element($scope.contents[0]);
 			$scope.input.addClass('moment-picker-input').attr('tabindex', 0);
+
+			// transclude scope to template additions
+			this.$timeout(() => {
+				angular.forEach($scope.additions || {}, (tempalteUrl: string, key: 'top' | 'bottom') => {
+					let placeholder = angular.element($scope.container[0].querySelector('.moment-picker-addition.' + key));
+					let template = this.$templateCache.get<string>(tempalteUrl);
+					let compiled = this.$compile(template)($scope.$parent);
+					placeholder.append(compiled);
+				});
+			});
 
 			// initialization
 			$scope.views.detectMinMax();
