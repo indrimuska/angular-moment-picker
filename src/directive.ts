@@ -110,6 +110,7 @@ export default class Directive implements ng.IDirective {
 							/* formats: s,ss,S,SS,SSS..,X,LTS */
 				},
 				detectMinMax: () => {
+					$scope.detectedMinView = $scope.detectedMaxView = undefined;
 					if (!$scope.format) return;
 
 					let minView, maxView;
@@ -127,6 +128,10 @@ export default class Directive implements ng.IDirective {
 
 					if (minView > $scope.views.all.indexOf($scope.minView)) $scope.minView = $scope.views.all[minView];
 					if (maxView < $scope.views.all.indexOf($scope.maxView)) $scope.maxView = $scope.views.all[maxView];
+
+					// save detected min/max view to use them to update the model value properly
+					$scope.detectedMinView = $scope.views.all[minView];
+					$scope.detectedMaxView = $scope.views.all[maxView];
 				},
 				// specific views
 				decade:	new DecadeView	($scope, $ctrl, this.provider),

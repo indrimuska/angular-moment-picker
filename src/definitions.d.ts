@@ -124,6 +124,10 @@ export interface IDirectiveScopeInternal extends IDirectiveScope, IProviderOptio
 		change: (view?: ViewString) => void;
 	};
 
+	// limits detection
+	detectedMinView: ViewString;
+	detectedMaxView: ViewString;
+
 	// elements
 	picker: ng.IAugmentedJQuery;
 	contents: ng.IAugmentedJQuery;

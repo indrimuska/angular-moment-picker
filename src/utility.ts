@@ -32,7 +32,7 @@ export const valueToMoment = (formattedValue: Value, $scope: IDirectiveScopeInte
 	else momentValue = moment(formattedValue, $scope.format, $scope.locale);
 	if ($scope.model) {
 		// set value for each view precision (from Decade View to minView)
-		const views = $scope.views.all.slice(0, $scope.views.all.indexOf($scope.minView));
+		const views = $scope.views.all.slice(0, $scope.views.all.indexOf($scope.detectedMinView));
 		angular.forEach(views, (view: ViewString) => {
 			const precision = $scope.views.precisions[view];
 			momentValue[precision]($scope.model[precision]());
@@ -58,7 +58,7 @@ export const updateMoment = (model: moment.Moment, value: moment.Moment, $scope:
 	else {
 		if (!model.isSame(value)) {
 			// set value for each view precision (from Decade View to maxView)
-			const views = $scope.views.all.slice(0, $scope.views.all.indexOf($scope.maxView) + 1);
+			const views = $scope.views.all.slice(0, $scope.views.all.indexOf($scope.detectedMaxView) + 1);
 			angular.forEach(views, (view: ViewString) => {
 				const precision = $scope.views.precisions[view];
 				model[precision](value[precision]());
