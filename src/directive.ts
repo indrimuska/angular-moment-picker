@@ -57,7 +57,7 @@ export default class Directive implements ng.IDirective {
 			});
 
 			// check if ngModel has been set
-			if (!$attrs['ngModel']) $ctrl = <any>{}; // tslint:disable-line:no-any
+			if (!$attrs['ngModel']) $ctrl = <IModelController>{};
 
 			// limits
 			$scope.limits = {
@@ -295,7 +295,11 @@ export default class Directive implements ng.IDirective {
 			$scope.limits.checkView();
 			// model controller is initialized after linking function
 			this.$timeout(() => {
-				if ($attrs['ngModel']) $ctrl.$commitViewValue();
+				if ($attrs['ngModel']) {
+					if (!$ctrl.$modelValue && $scope.value) $ctrl.$setViewValue($scope.value);
+					$ctrl.$commitViewValue();
+					$ctrl.$render();
+				}
 				// view initialization
 				if ($scope.startDate) $scope.view.moment = toMoment($scope.startDate, $scope.format, $scope.locale);
 				else if (isValidMoment($ctrl.$modelValue)) $scope.view.moment = $ctrl.$modelValue.clone();
