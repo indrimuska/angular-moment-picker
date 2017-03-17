@@ -366,6 +366,13 @@ export default class Directive implements ng.IDirective {
 				$scope.limits.checkView();
 				$scope.view.render();
 			});
+			$scope.$watch(() => toValue($scope.startDate, $scope.format, $scope.locale), (newViewValue, oldViewValue) => {
+				if (newViewValue == oldViewValue) return;
+
+				$scope.view.moment = valueToMoment(newViewValue, $scope);
+				$scope.view.update();
+				$scope.view.render();
+			});
 			$attrs.$observe('locale', (locale: string) => $scope.locale = locale);
 			$scope.$watch('locale', (locale: string, previous: string) => {
 				if (!angular.isDefined(previous) || locale == previous) return;
