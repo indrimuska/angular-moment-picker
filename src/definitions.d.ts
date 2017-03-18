@@ -24,6 +24,7 @@ export interface IDirectiveScope extends ng.IScope {
 	inline?: boolean;
 	validate?: boolean;
 	autoclose?: boolean;
+	setOnSelect?: boolean;
 	isOpen?: boolean;
 	today?: boolean;
 	keyboard?: boolean;

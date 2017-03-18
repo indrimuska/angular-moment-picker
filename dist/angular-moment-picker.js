@@ -1,4 +1,4 @@
-/*! Angular Moment Picker - v0.9.9 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
+/*! Angular Moment Picker - v0.9.10 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -93,6 +93,7 @@
 	            inline: false,
 	            validate: true,
 	            autoclose: true,
+	            setOnSelect: false,
 	            today: false,
 	            keyboard: false,
 	            showHeader: true,
@@ -173,6 +174,7 @@
 	            inline: '@?',
 	            validate: '=?',
 	            autoclose: '=?',
+	            setOnSelect: '=?',
 	            isOpen: '=?',
 	            today: '=?',
 	            keyboard: '=?',
@@ -185,7 +187,7 @@
 	            $transclude(function ($transElement) {
 	                // one-way binding attributes
 	                angular.forEach([
-	                    'locale', 'format', 'minView', 'maxView', 'startView', 'position', 'inline', 'validate', 'autoclose', 'today',
+	                    'locale', 'format', 'minView', 'maxView', 'startView', 'position', 'inline', 'validate', 'autoclose', 'setOnSelect', 'today',
 	                    'keyboard', 'showHeader', 'leftArrow', 'rightArrow', 'additions'
 	                ], function (attr) {
 	                    if (!angular.isDefined($scope[attr]))
@@ -397,11 +399,17 @@
 	                    },
 	                    change: function (view) {
 	                        var nextView = $scope.views.all.indexOf(view), minView = $scope.views.all.indexOf($scope.minView), maxView = $scope.views.all.indexOf($scope.maxView);
-	                        if (nextView < 0 || nextView > maxView) {
+	                        var update = function () {
 	                            utility_1.setValue($scope.view.moment, $scope, $ctrl, $attrs);
 	                            $scope.view.update();
 	                            if ($attrs['ngModel'])
 	                                $ctrl.$commitViewValue();
+	                        };
+	                        if ($scope.setOnSelect)
+	                            update();
+	                        if (nextView < 0 || nextView > maxView) {
+	                            if (!$scope.setOnSelect)
+	                                update();
 	                            if ($scope.autoclose)
 	                                _this.$timeout($scope.view.close);
 	                        }

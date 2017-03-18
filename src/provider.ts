@@ -11,6 +11,7 @@ export interface IProviderOptions {
 	inline?: boolean;
 	validate?: boolean;
 	autoclose?: boolean;
+	setOnSelect?: boolean;
 	today?: boolean;
 	keyboard?: boolean;
 	showHeader?: boolean;
@@ -54,6 +55,7 @@ export default class Provider implements angular.IServiceProvider {
 		inline: false,
 		validate: true,
 		autoclose: true,
+		setOnSelect: false,
 		today: false,
 		keyboard: false,
 		showHeader: true,

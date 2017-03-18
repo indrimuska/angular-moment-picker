@@ -87,6 +87,7 @@ position | | Sets a fixed position for the picker. Available values are `"top le
 inline | `false` | Views the picker inline. | [Plunker](https://embed.plnkr.co/5PhKOc)
 validate | `true` | Forces picker value between the range `minDate` and `maxDate`. | [Plunker](https://embed.plnkr.co/hFTyMV)
 autoclose | `true` | Closes the picker after selecting a date. | [Plunker](https://embed.plnkr.co/z7M6WK)
+set-on-select | `false` | Updates picker model after selecting a date in each view. | [Plunker](https://embed.plnkr.co/hJRNcT)
 is-open | | Open/closes the picker when set to `true` or `false`. | [Plunker](https://embed.plnkr.co/7T4sbs)
 today | `false` | Highlights the current day. | [Plunker](https://embed.plnkr.co/YYbV4C)
 keyboard | `false` | Allows using the keyboard to navigate the picker. | [Plunker](https://embed.plnkr.co/OdUhHx)
@@ -159,6 +160,7 @@ position | | Sets a fixed position for the picker. Available values are `"top le
 inline | `false` | Views the picker inline.
 validate | `true` | Forces picker value between the range `minDate` and `maxDate`.
 autoclose | `true` | Closes the picker after selecting a date.
+set-on-select | `false` | Updates picker model after selecting a date in each view.
 today | `false` | Highlights the current day.
 keyboard | `false` | Allows using the keyboard to navigate the picker.
 show-header | `true` | Shows the header in the view.

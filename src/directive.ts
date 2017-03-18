@@ -14,28 +14,29 @@ export default class Directive implements ng.IDirective {
 	public transclude = true;
 	public template   = templateHtml;
 	public scope      = {
-		value:      '=?momentPicker',
-		model:      '=?ngModel',
-		locale:     '@?',
-		format:     '@?',
-		minView:    '@?',
-		maxView:    '@?',
-		startView:  '@?',
-		minDate:    '=?',
-		maxDate:    '=?',
-		startDate:  '=?',
-		disabled:   '=?disable',
-		position:   '@?',
-		inline:     '@?',
-		validate:   '=?',
-		autoclose:  '=?',
-		isOpen:     '=?',
-		today:      '=?',
-		keyboard:   '=?',
-		showHeader: '=?',
-		additions:  '=?',
-		change:     '&?',
-		selectable: '&?'
+		value:       '=?momentPicker',
+		model:       '=?ngModel',
+		locale:      '@?',
+		format:      '@?',
+		minView:     '@?',
+		maxView:     '@?',
+		startView:   '@?',
+		minDate:     '=?',
+		maxDate:     '=?',
+		startDate:   '=?',
+		disabled:    '=?disable',
+		position:    '@?',
+		inline:      '@?',
+		validate:    '=?',
+		autoclose:   '=?',
+		setOnSelect: '=?',
+		isOpen:      '=?',
+		today:       '=?',
+		keyboard:    '=?',
+		showHeader:  '=?',
+		additions:   '=?',
+		change:      '&?',
+		selectable:  '&?'
 	};
 
 	constructor(
@@ -51,7 +52,7 @@ export default class Directive implements ng.IDirective {
 		$transclude(($transElement: ng.IAugmentedJQuery) => {
 			// one-way binding attributes
 			angular.forEach([
-				'locale', 'format', 'minView', 'maxView', 'startView', 'position', 'inline', 'validate', 'autoclose', 'today',
+				'locale', 'format', 'minView', 'maxView', 'startView', 'position', 'inline', 'validate', 'autoclose', 'setOnSelect', 'today',
 				'keyboard', 'showHeader', 'leftArrow', 'rightArrow', 'additions'
 			], (attr: string) => {
 				if (!angular.isDefined($scope[attr])) $scope[attr] = this.provider[attr];
@@ -261,11 +262,16 @@ export default class Directive implements ng.IDirective {
 					let nextView = $scope.views.all.indexOf(view),
 						minView  = $scope.views.all.indexOf($scope.minView),
 						maxView  = $scope.views.all.indexOf($scope.maxView);
-
-					if (nextView < 0 || nextView > maxView) {
+					
+					const update = () => {
 						setValue($scope.view.moment, $scope, $ctrl, $attrs);
 						$scope.view.update();
 						if ($attrs['ngModel']) $ctrl.$commitViewValue();
+					};
+
+					if ($scope.setOnSelect) update();
+					if (nextView < 0 || nextView > maxView) {
+						if (!$scope.setOnSelect) update();
 						if ($scope.autoclose) this.$timeout($scope.view.close);
 					} else if (nextView >= minView) $scope.view.selected = view;
 				}
