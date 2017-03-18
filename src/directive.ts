@@ -26,6 +26,7 @@ export default class Directive implements ng.IDirective {
 		startDate:  '=?',
 		disabled:   '=?disable',
 		position:   '@?',
+		inline:     '@?',
 		validate:   '=?',
 		autoclose:  '=?',
 		isOpen:     '=?',
@@ -50,8 +51,8 @@ export default class Directive implements ng.IDirective {
 		$transclude(($transElement: ng.IAugmentedJQuery) => {
 			// one-way binding attributes
 			angular.forEach([
-				'locale', 'format', 'minView', 'maxView', 'startView', 'position', 'validate', 'autoclose', 'today', 'keyboard', 'showHeader',
-				'leftArrow', 'rightArrow', 'additions'
+				'locale', 'format', 'minView', 'maxView', 'startView', 'position', 'inline', 'validate', 'autoclose', 'today',
+				'keyboard', 'showHeader', 'leftArrow', 'rightArrow', 'additions'
 			], (attr: string) => {
 				if (!angular.isDefined($scope[attr])) $scope[attr] = this.provider[attr];
 				if (!angular.isDefined($attrs[attr])) $attrs[attr] = $scope[attr];
@@ -152,21 +153,21 @@ export default class Directive implements ng.IDirective {
 				update: () => { $scope.view.value = momentToValue($scope.view.moment, $scope.format); },
 				toggle: () => { $scope.view.isOpen ? $scope.view.close() : $scope.view.open(); },
 				open: () => {
-					if ($scope.disabled || $scope.view.isOpen) return;
+					if ($scope.disabled || $scope.view.isOpen || $scope.inline) return;
 
 					$scope.isOpen = true;
 					$scope.view.isOpen = true;
 					this.$timeout($scope.view.position, 0, false);
 				},
 				close: () => {
-					if (!$scope.view.isOpen) return;
+					if (!$scope.view.isOpen || $scope.inline) return;
 
 					$scope.isOpen = false;
 					$scope.view.isOpen = false;
 					$scope.view.selected = $scope.startView;
 				},
 				position: () => {
-					if (!$scope.view.isOpen || $scope.position) return;
+					if (!$scope.view.isOpen || $scope.position || $scope.inline) return;
 					$scope.picker.removeClass('top').removeClass('right');
 
 					let container = $scope.container[0],
@@ -390,7 +391,8 @@ export default class Directive implements ng.IDirective {
 			});
 			$scope.$watch('validate', $scope.limits.checkValue);
 			$scope.$watch('isOpen', (isOpen: boolean) => {
-				if (angular.isDefined(isOpen) && isOpen != $scope.view.isOpen) $scope.view.toggle();
+				if ($scope.inline) $scope.view.isOpen = true;
+				else if (angular.isDefined(isOpen) && isOpen != $scope.view.isOpen) $scope.view.toggle();
 			});
 
 			// event listeners

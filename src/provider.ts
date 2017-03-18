@@ -8,6 +8,7 @@ export interface IProviderOptions {
 	maxView?: ViewString;
 	startView?: ViewString;
 	position?: Position;
+	inline?: boolean;
 	validate?: boolean;
 	autoclose?: boolean;
 	today?: boolean;
@@ -50,6 +51,7 @@ export default class Provider implements angular.IServiceProvider {
 		minView: 'decade',
 		maxView: 'minute',
 		startView: 'year',
+		inline: false,
 		validate: true,
 		autoclose: true,
 		today: false,

@@ -21,6 +21,7 @@ export interface IDirectiveScope extends ng.IScope {
 	startDate?: Value;
 	disabled?: boolean;
 	position?: Position;
+	inline?: boolean;
 	validate?: boolean;
 	autoclose?: boolean;
 	isOpen?: boolean;

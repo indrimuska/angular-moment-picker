@@ -1,6 +1,7 @@
 <div class="moment-picker">
     <span class="moment-picker-contents"></span>
-    <div class="moment-picker-container {{view.selected}}-view" ng-show="view.isOpen && !disabled" ng-class="{'moment-picker-disabled': disabled, 'open': view.isOpen}">
+    <div class="moment-picker-container {{view.selected}}-view" ng-show="(view.isOpen && !disabled) || inline"
+         ng-class="{'moment-picker-disabled': disabled, open: view.isOpen, inline: inline}">
         <div ng-if="additions.top" class="moment-picker-addition top"></div>
         <table class="header-view" ng-if="showHeader">
             <thead>
@@ -20,7 +21,8 @@
                 </thead>
                 <tbody>
                     <tr ng-repeat="row in views[view.selected].rows">
-                        <td ng-repeat="item in row track by item.index" ng-class="item.class" ng-bind="item.label" ng-click="views[view.selected].set(item)"></td>
+                        <td ng-repeat="item in row track by item.index" ng-class="item.class" ng-bind="item.label"
+                            ng-click="!disabled && views[view.selected].set(item)"></td>
                     </tr>
                 </tbody>
             </table>

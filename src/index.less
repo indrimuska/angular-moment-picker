@@ -41,6 +41,11 @@
         &:before, &:after { content: ''; display: block; width: 0; height: 0; border: 8px solid transparent; border-top: none; position: absolute; top: -9px; left: 15px; }
         &:before { border-bottom-color: @border-color; border-width: 9px; }
         &:after { border-bottom-color: @background; margin-top: 1px; margin-left: 1px; }
+        &.inline {
+            position: relative;
+            margin: 0;
+            &:before, &:after { content: none; }
+        }
     }
 
     // picker on top

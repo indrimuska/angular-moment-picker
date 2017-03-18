@@ -83,7 +83,8 @@ min-date | | Two-way bindable property representing the minimum selectable date 
 max-date | | Two-way bindable property representing the maximum selectable date (as String in the same format of the value, or as a Moment.js object). | [Plunker](https://embed.plnkr.co/OvvfAQ)
 start-date | | Two-way bindable property representing the initial date to be shown in picker (as String in the same format of the value, or as a Moment.js object). | [Plunker](https://embed.plnkr.co/rjFk9d)
 disable | `false` | Disables the picker if truly. | [Plunker](https://embed.plnkr.co/Zeaxd3)
-position | | Set a fixed position for the picker. Available values are `"top left"`, `"top right"`, `"bottom left"`, `"bottom right"`. | [Plunker](https://embed.plnkr.co/v9AZFu)
+position | | Sets a fixed position for the picker. Available values are `"top left"`, `"top right"`, `"bottom left"`, `"bottom right"`. | [Plunker](https://embed.plnkr.co/v9AZFu)
+inline | `false` | Views the picker inline. | [Plunker](https://embed.plnkr.co/5PhKOc)
 validate | `true` | Forces picker value between the range `minDate` and `maxDate`. | [Plunker](https://embed.plnkr.co/hFTyMV)
 autoclose | `true` | Closes the picker after selecting a date. | [Plunker](https://embed.plnkr.co/z7M6WK)
 is-open | | Open/closes the picker when set to `true` or `false`. | [Plunker](https://embed.plnkr.co/7T4sbs)
@@ -154,7 +155,8 @@ format | `"L LTS"` | Format of the output value and min/max date. <sup>1</sup>
 min-view | `"decade"` | Minimum navigable view.
 max-view | `"minute"` | Maximum navigable view.
 start-view | `"year"` | Initial view after picker opening.
-position | | Set a fixed position for the picker. Available values are `"top left"`, `"top right"`, `"bottom left"`, `"bottom right"`.
+position | | Sets a fixed position for the picker. Available values are `"top left"`, `"top right"`, `"bottom left"`, `"bottom right"`.
+inline | `false` | Views the picker inline.
 validate | `true` | Forces picker value between the range `minDate` and `maxDate`.
 autoclose | `true` | Closes the picker after selecting a date.
 today | `false` | Highlights the current day.
