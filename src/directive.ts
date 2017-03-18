@@ -74,7 +74,7 @@ export default class Directive implements ng.IDirective {
 				isSelectable: (value: moment.Moment, precision?: moment.unitOfTime.StartOf) => {
 					let selectable: boolean = true;
 					try {
-						if (angular.isFunction($scope.selectable)) selectable = $scope.selectable({ date: value, type: precision });
+						if (angular.isFunction($scope.selectable) && $attrs['selectable']) selectable = $scope.selectable({ date: value, type: precision });
 					} catch (e) {
 						this.$log.error(e);
 					}
@@ -333,7 +333,7 @@ export default class Directive implements ng.IDirective {
 				$scope.view.moment = (newModelValue || moment().locale($scope.locale)).clone();
 				$scope.view.update();
 				$scope.view.render();
-				if (angular.isFunction($scope.change)) {
+				if (angular.isFunction($scope.change) && $attrs['change']) {
 					let oldModelValue = valueToMoment(oldViewValue, $scope);
 					$scope.$evalAsync(() => $scope.change({ newValue: newModelValue, oldValue: oldModelValue }));
 				}

@@ -1,4 +1,4 @@
-/*! Angular Moment Picker - v0.9.8 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
+/*! Angular Moment Picker - v0.9.9 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -209,7 +209,7 @@
 	                    isSelectable: function (value, precision) {
 	                        var selectable = true;
 	                        try {
-	                            if (angular.isFunction($scope.selectable))
+	                            if (angular.isFunction($scope.selectable) && $attrs['selectable'])
 	                                selectable = $scope.selectable({ date: value, type: precision });
 	                        }
 	                        catch (e) {
@@ -472,7 +472,7 @@
 	                    $scope.view.moment = (newModelValue || moment().locale($scope.locale)).clone();
 	                    $scope.view.update();
 	                    $scope.view.render();
-	                    if (angular.isFunction($scope.change)) {
+	                    if (angular.isFunction($scope.change) && $attrs['change']) {
 	                        var oldModelValue_1 = utility_1.valueToMoment(oldViewValue, $scope);
 	                        $scope.$evalAsync(function () { return $scope.change({ newValue: newModelValue, oldValue: oldModelValue_1 }); });
 	                    }
