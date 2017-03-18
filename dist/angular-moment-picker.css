@@ -1,4 +1,4 @@
-/*! Angular Moment Picker - v0.9.7 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
+/*! Angular Moment Picker - v0.9.8 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
 .moment-picker {
   position: relative;
   display: block;
@@ -45,6 +45,14 @@
   margin-top: 1px;
   margin-left: 1px;
 }
+.moment-picker .moment-picker-container.inline {
+  position: relative;
+  margin: 0;
+}
+.moment-picker .moment-picker-container.inline:before,
+.moment-picker .moment-picker-container.inline:after {
+  content: none;
+}
 .moment-picker.top .moment-picker-container {
   top: auto;
   bottom: 100%;
@@ -67,17 +75,17 @@
   margin-top: auto;
   margin-bottom: 1px;
 }
-.moment-picker.left .moment-picker-container {
+.moment-picker.right .moment-picker-container {
   right: 0;
   margin-left: auto;
   margin-right: -0.5em;
 }
-.moment-picker.left .moment-picker-container:before,
-.moment-picker.left .moment-picker-container:after {
+.moment-picker.right .moment-picker-container:before,
+.moment-picker.right .moment-picker-container:after {
   left: auto;
   right: 15px;
 }
-.moment-picker.left .moment-picker-container:after {
+.moment-picker.right .moment-picker-container:after {
   margin-left: auto;
   margin-right: 1px;
 }
