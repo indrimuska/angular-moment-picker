@@ -1,5 +1,5 @@
 import * as angular from 'angular';
-import { ViewString } from './definitions';
+import { ViewString, Position } from './definitions';
 
 export interface IProviderOptions {
 	locale?: string;
@@ -7,6 +7,7 @@ export interface IProviderOptions {
 	minView?: ViewString;
 	maxView?: ViewString;
 	startView?: ViewString;
+	position?: Position;
 	validate?: boolean;
 	autoclose?: boolean;
 	today?: boolean;

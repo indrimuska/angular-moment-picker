@@ -25,6 +25,7 @@ export default class Directive implements ng.IDirective {
 		maxDate:    '=?',
 		startDate:  '=?',
 		disabled:   '=?disable',
+		position:   '@?',
 		validate:   '=?',
 		autoclose:  '=?',
 		isOpen:     '=?',
@@ -49,7 +50,7 @@ export default class Directive implements ng.IDirective {
 		$transclude(($transElement: ng.IAugmentedJQuery) => {
 			// one-way binding attributes
 			angular.forEach([
-				'locale', 'format', 'minView', 'maxView', 'startView', 'validate', 'autoclose', 'today', 'keyboard', 'showHeader',
+				'locale', 'format', 'minView', 'maxView', 'startView', 'position', 'validate', 'autoclose', 'today', 'keyboard', 'showHeader',
 				'leftArrow', 'rightArrow', 'additions'
 			], (attr: string) => {
 				if (!angular.isDefined($scope[attr])) $scope[attr] = this.provider[attr];
@@ -165,8 +166,8 @@ export default class Directive implements ng.IDirective {
 					$scope.view.selected = $scope.startView;
 				},
 				position: () => {
-					if (!$scope.view.isOpen) return;
-					$scope.picker.removeClass('top').removeClass('left');
+					if (!$scope.view.isOpen || $scope.position) return;
+					$scope.picker.removeClass('top').removeClass('right');
 
 					let container = $scope.container[0],
 						offset = getOffset(container),
@@ -176,7 +177,7 @@ export default class Directive implements ng.IDirective {
 						winHeight = this.$window.innerHeight;
 
 					if (top + this.$window.pageYOffset - container.offsetHeight > 0 && top > winHeight / 2) $scope.picker.addClass('top');
-					if (left + container.offsetWidth > winWidth) $scope.picker.addClass('left');
+					if (left + container.offsetWidth > winWidth) $scope.picker.addClass('right');
 				},
 				keydown: (e) => {
 					let view: IView = $scope.views[$scope.view.selected],
@@ -279,6 +280,7 @@ export default class Directive implements ng.IDirective {
 				? angular.element($scope.contents[0].querySelectorAll('input'))
 				: angular.element($scope.contents[0]);
 			$scope.input.addClass('moment-picker-input').attr('tabindex', 0);
+			($scope.position || '').split(' ').forEach((className: string) => $scope.picker.addClass(className));
 
 			// transclude scope to template additions
 			this.$timeout(() => {

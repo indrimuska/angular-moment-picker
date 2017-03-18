@@ -6,6 +6,8 @@ export type ViewString = 'decade' | 'year' | 'month' | 'day' | 'hour' | 'minute'
 
 export type Value = string | number;
 
+export type Position = 'top left' | 'top right' | 'bottom left' | 'bottom right';
+
 export interface IDirectiveScope extends ng.IScope {
 	value?: Value;
 	model?: moment.Moment;
@@ -18,6 +20,7 @@ export interface IDirectiveScope extends ng.IScope {
 	maxDate?: Value;
 	startDate?: Value;
 	disabled?: boolean;
+	position?: Position;
 	validate?: boolean;
 	autoclose?: boolean;
 	isOpen?: boolean;
