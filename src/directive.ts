@@ -413,6 +413,14 @@ export default class Directive implements ng.IDirective {
 			$scope.contents.on('click', () => focusInput());
 			$scope.container.on('mousedown', (e: JQueryEventObject) => focusInput(e));
 			angular.element(this.$window).on('resize scroll', $scope.view.position);
+
+			// unbind events on destroy
+			$scope.$on('$destroy', () => {
+				$scope.input.off('focus click blur keydown');
+				$scope.contents.off('click');
+				$scope.container.off('mousedown');
+				angular.element(this.$window).off('resize scroll', $scope.view.position);
+			});
 		});
 	}
 }
