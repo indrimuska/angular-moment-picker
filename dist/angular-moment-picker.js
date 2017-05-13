@@ -1,4 +1,4 @@
-/*! Angular Moment Picker - v0.9.11 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
+/*! Angular Moment Picker - v0.10.0 - http://indrimuska.github.io/angular-moment-picker - (c) 2015 Indri Muska - MIT */
 /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -305,7 +305,8 @@
 	                            return;
 	                        $scope.isOpen = true;
 	                        $scope.view.isOpen = true;
-	                        _this.$timeout($scope.view.position, 0, false);
+	                        document.body.appendChild($scope.picker[0]);
+	                        $scope.view.position();
 	                    },
 	                    close: function () {
 	                        if (!$scope.view.isOpen || $scope.inline)
@@ -313,16 +314,26 @@
 	                        $scope.isOpen = false;
 	                        $scope.view.isOpen = false;
 	                        $scope.view.selected = $scope.startView;
+	                        $scope.picker[0].parentNode.removeChild($scope.picker[0]);
 	                    },
 	                    position: function () {
 	                        if (!$scope.view.isOpen || $scope.position || $scope.inline)
 	                            return;
-	                        $scope.picker.removeClass('top').removeClass('right');
-	                        var container = $scope.container[0], offset = helpers_1.getOffset(container), top = offset.top - _this.$window.pageYOffset, left = offset.left - _this.$window.pageXOffset, winWidth = _this.$window.innerWidth, winHeight = _this.$window.innerHeight;
-	                        if (top + _this.$window.pageYOffset - container.offsetHeight > 0 && top > winHeight / 2)
+	                        var element = $element[0], picker = $scope.picker[0], hasClassTop = $scope.picker.hasClass('top'), hasClassRight = $scope.picker.hasClass('right'), offset = helpers_1.getOffset($element[0]), top = offset.top - _this.$window.pageYOffset, left = offset.left - _this.$window.pageXOffset, winWidth = _this.$window.innerWidth, winHeight = _this.$window.innerHeight, shouldHaveClassTop = top + _this.$window.pageYOffset - picker.offsetHeight > 0 && top > winHeight / 2, shouldHaveClassRight = left + picker.offsetWidth > winWidth, pickerTop = offset.top + (shouldHaveClassTop ? 0 : element.offsetHeight) + 'px', pickerLeft = offset.left + 'px', pickerWidth = element.offsetWidth + 'px';
+	                        if (!hasClassTop && shouldHaveClassTop)
 	                            $scope.picker.addClass('top');
-	                        if (left + container.offsetWidth > winWidth)
+	                        if (hasClassTop && !shouldHaveClassTop)
+	                            $scope.picker.removeClass('top');
+	                        if (!hasClassRight && shouldHaveClassRight)
 	                            $scope.picker.addClass('right');
+	                        if (hasClassRight && !shouldHaveClassRight)
+	                            $scope.picker.removeClass('right');
+	                        if ($scope.picker.css('top') !== pickerTop)
+	                            $scope.picker.css('top', pickerTop);
+	                        if ($scope.picker.css('left') !== pickerLeft)
+	                            $scope.picker.css('left', pickerLeft);
+	                        if ($scope.picker.css('width') !== pickerWidth)
+	                            $scope.picker.css('width', pickerWidth);
 	                    },
 	                    keydown: function (e) {
 	                        var view = $scope.views[$scope.view.selected], precision = $scope.views.precisions[$scope.view.selected].replace('date', 'day'), singleUnit = _this.provider[precision + 'sStep'] || 1, operation = [utility_1.KEYS.up, utility_1.KEYS.left].indexOf(e.keyCode) >= 0 ? 'subtract' : 'add', highlight = function (vertical) {
@@ -418,16 +429,20 @@
 	                    }
 	                };
 	                // creation
+	                $element.addClass('moment-picker-reference').prepend($transElement);
 	                $scope.picker = angular.element($element[0].querySelectorAll('.moment-picker'));
-	                $element.after($scope.picker);
-	                $scope.contents = angular.element($scope.picker[0].querySelectorAll('.moment-picker-contents'));
 	                $scope.container = angular.element($scope.picker[0].querySelectorAll('.moment-picker-container'));
-	                $scope.contents.append($element.append($transElement));
-	                $scope.input = $scope.contents[0].tagName.toLowerCase() != 'input' && $scope.contents[0].querySelectorAll('input').length > 0
-	                    ? angular.element($scope.contents[0].querySelectorAll('input'))
-	                    : angular.element($scope.contents[0]);
-	                $scope.input.addClass('moment-picker-input').attr('tabindex', 0);
+	                $scope.input = $element[0].tagName.toLowerCase() != 'input' && $element[0].querySelectorAll('input').length > 0
+	                    ? angular.element($element[0].querySelectorAll('input'))
+	                    : angular.element($element[0]);
+	                $scope.input.attr('tabindex', 0);
 	                ($scope.position || '').split(' ').forEach(function (className) { return $scope.picker.addClass(className); });
+	                if (!$scope.inline)
+	                    $scope.picker[0].parentNode.removeChild($scope.picker[0]);
+	                else {
+	                    $element.after($scope.picker);
+	                    $scope.picker.addClass('inline');
+	                }
 	                // transclude scope to template additions
 	                _this.$timeout(function () {
 	                    angular.forEach($scope.additions || {}, function (tempalteUrl, key) {
@@ -546,20 +561,21 @@
 	                        e.preventDefault();
 	                    $scope.input[0].focus();
 	                };
+	                // use `touchstart` for iOS Safari, where click events aren't propogated under most circumstances.
 	                $scope.input
-	                    .on('focus click', function () { return $scope.$evalAsync($scope.view.open); })
+	                    .on('focus click touchstart', function () { return $scope.$evalAsync($scope.view.open); })
 	                    .on('blur', function () { return $scope.$evalAsync($scope.view.close); })
 	                    .on('keydown', function (e) {
 	                    if ($scope.keyboard)
 	                        $scope.$evalAsync(function () { return $scope.view.keydown(e); });
 	                });
-	                $scope.contents.on('click', function () { return focusInput(); });
+	                $element.on('click touchstart', function () { return focusInput(); });
 	                $scope.container.on('mousedown', function (e) { return focusInput(e); });
 	                angular.element(_this.$window).on('resize scroll', $scope.view.position);
 	                // unbind events on destroy
 	                $scope.$on('$destroy', function () {
-	                    $scope.input.off('focus click blur keydown');
-	                    $scope.contents.off('click');
+	                    $scope.input.off('focus click touchstart blur keydown');
+	                    $element.off('click touchstart');
 	                    $scope.container.off('mousedown');
 	                    angular.element(_this.$window).off('resize scroll', $scope.view.position);
 	                });
@@ -724,8 +740,8 @@
 	};
 	exports.setValue = function (value, $scope, $ctrl, $attrs) {
 	    var modelValue = exports.isValidMoment(value) ? value.clone() : exports.valueToMoment(value, $scope), viewValue = exports.momentToValue(modelValue, $scope.format);
-	    exports.updateMoment($scope.model, modelValue, $scope);
-	    exports.updateMoment($ctrl.$modelValue, modelValue, $scope);
+	    $scope.model = exports.updateMoment($scope.model, modelValue, $scope);
+	    $ctrl.$modelValue = exports.updateMoment($ctrl.$modelValue, modelValue, $scope);
 	    if ($attrs['ngModel'] != $attrs['momentPicker'])
 	        $scope.value = viewValue;
 	    if ($attrs['ngModel']) {
@@ -1071,7 +1087,7 @@
 /* 15 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=moment-picker> <span class=moment-picker-contents></span> <div class=\"moment-picker-container {{view.selected}}-view\" ng-show=\"(view.isOpen && !disabled) || inline\" ng-class=\"{'moment-picker-disabled': disabled, open: view.isOpen, inline: inline}\"> <div ng-if=additions.top class=\"moment-picker-addition top\"></div> <table class=header-view ng-if=showHeader> <thead> <tr> <th ng-class=\"{disabled: !view.previous.selectable}\" ng-bind-html=view.previous.label ng-click=view.previous.set()></th> <th ng-bind=view.title ng-click=view.setParentView()></th> <th ng-class=\"{disabled: !view.next.selectable}\" ng-bind-html=view.next.label ng-click=view.next.set()></th> </tr> </thead> </table> <div class=moment-picker-specific-views> <table> <thead ng-if=views[view.selected].headers> <tr> <th ng-repeat=\"header in views[view.selected].headers\" ng-bind=header></th> </tr> </thead> <tbody> <tr ng-repeat=\"row in views[view.selected].rows\"> <td ng-repeat=\"item in row track by item.index\" ng-class=item.class ng-bind=item.label ng-click=\"!disabled && views[view.selected].set(item)\"></td> </tr> </tbody> </table> </div> <div ng-if=additions.bottom class=\"moment-picker-addition bottom\"></div> </div> </div>";
+	module.exports = "<div class=moment-picker> <div class=\"moment-picker-container {{view.selected}}-view\" ng-class=\"{'moment-picker-disabled': disabled, open: view.isOpen}\"> <div ng-if=additions.top class=\"moment-picker-addition top\"></div> <table class=header-view ng-if=showHeader> <thead> <tr> <th ng-class=\"{disabled: !view.previous.selectable}\" ng-bind-html=view.previous.label ng-click=view.previous.set()></th> <th ng-bind=view.title ng-click=view.setParentView()></th> <th ng-class=\"{disabled: !view.next.selectable}\" ng-bind-html=view.next.label ng-click=view.next.set()></th> </tr> </thead> </table> <div class=moment-picker-specific-views> <table> <thead ng-if=views[view.selected].headers> <tr> <th ng-repeat=\"header in views[view.selected].headers\" ng-bind=header></th> </tr> </thead> <tbody> <tr ng-repeat=\"row in views[view.selected].rows\"> <td ng-repeat=\"item in row track by item.index\" ng-class=item.class ng-bind=item.label ng-click=\"!disabled && views[view.selected].set(item)\"></td> </tr> </tbody> </table> </div> <div ng-if=additions.bottom class=\"moment-picker-addition bottom\"></div> </div> </div>";
 
 /***/ },
 /* 16 */
