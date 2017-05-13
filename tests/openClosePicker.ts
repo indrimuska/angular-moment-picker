@@ -3,9 +3,7 @@ import * as test from './utility';
 
 describe('Open / close picker', () => {
 	
-	let $inputPicker: ng.IAugmentedJQuery;
 	let $inputContent: ng.IAugmentedJQuery;
-	let $divPicker: ng.IAugmentedJQuery;
 	let $divContent: ng.IAugmentedJQuery;
 
 	// init test
@@ -14,52 +12,50 @@ describe('Open / close picker', () => {
 	// create two pickers for all tests
 	beforeEach(() => {
 		// tslint:disable-next-line:no-unused-expression
-		$inputPicker  = test.buildTemplate('input', { class: 'input-picker' });
-		$inputContent = $inputPicker.find('.moment-picker-input');
-		$divPicker    = test.buildTemplate('div', { class: 'div-picker' });
-		$divContent   = $divPicker.find('.moment-picker-input');
+		$inputContent = test.buildTemplate('input', { class: 'input-picker' });
+		$divContent   = test.buildTemplate('div', { class: 'div-picker' });
 	});
 	
-	const isVisible = ($element: ng.IAugmentedJQuery) => !$element.find('.moment-picker-container').hasClass('ng-hide');
+	const isVisible = ($element: ng.IAugmentedJQuery) => test.getPicker($element).is(':visible');
 	
 	// open picker on click
 	it('should open the picker on click', () => {
 		test.trigger($inputContent, 'click');
-		expect(isVisible($inputPicker)).toBe(true);
+		expect(isVisible($inputContent)).toBe(true);
 		
 		test.trigger($divContent, 'click');
-		expect(isVisible($divPicker)).toBe(true);
+		expect(isVisible($divContent)).toBe(true);
 	});
 	
 	// open picker on focus
 	// it('should open the picker on focus', () => {
 	// 	test.trigger($inputContent, 'focus');
-	// 	expect(isVisible($inputPicker)).toBe(true);
+	// 	expect(isVisible($inputContent)).toBe(true);
 
 	// 	test.trigger($divContent, 'focus');
-	// 	expect(isVisible($divPicker)).toBe(true);
+	// 	expect(isVisible($divContent)).toBe(true);
 	// });
 	
 	// close picker on blur
 	it('should close the picker on blur', () => {
 		test.trigger($inputContent, 'click');
-		expect(isVisible($inputPicker)).toBe(true);
+		expect(isVisible($inputContent)).toBe(true);
 		test.trigger($inputContent, 'blur');
-		expect(isVisible($inputPicker)).toBe(false);
+		expect(isVisible($inputContent)).toBe(false);
 		
 		test.trigger($divContent, 'click');
-		expect(isVisible($divPicker)).toBe(true);
+		expect(isVisible($divContent)).toBe(true);
 		test.trigger($divContent, 'blur');
-		expect(isVisible($divPicker)).toBe(false);
+		expect(isVisible($divContent)).toBe(false);
 	});
 	
 	// close picker clicking on another one
 	it('should close a picker when clicking to another picker', () => {
 		test.trigger($inputContent, 'click');
-		expect(isVisible($inputPicker)).toBe(true);
+		expect(isVisible($inputContent)).toBe(true);
 		
 		test.trigger($divContent, 'click');
-		expect(isVisible($divPicker)).toBe(true);
-		expect(isVisible($inputPicker)).toBe(false);
+		expect(isVisible($divContent)).toBe(true);
+		expect(isVisible($inputContent)).toBe(false);
 	});
 });

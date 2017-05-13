@@ -42,7 +42,7 @@ describe('Keyboard', () => {
 		let $input: ng.IAugmentedJQuery;
 
 		beforeEach(() => {
-			$input = test.buildTemplate('input', { keyboard: 'true', class: 'input-picker' }).find('.input-picker');
+			$input = test.buildTemplate('input', { keyboard: 'true' });
 		});
 
 		// prevent default event
@@ -63,14 +63,12 @@ describe('Keyboard', () => {
 	});
 
 	describe('picker open/close', () => {
-		let $picker: ng.IAugmentedJQuery;
 		let $input: ng.IAugmentedJQuery;
 
-		const isOpen = () => !$picker.find('.moment-picker-container').hasClass('ng-hide');
+		const isOpen = () => test.getPicker($input).is(':visible');
 
 		beforeEach(inject(($rootScope) => {
-			$picker = test.buildTemplate('input', { keyboard: 'true', class: 'input-picker' });
-			$input  = $picker.find('.input-picker');
+			$input = test.buildTemplate('input', { keyboard: 'true' });
 		}));
 
 		// close picker on pressing ESC
@@ -105,7 +103,7 @@ describe('Keyboard', () => {
 
 		const pickerViews = ['decade', 'year', 'month', 'day', 'hour', 'minute'];
 		const commonOpts = { keyboard: 'true', ngModel: 'date', format: 'YYYY-MM-DD HH:mm:ss', class: 'input-picker', locale: locale };
-		const getHighlightedText = ($element: ng.IAugmentedJQuery) => $element.find('.moment-picker-container td.highlighted').text();
+		const getHighlightedText = ($element: ng.IAugmentedJQuery) => test.getPicker($element).find('td.highlighted').text();
 
 		// get formats from momentPickerProvider
 		beforeEach(inject(($rootScope: ng.IRootScopeService, momentPicker: IProviderOptions) => { // tslint:disable-line:variable-name
@@ -138,9 +136,9 @@ describe('Keyboard', () => {
 			// highlight on open
 			it('should highlight the selected ' + view + ' on picker open', () => {
 				let options = angular.extend({ startView: view }, commonOpts),
-					$picker = test.buildTemplate('input', options, undefined, $scope);
+					$input  = test.buildTemplate('input', options, undefined, $scope);
 				
-				expect(getHighlightedText($picker)).toBe(date.format(formats[view]));
+				expect(getHighlightedText($input)).toBe(date.format(formats[view]));
 			});
 
 			// highlight on key press
@@ -151,12 +149,11 @@ describe('Keyboard', () => {
 
 				it(title, () => {
 					let options   = angular.extend({ startView: view }, commonOpts),
-						$picker   = test.buildTemplate('input', options, undefined, $scope),
-						$input    = $picker.find('.input-picker'),
+						$input    = test.buildTemplate('input', options, undefined, $scope),
 						finalDate = date.clone()[operation](datesToShift, viewPrecision);
 					
 					sendKey($input, key);
-					expect(getHighlightedText($picker)).toBe(finalDate.format(formats[view]));
+					expect(getHighlightedText($input)).toBe(finalDate.format(formats[view]));
 				});
 			});
 		});

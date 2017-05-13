@@ -35,20 +35,20 @@ describe('Property `locale`', () => {
 			expectedHeaders.hour [locale] = localeDate.startOf('hour').format('lll');
 		});
 
-		const getHeader = ($element: ng.IAugmentedJQuery) => Array.prototype.slice.call($element.find('.moment-picker-container th'), 0)
+		const getHeader = ($element: ng.IAugmentedJQuery) => Array.prototype.slice.call(test.getPicker($element).find('th'), 0)
 			.map((e: Node) => e.textContent)
 			.filter((s: string) => s != '←' && s != '→')
 			.join(stringDivider);
 		
 		it('should change locale dinamically', () => {
 			angular.forEach(expectedHeaders, (header, view: string) => {
-				let $scope  = $rootScope.$new(),
-					$picker = test.buildTemplate('input', { locale: '\{\{locale\}\}', format: format, startView: view, startDate: startDate }, undefined, $scope);
+				let $scope = $rootScope.$new(),
+					$input = test.buildTemplate('input', { locale: '\{\{locale\}\}', format: format, startView: view, startDate: startDate }, undefined, $scope);
 				
 				angular.forEach(header, (expectedHeader: string, locale: string) => {
 					$scope['locale'] = locale;
 					$scope.$apply();
-					expect(getHeader($picker)).toBe(expectedHeader);
+					expect(getHeader($input)).toBe(expectedHeader);
 				});
 			});
 		});

@@ -1,4 +1,5 @@
 import * as angular from 'angular';
+import { IDirectiveScopeInternal } from '../src/definitions';
 
 let $compile, $timeout, $rootScope;
 
@@ -55,6 +56,8 @@ export const buildTemplate = (tag: string, options?: any, content?: any, $scope?
 	$timeout.flush();
 	return $element;
 };
+
+export const getPicker = (element: ng.IAugmentedJQuery) => (<IDirectiveScopeInternal>element.isolateScope()).picker;
 
 // wrap jquery trigger fn: event trigger + digest stimulation
 export const trigger = (element: ng.IAugmentedJQuery, event: string | JQueryEventObject) => {

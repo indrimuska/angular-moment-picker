@@ -19,7 +19,7 @@ describe('Property `startDate`', () => {
 	// init test
 	test.bootstrap();
 	
-	const getHeaderText = ($element: ng.IAugmentedJQuery) => angular.element($element.find('.header-view th')[1]).text();
+	const getHeaderText = ($element: ng.IAugmentedJQuery) => angular.element(test.getPicker($element).find('.header-view th')[1]).text();
 	
 	// test all views
 	angular.forEach(expectedHeaders, (expectedHeader, view) => {
@@ -27,8 +27,8 @@ describe('Property `startDate`', () => {
 			title    = 'should open ' + viewName + ' View in ' + expectedHeader;
 		
 		it(title, () => {
-			let $propAsMoment  = test.buildTemplate('div', { locale: 'en', format: format, startView: view, startDate: startDate }),
-				$propAsString  = test.buildTemplate('div', { locale: 'en', format: format, startView: view, startDate: startDateStr });
+			let $propAsMoment = test.buildTemplate('div', { locale: 'en', format: format, startView: view, startDate: startDate }),
+				$propAsString = test.buildTemplate('div', { locale: 'en', format: format, startView: view, startDate: startDateStr });
 				
 			// Moment object input
 			expect(getHeaderText($propAsMoment)).toBe(expectedHeader);

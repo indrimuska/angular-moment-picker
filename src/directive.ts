@@ -301,7 +301,10 @@ export default class Directive implements ng.IDirective {
 			$scope.input.attr('tabindex', 0);
 			($scope.position || '').split(' ').forEach((className: string) => $scope.picker.addClass(className));
 			if (!$scope.inline) $scope.picker[0].parentNode.removeChild($scope.picker[0]);
-			else $scope.picker.addClass('inline');
+			else {
+				$element.after($scope.picker);
+				$scope.picker.addClass('inline');
+			}
 
 			// transclude scope to template additions
 			this.$timeout(() => {

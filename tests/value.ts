@@ -13,7 +13,7 @@ describe('Value', () => {
 	// same picker settings for all tests in this suite
 	beforeEach(inject(($rootScope: ng.IRootScopeService) => {
 		$scope = $rootScope.$new();
-		$input = test.buildTemplate('input', { momentPicker: 'dateStr', ngModel: 'dateObj', format: format, class: 'input-picker' }, undefined, $scope).find('.input-picker');
+		$input = test.buildTemplate('input', { momentPicker: 'dateStr', ngModel: 'dateObj', format: format }, undefined, $scope);
 	}));
 	
 	// set Model Value from View Value
@@ -77,7 +77,7 @@ describe('Value', () => {
 		let date = moment('2017-01-12', format);
 		
 		$scope['date'] = date;
-		$input = test.buildTemplate('input', { momentPicker: 'date', ngModel: 'date', format: format, class: 'input-picker' }, undefined, $scope).find('.input-picker');
+		$input = test.buildTemplate('input', { momentPicker: 'date', ngModel: 'date', format: format }, undefined, $scope);
 		expect($scope['date'].isSame(date)).toBe(true);
 		expect($input.val()).toBe(date.format(format));
 	});
@@ -86,8 +86,8 @@ describe('Value', () => {
 	it('should sync model updates across pickers', () => {
 		let dateFormat = 'YYYY-MM-DD',
 			timeFormat = 'HH:mm',
-			$date = test.buildTemplate('input', { momentPicker: 'date', ngModel: 'datetime', format: dateFormat, class: 'date-picker' }, undefined, $scope).find('.date-picker'),
-			$time = test.buildTemplate('input', { momentPicker: 'time', ngModel: 'datetime', format: timeFormat, class: 'time-picker' }, undefined, $scope).find('.time-picker');
+			$date = test.buildTemplate('input', { momentPicker: 'date', ngModel: 'datetime', format: dateFormat }, undefined, $scope),
+			$time = test.buildTemplate('input', { momentPicker: 'time', ngModel: 'datetime', format: timeFormat }, undefined, $scope);
 		
 		$scope['datetime'] = moment('2017-01-12 20:32', dateFormat + ' ' + timeFormat);
 		$scope.$digest();
