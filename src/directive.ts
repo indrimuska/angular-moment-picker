@@ -158,7 +158,8 @@ export default class Directive implements ng.IDirective {
 
 					$scope.isOpen = true;
 					$scope.view.isOpen = true;
-					this.$timeout($scope.view.position, 0, false);
+					document.body.appendChild($scope.picker[0]);
+					$scope.view.position();
 				},
 				close: () => {
 					if (!$scope.view.isOpen || $scope.inline) return;
@@ -166,20 +167,33 @@ export default class Directive implements ng.IDirective {
 					$scope.isOpen = false;
 					$scope.view.isOpen = false;
 					$scope.view.selected = $scope.startView;
+					$scope.picker[0].parentNode.removeChild($scope.picker[0]);
 				},
 				position: () => {
 					if (!$scope.view.isOpen || $scope.position || $scope.inline) return;
-					$scope.picker.removeClass('top').removeClass('right');
 
-					let container = $scope.container[0],
-						offset = getOffset(container),
+					let element = $element[0],
+						picker = $scope.picker[0],
+						hasClassTop = $scope.picker.hasClass('top'),
+						hasClassRight = $scope.picker.hasClass('right'),
+						offset = getOffset($element[0]),
 						top = offset.top - this.$window.pageYOffset,
 						left = offset.left - this.$window.pageXOffset,
 						winWidth = this.$window.innerWidth,
-						winHeight = this.$window.innerHeight;
+						winHeight = this.$window.innerHeight,
+						shouldHaveClassTop = top + this.$window.pageYOffset - picker.offsetHeight > 0 && top > winHeight / 2,
+						shouldHaveClassRight = left + picker.offsetWidth > winWidth,
+						pickerTop = offset.top + (shouldHaveClassTop ? 0 : element.offsetHeight) + 'px',
+						pickerLeft = offset.left + 'px',
+						pickerWidth = element.offsetWidth + 'px';
 
-					if (top + this.$window.pageYOffset - container.offsetHeight > 0 && top > winHeight / 2) $scope.picker.addClass('top');
-					if (left + container.offsetWidth > winWidth) $scope.picker.addClass('right');
+					if (!hasClassTop && shouldHaveClassTop) $scope.picker.addClass('top');
+					if (hasClassTop && !shouldHaveClassTop) $scope.picker.removeClass('top');
+					if (!hasClassRight && shouldHaveClassRight) $scope.picker.addClass('right');
+					if (hasClassRight && !shouldHaveClassRight) $scope.picker.removeClass('right');
+					if ($scope.picker.css('top') !== pickerTop) $scope.picker.css('top', pickerTop);
+					if ($scope.picker.css('left') !== pickerLeft) $scope.picker.css('left', pickerLeft);
+					if ($scope.picker.css('width') !== pickerWidth) $scope.picker.css('width', pickerWidth);
 				},
 				keydown: (e) => {
 					let view: IView = $scope.views[$scope.view.selected],
@@ -278,16 +292,16 @@ export default class Directive implements ng.IDirective {
 			};
 
 			// creation
+			$element.addClass('moment-picker-reference').prepend($transElement);
 			$scope.picker = angular.element($element[0].querySelectorAll('.moment-picker'));
-			$element.after($scope.picker);
-			$scope.contents = angular.element($scope.picker[0].querySelectorAll('.moment-picker-contents'));
 			$scope.container = angular.element($scope.picker[0].querySelectorAll('.moment-picker-container'));
-			$scope.contents.append($element.append($transElement));
-			$scope.input = $scope.contents[0].tagName.toLowerCase() != 'input' && $scope.contents[0].querySelectorAll('input').length > 0
-				? angular.element($scope.contents[0].querySelectorAll('input'))
-				: angular.element($scope.contents[0]);
-			$scope.input.addClass('moment-picker-input').attr('tabindex', 0);
+			$scope.input = $element[0].tagName.toLowerCase() != 'input' && $element[0].querySelectorAll('input').length > 0
+				? angular.element($element[0].querySelectorAll('input'))
+				: angular.element($element[0]);
+			$scope.input.attr('tabindex', 0);
 			($scope.position || '').split(' ').forEach((className: string) => $scope.picker.addClass(className));
+			if (!$scope.inline) $scope.picker[0].parentNode.removeChild($scope.picker[0]);
+			else $scope.picker.addClass('inline');
 
 			// transclude scope to template additions
 			this.$timeout(() => {
@@ -406,20 +420,21 @@ export default class Directive implements ng.IDirective {
 				if (e) e.preventDefault();
 				$scope.input[0].focus();
 			};
+			// use `touchstart` for iOS Safari, where click events aren't propogated under most circumstances.
 			$scope.input
-				.on('focus click', () => $scope.$evalAsync($scope.view.open))
-				.on('blur',        () => $scope.$evalAsync($scope.view.close))
-				.on('keydown',     (e) => {
+				.on('focus click touchstart', () => $scope.$evalAsync($scope.view.open))
+				.on('blur',        			  () => $scope.$evalAsync($scope.view.close))
+				.on('keydown',     			  (e) => {
 					if ($scope.keyboard) $scope.$evalAsync(() => $scope.view.keydown(e));
 				});
-			$scope.contents.on('click', () => focusInput());
+			$element.on('click touchstart', () => focusInput());
 			$scope.container.on('mousedown', (e: JQueryEventObject) => focusInput(e));
 			angular.element(this.$window).on('resize scroll', $scope.view.position);
 
 			// unbind events on destroy
 			$scope.$on('$destroy', () => {
-				$scope.input.off('focus click blur keydown');
-				$scope.contents.off('click');
+				$scope.input.off('focus click touchstart blur keydown');
+				$element.off('click touchstart');
 				$scope.container.off('mousedown');
 				angular.element(this.$window).off('resize scroll', $scope.view.position);
 			});

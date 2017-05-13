@@ -44,8 +44,8 @@ export const valueToMoment = (formattedValue: Value, $scope: IDirectiveScopeInte
 export const setValue = (value: moment.Moment | Value, $scope: IDirectiveScopeInternal, $ctrl: IModelController, $attrs: ng.IAttributes): void => {
 	let modelValue = isValidMoment(value) ? (<moment.Moment>value).clone() : valueToMoment(<Value>value, $scope),
 		viewValue = momentToValue(modelValue, $scope.format);
-	updateMoment($scope.model, modelValue, $scope);
-	updateMoment($ctrl.$modelValue, modelValue, $scope);
+	$scope.model = updateMoment($scope.model, modelValue, $scope);
+	$ctrl.$modelValue = updateMoment($ctrl.$modelValue, modelValue, $scope);
 	if ($attrs['ngModel'] != $attrs['momentPicker']) $scope.value = viewValue;
 	if ($attrs['ngModel']) {
 		$ctrl.$setViewValue(viewValue);

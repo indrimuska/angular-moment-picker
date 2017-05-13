@@ -1,7 +1,6 @@
 <div class="moment-picker">
-    <span class="moment-picker-contents"></span>
-    <div class="moment-picker-container {{view.selected}}-view" ng-show="(view.isOpen && !disabled) || inline"
-         ng-class="{'moment-picker-disabled': disabled, open: view.isOpen, inline: inline}">
+    <div class="moment-picker-container {{view.selected}}-view"
+         ng-class="{'moment-picker-disabled': disabled, open: view.isOpen}">
         <div ng-if="additions.top" class="moment-picker-addition top"></div>
         <table class="header-view" ng-if="showHeader">
             <thead>

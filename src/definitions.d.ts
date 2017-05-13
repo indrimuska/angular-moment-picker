@@ -135,7 +135,6 @@ export interface IDirectiveScopeInternal extends IDirectiveScope, IProviderOptio
 
 	// elements
 	picker: ng.IAugmentedJQuery;
-	contents: ng.IAugmentedJQuery;
 	container: ng.IAugmentedJQuery;
 	input: ng.IAugmentedJQuery;
 }

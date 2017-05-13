@@ -20,11 +20,11 @@
 @selected-bg-image:         linear-gradient(#45b1e8, #3097de);
 @selected-border-color:     #3ca0dd;
 
+.moment-picker-reference { cursor: pointer; }
 .moment-picker {
-    position: relative;
-    display: block;
+    position: absolute;
+    z-index: 1000;
 
-    .moment-picker-input { cursor: pointer; }
     .moment-picker-container {
         color: @text-color;
         min-width: 15em;
@@ -33,15 +33,19 @@
         border: 1px solid @border-color;
         border-radius: 4px;
         position: absolute;
-        top: 100%;
         margin-top: 4px;
         margin-left: -.5em;
         box-shadow: 0 2px 4px @box-shadow-color;
-        z-index: 5;
         &:before, &:after { content: ''; display: block; width: 0; height: 0; border: 8px solid transparent; border-top: none; position: absolute; top: -9px; left: 15px; }
         &:before { border-bottom-color: @border-color; border-width: 9px; }
         &:after { border-bottom-color: @background; margin-top: 1px; margin-left: 1px; }
-        &.inline {
+    }
+
+    // inline picker
+    &.inline {
+        display: block;
+        position: relative;
+        .moment-picker-container {
             position: relative;
             margin: 0;
             &:before, &:after { content: none; }
@@ -50,7 +54,6 @@
 
     // picker on top
     &.top .moment-picker-container {
-        top: auto;
         bottom: 100%;
         margin-top: auto;
         margin-bottom: 4px;
