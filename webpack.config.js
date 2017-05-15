@@ -11,7 +11,8 @@ let extractTextPlugin = require('extract-text-webpack-plugin');
 let generateJsonPlugin = require('generate-json-webpack-plugin');
 
 let isProduction = process.argv.indexOf('-p') != -1;
-let filename = 'angular-moment-picker' + (isProduction ? '.min' : '');
+let filesuffix = (isProduction ? '.min' : '');
+let filename = 'angular-moment-picker' + filesuffix;
 let increase = (process.argv.filter(argv => argv.match(/^increase=.+$/))[0] || '').replace('increase=', '');
 
 // sync bower.json with package.json
@@ -26,7 +27,7 @@ fs.readdirSync('src/themes').forEach(file => themes.push(file.replace('.less', '
 let extractBaseTheme = new extractTextPlugin(filename + '.css');
 let extractOtherThemes = themes.map(theme => ({
 	file: path.resolve(__dirname, 'src/themes/' + theme + '.less'),
-	extract: new extractTextPlugin('themes/' + theme + '.css')
+	extract: new extractTextPlugin('themes/' + theme + filesuffix + '.css')
 }));
 let extractPluginLoaders = [
 	'css-loader',
