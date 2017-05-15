@@ -9,7 +9,7 @@ import { isValidMoment, toValue, toMoment, momentToValue, valueToMoment, setValu
 const templateHtml = require('./template.tpl.html');
 
 export default class Directive implements ng.IDirective {
-	public restrict   = 'AE';
+	public restrict   = 'A';
 	public require    = '?ngModel';
 	public transclude = true;
 	public template   = templateHtml;
@@ -232,6 +232,8 @@ export default class Directive implements ng.IDirective {
 							$scope.view.toggle();
 							break;
 					}
+
+					$scope.$evalAsync();
 				},
 				// utility
 				unit: () => $scope.view.selected == 'decade' ? 10 : 1,
@@ -292,13 +294,13 @@ export default class Directive implements ng.IDirective {
 			};
 
 			// creation
-			$element.addClass('moment-picker-reference').prepend($transElement);
+			$element.prepend($transElement);
 			$scope.picker = angular.element($element[0].querySelectorAll('.moment-picker'));
 			$scope.container = angular.element($scope.picker[0].querySelectorAll('.moment-picker-container'));
 			$scope.input = $element[0].tagName.toLowerCase() != 'input' && $element[0].querySelectorAll('input').length > 0
 				? angular.element($element[0].querySelectorAll('input'))
 				: angular.element($element[0]);
-			$scope.input.attr('tabindex', 0);
+			$scope.input.addClass('moment-picker-input').attr('tabindex', 0);
 			($scope.position || '').split(' ').forEach((className: string) => $scope.picker.addClass(className));
 			if (!$scope.inline) $scope.picker[0].parentNode.removeChild($scope.picker[0]);
 			else {
@@ -427,9 +429,7 @@ export default class Directive implements ng.IDirective {
 			$scope.input
 				.on('focus click touchstart', () => $scope.$evalAsync($scope.view.open))
 				.on('blur',        			  () => $scope.$evalAsync($scope.view.close))
-				.on('keydown',     			  (e) => {
-					if ($scope.keyboard) $scope.$evalAsync(() => $scope.view.keydown(e));
-				});
+				.on('keydown',     			  (e) => { if ($scope.keyboard) $scope.view.keydown(e); });
 			$element.on('click touchstart', () => focusInput());
 			$scope.container.on('mousedown', (e: JQueryEventObject) => focusInput(e));
 			angular.element(this.$window).on('resize scroll', $scope.view.position);

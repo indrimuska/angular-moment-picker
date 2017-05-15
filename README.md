@@ -58,7 +58,7 @@ Check out the demo page at [http://indrimuska.github.io/angular-moment-picker/](
 
 ## Options
 
-To configure Angular Moment Picker you have to append to your block or your input the attribute options you want to set.
+To configure Angular Moment Picker you have to add to your element or your input the attribute relative to the options you want to set.
 
 ```html
 <div moment-picker="ctrl.birthday" locale="fr" format="LL">
@@ -100,14 +100,14 @@ Append your method to your element and define its behavior in the controller.
 
 ```html
 <div moment-picker="ctrl.exhibition" format="dddd D MMMM" selectable="ctrl.isSelectable(date, type)">
-	Next exhibition is on {{ ctrl.exhibition }}.
+    Next exhibition is on {{ ctrl.exhibition }}.
 </div>
 ```
 
 ```javascript
 ctrl.isSelectable = function (date, type) {
-	// disable all Sundays in the Month View
-	return type != 'day' || date.format('dddd') != 'Sunday';
+    // disable all Sundays in the Month View
+    return type != 'day' || date.format('dddd') != 'Sunday';
 };
 ```
 
@@ -127,7 +127,7 @@ As for methods, to bind an event you only need to attach the right property to y
 
 ```javascript
 ctrl.onChange = function (newValue, oldValue) {
-	$log.log('Meeting changed from ' + oldValue + ' to ' + newValue);
+    $log.log('Meeting changed from ' + oldValue + ' to ' + newValue);
 };
 ```
 

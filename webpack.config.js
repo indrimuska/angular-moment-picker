@@ -1,5 +1,7 @@
 'use strict';
 
+let fs = require('fs');
+let path = require('path');
 let pkg = require('./package');
 let bower = require('./bower');
 let semver = require('semver');
@@ -16,37 +18,52 @@ let increase = (process.argv.filter(argv => argv.match(/^increase=.+$/))[0] || '
 pkg.version = increase ? semver.inc(pkg.version, increase) : pkg.version;
 ['name', 'version', 'description', 'homepage', 'license', 'keywords', 'dependencies'].forEach(field => bower[field] = pkg[field]);
 
+// themes - read file from `src/themes` folder
+let themes = [];
+fs.readdirSync('src/themes').forEach(file => themes.push(file.replace('.less', '')));
+
+// extract plugin settings for css file generation
+let extractBaseTheme = new extractTextPlugin(filename + '.css');
+let extractOtherThemes = themes.map(theme => ({
+	file: path.resolve(__dirname, 'src/themes/' + theme + '.less'),
+	extract: new extractTextPlugin('themes/' + theme + '.css')
+}));
+let extractPluginLoaders = [
+	'css-loader',
+	{ loader: 'postcss-loader', options: { plugins: [ autoprefixer({ browsers: ['> 0%'] }) ] } },
+	'less-loader'
+];
+
 module.exports = {
 	entry: [
 		'./src/index.ts',
-		'./src/index.less'
+		'./src/index.less',
+		...extractOtherThemes.map(theme => theme.file)
 	],
 	output: {
-		path: './dist/',
+		path: path.join(__dirname, 'dist'),
 		filename: filename + '.js'
 	},
 	bail: true,
 	externals: Object.keys(pkg.dependencies),
 	resolve: {
-		extensions: ['', '.ts', '.html', '.less']
+		extensions: ['.ts', '.html', '.less']
 	},
 	module: {
-		preLoaders: [
-			{ test: /\.ts$/, loader: 'tslint' }
-		],
-		loaders: [
-			{ test: /\.ts$/, loader: 'ts' },
-			{ test: /\.html$/, loader: 'html?minimize=true' },
-			{ test: /\.less$/, loader: extractTextPlugin.extract('style', 'css!postcss!less') }
+		rules: [
+			{ test: /\.ts$/, use: ['ts-loader', 'tslint-loader'] },
+			{ test: /\.html$/, use: 'html-loader?minimize=true' },
+			{ test: /\.less$/, exclude: /themes/, use: extractBaseTheme.extract(extractPluginLoaders) },
+			...extractOtherThemes.map(theme => {
+				return { include: theme.file, use: theme.extract.extract(extractPluginLoaders) };
+			})
 		]
 	},
 	plugins: [
-		new extractTextPlugin(filename + '.css'),
+		extractBaseTheme,
+		...extractOtherThemes.map(theme => theme.extract),
 		new webpack.BannerPlugin('Angular Moment Picker - v' + pkg.version + ' - ' + pkg.homepage + ' - (c) 2015 Indri Muska - ' + pkg.license),
 		new generateJsonPlugin('../bower.json', bower, undefined, 2),
 		new generateJsonPlugin('../package.json', pkg, undefined, 2)
-	],
-	postcss: [
-		autoprefixer({ browsers: ['> 0%'] })
 	]
 };
