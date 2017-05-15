@@ -1,7 +1,6 @@
 let webpackConfig = require('./webpack.config');
 let generateJsonPlugin = require('generate-json-webpack-plugin');
 
-webpackConfig.entry = {};
 webpackConfig.devtool = 'source-map';
 webpackConfig.plugins = webpackConfig.plugins.filter(plugin => !(plugin instanceof generateJsonPlugin));
 

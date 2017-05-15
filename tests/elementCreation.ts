@@ -6,16 +6,6 @@ describe('Element creation', () => {
 	// init test
 	test.bootstrap();
 	
-	// creating directive
-	it('should create a `.moment-picker-reference` element that transclude content', () => {
-		let $element = test.buildTemplate('div', { class: 'my-content' }),
-			content;
-		
-		expect($element).toBeDefined();
-		expect($element.hasClass('moment-picker-reference')).toBe(true);
-		expect($element.hasClass('my-content')).toBe(true);
-	});
-	
 	// check transcluded DIV content
 	it('should transclude DIV content', () => {
 		let $element = test.buildTemplate('div', { class: 'my-content' }, 'My content');
