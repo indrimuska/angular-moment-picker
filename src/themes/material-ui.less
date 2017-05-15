@@ -15,10 +15,10 @@
     }
     
     .header-view th { background: @bg-gray; border-radius: 0; min-width: @cell-def-size; height: @cell-def-size; }
-    td {
-        border-radius: @cell-big-size;
-        &:hover { background: @bg-dark-gray; }
+    .header-view th, td {
+        &:hover { background-color: @bg-dark-gray; }
     }
+    td { border-radius: @cell-big-size; }
 
     .moment-picker-specific-views {
         padding: 4px 8px;
@@ -26,6 +26,7 @@
         th { background: none; cursor: default; }
     }
 
+    // specific view - custom sizes
     .decade-view, .year-view {
         td { min-width: @cell-big-size; height: @cell-big-size; }
     }
