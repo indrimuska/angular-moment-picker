@@ -164,15 +164,12 @@
 				{ group: 'Month name, day of month, day of week, year, time (Localized formats)', token: 'llll', output: 'Thu, Sep 4 1986 8:30 PM' },
 			];
 			ctrl.views = ['decade', 'year', 'month', 'day', 'hour', 'minute'];
-			ctrl.defaults = {
-				locale:    'en',
-				format:    'LL LTS',
-				formatDef: momentPicker.format,
-				minView:   momentPicker.minView,
-				maxView:   momentPicker.maxView,
-				startView: momentPicker.startView,
-				today:     momentPicker.today
-			}
+			ctrl.defaults = {};
+			angular.forEach(momentPicker, (value, key) => ctrl.defaults[key] = value);
+			ctrl.defaults.locale = 'en';
+			ctrl.defaults.format = 'LL LTS';
+			ctrl.defaults.formatDef = momentPicker.format;
+			
 			ctrl.builder = angular.copy(ctrl.defaults);
 			ctrl.built = true;
 			ctrl.myInput = moment().format(ctrl.builder.format);
@@ -201,7 +198,9 @@
 				if (availableViews.indexOf(ctrl.builder.startView) < 0)
 					ctrl.builder.startView = availableViews[0];
 			}, true);
-			$scope.$watch('ctrl.builder', function () {
+			$scope.$watch('ctrl.builder', function (newValue, oldValue) {
+				if (newValue.isOpen !== oldValue.isOpen) return;
+				if (ctrl.builder.inline) ctrl.builder.isOpen = false;
 				$timeout(function () {
 					ctrl.built = false;
 					$timeout(function () { ctrl.built = true; });

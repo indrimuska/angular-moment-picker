@@ -170,9 +170,10 @@
 				</div>
 				<div class="example" id="builder">
 					<h3>Builder. <span class="text-muted">You have no excuses now!</span></h3>
+					<p class="text-center">Check out all available options <a href="https://github.com/indrimuska/angular-moment-picker#options">in the official documentation</a>.</p>
 					<div class="builder">
 						<div class="lead results text-center">
-							<span moment-picker="ctrl.myInput" ng-if="ctrl.built"
+							<span moment-picker="ctrl.myInput" ng-if="ctrl.built && !ctrl.builder.inline"
 								locale="{{ctrl.builder.locale}}"
 								ng-attr-format="{{ctrl.builder.format || ctrl.defaults.formatDef}}"
 								min-view="{{ctrl.builder.minView}}"
@@ -183,7 +184,29 @@
 								disable="ctrl.builder.disable"
 								autoclose="ctrl.builder.autoclose"
 								today="ctrl.builder.today"
-								keyboard="ctrl.builder.keyboard">
+								keyboard="ctrl.builder.keyboard"
+								set-on-select="ctrl.builder.setOnSelect"
+								is-open="ctrl.builder.isOpen"
+								show-header="ctrl.builder.showHeader">
+								<i class="mega-octicon octicon-calendar"></i>&nbsp;
+								{{ ctrl.myInput }}
+							</span>
+							<span moment-picker="ctrl.myInput" ng-if="ctrl.built && ctrl.builder.inline"
+								locale="{{ctrl.builder.locale}}"
+								ng-attr-format="{{ctrl.builder.format || ctrl.defaults.formatDef}}"
+								min-view="{{ctrl.builder.minView}}"
+								max-view="{{ctrl.builder.maxView}}"
+								start-view="{{ctrl.builder.startView}}"
+								min-date="ctrl.builder.minDate"
+								max-date="ctrl.builder.maxDate"
+								disable="ctrl.builder.disable"
+								autoclose="ctrl.builder.autoclose"
+								today="ctrl.builder.today"
+								keyboard="ctrl.builder.keyboard"
+								inline="true"
+								set-on-select="ctrl.builder.setOnSelect"
+								is-open="ctrl.builder.isOpen"
+								show-header="ctrl.builder.showHeader">
 								<i class="mega-octicon octicon-calendar"></i>&nbsp;
 								{{ ctrl.myInput }}
 							</span>
@@ -266,28 +289,52 @@
 						</div>
 					</div>
 					<div class="row">
-						<div class="col-md-3">
+						<div class="col-sm-3 col-xs-6">
 							<div class="form-group text-center">
 								<label for="disabled">Disabled</label>
 								<switcher ng-model="ctrl.builder.disable"></switcher>
 							</div>
 						</div>
-							<div class="col-md-3">
-								<div class="form-group text-center">
-									<label for="disabled">Autoclose</label>
-									<switcher ng-model="ctrl.builder.autoclose"></switcher>
-								</div>
+						<div class="col-sm-3 col-xs-6">
+							<div class="form-group text-center">
+								<label for="disabled">Autoclose</label>
+								<switcher ng-model="ctrl.builder.autoclose"></switcher>
 							</div>
-						<div class="col-md-3">
+						</div>
+						<div class="col-sm-3 col-xs-6">
+							<div class="form-group text-center">
+								<label for="disabled">Is open</label>
+								<switcher ng-model="ctrl.builder.isOpen" ng-disabled="ctrl.builder.inline"></switcher>
+							</div>
+						</div>
+						<div class="col-sm-3 col-xs-6">
 							<div class="form-group text-center">
 								<label for="disabled">Today</label>
 								<switcher ng-model="ctrl.builder.today"></switcher>
 							</div>
 						</div>
-						<div class="col-md-3">
+						<div class="col-sm-3 col-xs-6">
 							<div class="form-group text-center">
 								<label for="disabled">Keyboard</label>
 								<switcher ng-model="ctrl.builder.keyboard"></switcher>
+							</div>
+						</div>
+						<div class="col-sm-3 col-xs-6">
+							<div class="form-group text-center">
+								<label for="disabled">Inline</label>
+								<switcher ng-model="ctrl.builder.inline"></switcher>
+							</div>
+						</div>
+						<div class="col-sm-3 col-xs-6">
+							<div class="form-group text-center">
+								<label for="disabled">Set on select</label>
+								<switcher ng-model="ctrl.builder.setOnSelect"></switcher>
+							</div>
+						</div>
+						<div class="col-sm-3 col-xs-6">
+							<div class="form-group text-center">
+								<label for="disabled">Show header</label>
+								<switcher ng-model="ctrl.builder.showHeader"></switcher>
 							</div>
 						</div>
 					</div>
@@ -300,16 +347,21 @@
      start-view="{{ctrl.builder.startView | encoded}}"</span><span ng-show="ctrl.builder.minDate">
      min-date="'{{ctrl.builder.minDate | encoded}}'"</span><span ng-show="ctrl.builder.maxDate">
      max-date="'{{ctrl.builder.maxDate | encoded}}'"</span><span ng-show="ctrl.builder.disable">
-     disable="{{ctrl.builder.disable}}"</span><span ng-show="ctrl.builder.autoclose">
-     autoclose="{{ctrl.builder.autoclose}}"</span><span ng-show="ctrl.builder.today">
-     today="{{ctrl.builder.today}}"</span><span ng-show="ctrl.builder.keyboard">
-     keyboard="{{ctrl.builder.keyboard}}"</span>&gt;
+     disable="{{ctrl.builder.disable}}"</span><span ng-show="ctrl.builder.autoclose != ctrl.defaults.autoclose">
+     autoclose="{{ctrl.builder.autoclose}}"</span><span ng-show="ctrl.builder.isOpen">
+     is-open="{{ctrl.builder.isOpen}}"</span><span ng-show="ctrl.builder.today != ctrl.defaults.today">
+     today="{{ctrl.builder.today}}"</span><span ng-show="ctrl.builder.keyboard != ctrl.defaults.keyboard">
+     keyboard="{{ctrl.builder.keyboard}}"</span><span ng-show="ctrl.builder.inline != ctrl.defaults.inline">
+     inline="true"</span><span ng-show="ctrl.builder.setOnSelect != ctrl.defaults.setOnSelect">
+     set-on-select="{{ctrl.builder.setOnSelect}}"</span><span ng-show="ctrl.builder.showHeader != ctrl.defaults.showHeader">
+     show-header="{{ctrl.builder.showHeader}}"</span>&gt;
     <span ng-non-bindable>{{ ctrl.myInput }}</span>
 &lt;/div&gt;</code></pre>
 					</div>
 				</div>
 				<div class="example">
 					<h3>MomentPickerProvider. <span class="text-muted">Set a default configuration for all the pickers.</span></h3>
+					<p>Check out all available options <a href="https://github.com/indrimuska/angular-moment-picker#momentpickerprovider">in the official documentation</a>.</p>
 					<pre><code class="javascript">angular
     .module('myApp', ['moment-picker'])
     .config(['momentPickerProvider', function (<mark>momentPickerProvider</mark>) {

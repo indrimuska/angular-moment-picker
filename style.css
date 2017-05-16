@@ -40,14 +40,14 @@ pre .clipboard:hover span { max-width: 100px; opacity: 1; }
 .examples { margin-top: 40px; }
 .examples .example { margin-bottom: 70px; }
 .examples .example .lead { color: #597ea2; margin-bottom: 40px; }
-.examples .example .locales .moment-picker { margin: 3px; display: inline-block; }
+.examples .example .locales .btn { margin: 3px; display: inline-block; }
 .examples .example label small { color: #abbbc7; }
 .examples .example .form-group>label { display: block; }
 .examples .example .min-max-containers { min-height: 34px; display: block; }
 .examples .example .builder pre,
 .examples .example .builder .results { margin: 20px 0; }
 .examples .example .builder .results { background: #e4eef5; padding: 10px 0 15px; border-radius: 4px; min-height: 58px; }
-.examples .example .builder .results .moment-picker { display: inline-block; }
+.examples .example .builder .results .moment-picker.inline { padding: 25px; margin-bottom: -10px; margin-top: 15px; border-top: 1px solid rgba(0, 0, 0, .075); }
 
 /* Footer */
 .footer { border-top: 1px solid #e5e5e5; margin: 60px 0; }
