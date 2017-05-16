@@ -61,7 +61,7 @@ Check out the demo page at [http://indrimuska.github.io/angular-moment-picker/](
 
 Angular Moment Picker provides the following additional themes. Each theme has a dedicate stylesheet to be included in the application the overrides the default style.
 
- - **Material UI**
+ - **Material UI** - [Plunker](https://embed.plnkr.co/P48UnN)
    ```html
    <link href="//cdn.rawgit.com/indrimuska/angular-moment-picker/master/dist/themes/material-ui.min.css" rel="stylesheet">
    ```
