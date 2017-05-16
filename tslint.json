@@ -42,6 +42,7 @@
 		"ordered-imports": [false],
 		"prefer-const": false,
 		"quotemark": [true, "single"],
+		"space-before-function-paren": ["error", {"anonymous": "always" }],
 		"switch-default": false,
 		"trailing-comma": [false],
 		"triple-equals": [false],

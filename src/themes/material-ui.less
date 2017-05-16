@@ -11,10 +11,12 @@
         text-shadow: none;
         border-radius: 0;
         padding: 0;
-        border: 1px solid #fff;
     }
     
-    .header-view th { background: @bg-gray; border-radius: 0; min-width: @cell-def-size; height: @cell-def-size; }
+    .header-view {
+        border: 1px solid #fff;
+        th { background: @bg-gray; border-radius: 0; min-width: @cell-def-size; height: @cell-def-size; }
+    }
     .header-view th, td {
         &:hover { background-color: @bg-dark-gray; }
     }

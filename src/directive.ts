@@ -327,6 +327,8 @@ export default class Directive implements ng.IDirective {
 					if (!$ctrl.$modelValue && $scope.value) $ctrl.$setViewValue($scope.value);
 					$ctrl.$commitViewValue();
 					$ctrl.$render();
+				} else {
+					if ($scope.value) $ctrl.$modelValue = valueToMoment($scope.value, $scope);
 				}
 				// view initialization
 				if ($scope.startDate) $scope.view.moment = toMoment($scope.startDate, $scope.format, $scope.locale);
@@ -439,6 +441,7 @@ export default class Directive implements ng.IDirective {
 				$scope.input.off('focus click touchstart blur keydown');
 				$element.off('click touchstart');
 				$scope.container.off('mousedown');
+				$scope.picker.remove();
 				angular.element(this.$window).off('resize scroll', $scope.view.position);
 			});
 		});

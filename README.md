@@ -53,9 +53,20 @@ Check out the demo page at [http://indrimuska.github.io/angular-moment-picker/](
 
 ***Decade view*** | ***Year view*** | ***Month view***
 :---:|:---:|:---:
-![Decade view](http://indrimuska.github.io/angular-moment-picker/img/decade-view.png?) | ![Year view](http://indrimuska.github.io/angular-moment-picker/img/year-view.png?) | ![Month view](http://indrimuska.github.io/angular-moment-picker/img/month-view.png?)
+![Decade view](http://indrimuska.github.io/angular-moment-picker/img/themes/default/decade-view.png?) | ![Year view](http://indrimuska.github.io/angular-moment-picker/img/themes/default/year-view.png?) | ![Month view](http://indrimuska.github.io/angular-moment-picker/img/themes/default/month-view.png?)
 ***Day view*** | ***Hour view*** | ***Minute view***
-![Day view](http://indrimuska.github.io/angular-moment-picker/img/day-view.png?) | ![Hour view](http://indrimuska.github.io/angular-moment-picker/img/hour-view.png?) | ![Minute view](http://indrimuska.github.io/angular-moment-picker/img/minute-view.png?)
+![Day view](http://indrimuska.github.io/angular-moment-picker/img/themes/default/day-view.png?) | ![Hour view](http://indrimuska.github.io/angular-moment-picker/img/themes/default/hour-view.png?) | ![Minute view](http://indrimuska.github.io/angular-moment-picker/img/themes/default/minute-view.png?)
+
+### Additional themes
+
+Angular Moment Picker provides the following additional themes. Each theme has a dedicate stylesheet to be included in the application the overrides the default style.
+
+ - **Material UI**
+   ```html
+   <link href="//cdn.rawgit.com/indrimuska/angular-moment-picker/master/dist/themes/material-ui.min.css" rel="stylesheet">
+   ```
+
+A preview of the each theme is available [here](dist/themes/).
 
 ## Options
 
