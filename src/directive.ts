@@ -173,7 +173,7 @@ export default class Directive implements ng.IDirective {
 					if (!$scope.view.isOpen || $scope.position || $scope.inline) return;
 
 					let element = $element[0],
-						picker = $scope.picker[0],
+						picker = $scope.picker.children()[0],
 						hasClassTop = $scope.picker.hasClass('top'),
 						hasClassRight = $scope.picker.hasClass('right'),
 						offset = getOffset($element[0]),
