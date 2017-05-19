@@ -715,23 +715,29 @@ var Provider = (function () {
             rightArrow: '&rarr;',
             // Decade View
             yearsFormat: 'YYYY',
+            yearsPerLine: 4,
             // Year View
             monthsFormat: 'MMM',
+            monthsPerLine: 4,
             // Month View
             daysFormat: 'D',
+            daysPerLine: moment.weekdays().length,
             // Day View
             hoursFormat: 'HH:[00]',
             hoursStart: 0,
             hoursEnd: 23,
+            hoursPerLine: 4,
             // Hour View
             minutesStep: 5,
             minutesStart: 0,
             minutesEnd: 59,
+            minutesPerLine: 4,
             // Minute View
             secondsFormat: 'ss',
             secondsStep: 1,
             secondsStart: 0,
-            secondsEnd: 59
+            secondsEnd: 59,
+            secondsPerLine: 6
         };
     }
     Provider.prototype.options = function (options) {
@@ -759,7 +765,7 @@ var DayView = (function () {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
         this.provider = provider;
-        this.perLine = 4;
+        this.perLine = provider.hoursPerLine;
         this.rows = {};
     }
     DayView.prototype.render = function () {
@@ -812,7 +818,7 @@ var DecadeView = (function () {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
         this.provider = provider;
-        this.perLine = 4;
+        this.perLine = provider.yearsPerLine;
         this.rows = {};
     }
     DecadeView.prototype.render = function () {
@@ -865,7 +871,7 @@ var HourView = (function () {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
         this.provider = provider;
-        this.perLine = 4;
+        this.perLine = provider.minutesPerLine;
         this.rows = {};
     }
     HourView.prototype.render = function () {
@@ -963,7 +969,7 @@ var MinuteView = (function () {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
         this.provider = provider;
-        this.perLine = 6;
+        this.perLine = provider.secondsPerLine;
         this.rows = {};
     }
     MinuteView.prototype.render = function () {
@@ -1042,7 +1048,7 @@ var MonthView = (function () {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
         this.provider = provider;
-        this.perLine = moment.weekdays().length;
+        this.perLine = provider.daysPerLine;
         this.rows = [];
     }
     MonthView.prototype.render = function () {
@@ -1101,7 +1107,7 @@ var YearView = (function () {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
         this.provider = provider;
-        this.perLine = 4;
+        this.perLine = provider.monthsPerLine;
         this.rows = {};
     }
     YearView.prototype.render = function () {

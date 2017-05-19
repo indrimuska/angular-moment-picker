@@ -180,19 +180,25 @@ left-arrow | `"&larr;"` | Left arrow string (HTML allowed).
 right-arrow | `"&rarr;"` | Right arrow string (HTML allowed).
 additions | `{ top: undefined, bottom: undefined }` | Template url for custom contents above and below each picker views (inside the dialog).
 years-format | `"YYYY"` | Years format in `decade` view.
+years-perLine | `4` | Years per line in `decade` view.
 months-format | `"MMM"` | Months format in `year` view.
+months-perLine | `4` | Months per line in `year` view.
 days-format | `"D"` | Days format in `month` view.
+days-perLine | `moment.weekdays().length` | Days per line in `month` view.
 hours-format | `"HH:[00]"` | Hours format in `day` view.
 hours-start | `0` | First rendered hour in `day` view (24h format).
 hours-end | `23` | Last rendered hour in `day` view (24h format).
+hours-perLine | `4` | Hours per line in `day` view.
 minutes-format | <sup>2</sub> | Minutes format in `hour` view.
 minutes-step | `5` | Step between each visible minute in `hour` view.
 minutes-start | `0` | First rendered minute in `hour` view.
 minutes-end | `59` | Last rendered minute in `hour` view.
+minutes-perLine | `4` | Minutes per line in `hour` view.
 seconds-format | `"ss"` | Seconds format in `minute` view.
 seconds-step | `1` | Step between each visible second in `minute` view.
 seconds-start | `0` | First rendered second in `minute` view.
 seconds-end | `59` | Last rendered second in `minute` view.
+seconds-perLine | `6` | Seconds per line in `minute` view.
 
 ## Notes
 
