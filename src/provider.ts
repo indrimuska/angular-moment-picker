@@ -19,30 +19,35 @@ export interface IProviderOptions {
 	rightArrow?: string;
 	
 	// Decade View
-	yearsFormat?: string;
+	yearsFormat?: string;	
 	
 	// Year View
 	monthsFormat?: string;
+	monthsHeaderFormat?: string;
 	
 	// Month View
 	daysFormat?: string;
+	daysHeaderFormat?: string; 
 	
 	// Day View
 	hoursFormat?: string;
 	hoursStart?: number;
 	hoursEnd?: number;
+	hoursHeaderFormat?: string;
 	
 	// Hour View
 	minutesFormat?: string;
 	minutesStep?: number;
 	minutesStart?: number;
 	minutesEnd?: number;
+	minutesHeaderFormat?: string;
 
 	// Minute View
 	secondsFormat?: string;
 	secondsStep?: number;
 	secondsStart?: number;
 	secondsEnd?: number;
+	secondsHeaderFormat?: string;
 }
 
 export default class Provider implements angular.IServiceProvider {
@@ -67,25 +72,30 @@ export default class Provider implements angular.IServiceProvider {
 		
 		// Year View
 		monthsFormat: 'MMM',
+		monthsHeaderFormat: 'YYYY',
 		
 		// Month View
 		daysFormat: 'D',
+		daysHeaderFormat: 'MMMM YYYY',
 		
 		// Day View
 		hoursFormat: 'HH:[00]',
 		hoursStart: 0,
 		hoursEnd: 23,
+		hoursHeaderFormat: 'LLL',
 		
 		// Hour View
 		minutesStep: 5,
 		minutesStart: 0,
 		minutesEnd: 59,
-		
+		minutesHeaderFormat: 'lll',
+
 		// Minute View
 		secondsFormat: 'ss',
 		secondsStep: 1,
 		secondsStart: 0,
-		secondsEnd: 59
+		secondsEnd: 59,
+		secondsHeaderFormat: 'lll'
 	};
 	
 	public options(options: IProviderOptions): IProviderOptions {
