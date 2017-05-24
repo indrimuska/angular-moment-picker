@@ -82,7 +82,7 @@ export default class Provider implements angular.IServiceProvider {
 		hoursFormat: 'HH:[00]',
 		hoursStart: 0,
 		hoursEnd: 23,
-		hoursHeaderFormat: 'LLL',
+		hoursHeaderFormat: 'LL',
 		
 		// Hour View
 		minutesStep: 5,
