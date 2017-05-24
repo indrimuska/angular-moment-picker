@@ -36,7 +36,7 @@ class YearView implements IView {
 			month.add(1, 'months');
 		});
 		// return title
-		return this.$scope.view.moment.format('YYYY');
+		return this.$scope.view.moment.format(this.provider.monthsHeaderFormat);
 	}
 
 	public set(month: IViewItem): void {

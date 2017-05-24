@@ -46,7 +46,7 @@ export default class MonthView implements IView {
 		// render headers
 		this.headers = moment.weekdays().map((d: string, i: number) => moment().locale(this.$scope.locale).startOf('week').add(i, 'day').format('dd'));
 		// return title
-		return this.$scope.view.moment.format('MMMM YYYY');
+		return this.$scope.view.moment.format(this.provider.daysHeaderFormat);
 	}
 	
 	public set(day: IViewItem): void {
