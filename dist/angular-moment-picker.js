@@ -385,7 +385,7 @@ var Directive = (function () {
                     position: function () {
                         if (!$scope.view.isOpen || $scope.position || $scope.inline)
                             return;
-                        var element = $element[0], picker = $scope.picker[0], hasClassTop = $scope.picker.hasClass('top'), hasClassRight = $scope.picker.hasClass('right'), offset = helpers_1.getOffset($element[0]), top = offset.top - _this.$window.pageYOffset, left = offset.left - _this.$window.pageXOffset, winWidth = _this.$window.innerWidth, winHeight = _this.$window.innerHeight, shouldHaveClassTop = top + _this.$window.pageYOffset - picker.offsetHeight > 0 && top > winHeight / 2, shouldHaveClassRight = left + picker.offsetWidth > winWidth, pickerTop = offset.top + (shouldHaveClassTop ? 0 : element.offsetHeight) + 'px', pickerLeft = offset.left + 'px', pickerWidth = element.offsetWidth + 'px';
+                        var element = $element[0], picker = $scope.picker.children()[0], hasClassTop = $scope.picker.hasClass('top'), hasClassRight = $scope.picker.hasClass('right'), offset = helpers_1.getOffset($element[0]), top = offset.top - _this.$window.pageYOffset, left = offset.left - _this.$window.pageXOffset, winWidth = _this.$window.innerWidth, winHeight = _this.$window.innerHeight, shouldHaveClassTop = top + _this.$window.pageYOffset - picker.offsetHeight > 0 && top > winHeight / 2, shouldHaveClassRight = left + picker.offsetWidth > winWidth, pickerTop = offset.top + (shouldHaveClassTop ? 0 : element.offsetHeight) + 'px', pickerLeft = offset.left + 'px', pickerWidth = element.offsetWidth + 'px';
                         if (!hasClassTop && shouldHaveClassTop)
                             $scope.picker.addClass('top');
                         if (hasClassTop && !shouldHaveClassTop)
@@ -717,21 +717,26 @@ var Provider = (function () {
             yearsFormat: 'YYYY',
             // Year View
             monthsFormat: 'MMM',
+            monthsHeaderFormat: 'YYYY',
             // Month View
             daysFormat: 'D',
+            daysHeaderFormat: 'MMMM YYYY',
             // Day View
             hoursFormat: 'HH:[00]',
             hoursStart: 0,
             hoursEnd: 23,
+            hoursHeaderFormat: 'LLL',
             // Hour View
             minutesStep: 5,
             minutesStart: 0,
             minutesEnd: 59,
+            minutesHeaderFormat: 'lll',
             // Minute View
             secondsFormat: 'ss',
             secondsStep: 1,
             secondsStart: 0,
-            secondsEnd: 59
+            secondsEnd: 59,
+            secondsHeaderFormat: 'lll'
         };
     }
     Provider.prototype.options = function (options) {
@@ -785,7 +790,7 @@ var DayView = (function () {
             hour.add(1, 'hours');
         }
         // return title
-        return this.$scope.view.moment.format('LL');
+        return this.$scope.view.moment.format(this.provider.hoursHeaderFormat);
     };
     DayView.prototype.set = function (hour) {
         if (!hour.selectable)
@@ -895,7 +900,7 @@ var HourView = (function () {
         if (this.$scope.keyboard)
             this.highlightClosest();
         // return title
-        return this.$scope.view.moment.clone().startOf('hour').format('lll');
+        return this.$scope.view.moment.clone().startOf('hour').format(this.provider.minutesHeaderFormat);
     };
     HourView.prototype.set = function (minute) {
         if (!minute.selectable)
@@ -994,7 +999,7 @@ var MinuteView = (function () {
         if (this.$scope.keyboard)
             this.highlightClosest();
         // return title
-        return this.$scope.view.moment.clone().startOf('minute').format('lll');
+        return this.$scope.view.moment.clone().startOf('minute').format(this.provider.secondsHeaderFormat);
     };
     MinuteView.prototype.set = function (second) {
         if (!second.selectable)
@@ -1073,7 +1078,7 @@ var MonthView = (function () {
         // render headers
         this.headers = moment.weekdays().map(function (d, i) { return moment().locale(_this.$scope.locale).startOf('week').add(i, 'day').format('dd'); });
         // return title
-        return this.$scope.view.moment.format('MMMM YYYY');
+        return this.$scope.view.moment.format(this.provider.daysHeaderFormat);
     };
     MonthView.prototype.set = function (day) {
         if (!day.selectable)
@@ -1126,7 +1131,7 @@ var YearView = (function () {
             month.add(1, 'months');
         });
         // return title
-        return this.$scope.view.moment.format('YYYY');
+        return this.$scope.view.moment.format(this.provider.monthsHeaderFormat);
     };
     YearView.prototype.set = function (month) {
         if (!month.selectable)
