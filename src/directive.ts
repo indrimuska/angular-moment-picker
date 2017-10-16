@@ -429,17 +429,17 @@ export default class Directive implements ng.IDirective {
 			};
 			// use `touchstart` for iOS Safari, where click events aren't propogated under most circumstances.
 			$scope.input
-				.on('focus click touchstart', () => $scope.$evalAsync($scope.view.open))
+				.on('focus click', () => $scope.$evalAsync($scope.view.open))
 				.on('blur',        			  () => $scope.$evalAsync($scope.view.close))
 				.on('keydown',     			  (e) => { if ($scope.keyboard) $scope.view.keydown(e); });
-			$element.on('click touchstart', () => focusInput());
+			$element.on('click', () => focusInput());
 			$scope.container.on('mousedown', (e: JQueryEventObject) => focusInput(e));
 			angular.element(this.$window).on('resize scroll', $scope.view.position);
 
 			// unbind events on destroy
 			$scope.$on('$destroy', () => {
-				$scope.input.off('focus click touchstart blur keydown');
-				$element.off('click touchstart');
+				$scope.input.off('focus click blur keydown');
+				$element.off('click');
 				$scope.container.off('mousedown');
 				$scope.picker.remove();
 				angular.element(this.$window).off('resize scroll', $scope.view.position);
