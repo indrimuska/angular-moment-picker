@@ -28,8 +28,8 @@ export const momentToValue = (momentObject: moment.Moment, format: string): Valu
 export const valueToMoment = (formattedValue: Value, $scope: IDirectiveScopeInternal): moment.Moment => {
 	let momentValue: moment.Moment;
 	if (!formattedValue) return momentValue;
-	if (!$scope.format) momentValue = moment(formattedValue);
-	else momentValue = moment(formattedValue, $scope.format, $scope.locale);
+	if (!$scope.format && !$scope.parseFormat) momentValue = moment(formattedValue);
+	else momentValue = moment(formattedValue, $scope.parseFormat || $scope.format, $scope.locale);
 	if ($scope.model) {
 		// set value for each view precision (from Decade View to minView)
 		const views = $scope.views.all.slice(0, $scope.views.all.indexOf($scope.detectedMinView));
