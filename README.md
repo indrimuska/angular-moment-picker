@@ -88,6 +88,7 @@ moment-picker | | Two-way bindable property as **formatted datetime string**. | 
 ng-model | | Two-way bindable property as **Moment.js object**. | [Plunker](https://embed.plnkr.co/hs10SM)
 locale | `"en"` | Locale code. <sup>1</sup> | [Plunker](https://embed.plnkr.co/z3KSxy)
 format | `"L LTS"` | Format of the output value and min/max date. <sup>1</sup> | [Plunker](https://embed.plnkr.co/rWtdhO)
+parse-format | `null` | Format or list of formats for parsing user input. <sup>1</sup> |
 min-view | `"decade"` | Minimum navigable view. | [Plunker](https://embed.plnkr.co/wAGqtl)
 max-view | `"minute"` | Maximum navigable view. | [Plunker](https://embed.plnkr.co/GYRv7J)
 start-view | `"year"` | Initial view when the picker is open. | [Plunker](https://embed.plnkr.co/wFXcGL)
@@ -165,6 +166,7 @@ Property | Default | Description
 ---|---|---
 locale | `"en"` | Locale code. <sup>1</sup>
 format | `"L LTS"` | Format of the output value and min/max date. <sup>1</sup>
+parse-format | `null` | Format or list of formats for parsing user input. <sup>1</sup>
 min-view | `"decade"` | Minimum navigable view.
 max-view | `"minute"` | Maximum navigable view.
 start-view | `"year"` | Initial view after picker opening.

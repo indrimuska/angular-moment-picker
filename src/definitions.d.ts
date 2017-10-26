@@ -13,6 +13,7 @@ export interface IDirectiveScope extends ng.IScope {
 	model?: moment.Moment;
 	locale?: string;
 	format?: string;
+	parseFormat?: string | string[];
 	minView?: ViewString;
 	maxView?: ViewString;
 	startView?: ViewString;
