@@ -3,7 +3,7 @@ import { IProviderOptions } from '../provider';
 import { isValidMoment } from '../utility';
 
 export default class DecadeView implements IView {
-	public perLine: number = 4;
+	public perLine: number = this.provider.yearsPerLine;
 	public rows: { [index: number]: IViewItem[] } = {};
 
 	constructor(

@@ -4,7 +4,7 @@ import { IProviderOptions } from '../provider';
 import { isValidMoment } from '../utility';
 
 class YearView implements IView {
-	public perLine: number = 4;
+	public perLine: number = this.provider.monthsPerLine;
 	public rows: { [index: number]: IViewItem[] } = {};
 
 	constructor(

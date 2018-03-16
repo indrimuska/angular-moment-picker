@@ -209,7 +209,7 @@ var helpers_1 = __webpack_require__(8);
 var views_1 = __webpack_require__(13);
 var utility_1 = __webpack_require__(0);
 var templateHtml = __webpack_require__(6);
-var Directive = (function () {
+var Directive = /** @class */ (function () {
     function Directive($timeout, $sce, $log, $window, provider, $compile, $templateCache) {
         var _this = this;
         this.$timeout = $timeout;
@@ -696,7 +696,7 @@ exports.getOffset = function (element) {
 
 exports.__esModule = true;
 var angular = __webpack_require__(1);
-var Provider = (function () {
+var Provider = /** @class */ (function () {
     function Provider() {
         this.settings = {
             locale: 'en',
@@ -715,23 +715,28 @@ var Provider = (function () {
             rightArrow: '&rarr;',
             // Decade View
             yearsFormat: 'YYYY',
+            yearsPerLine: 4,
             // Year View
             monthsFormat: 'MMM',
+            monthsPerLine: 4,
             // Month View
             daysFormat: 'D',
             // Day View
             hoursFormat: 'HH:[00]',
             hoursStart: 0,
             hoursEnd: 23,
+            hoursPerLine: 4,
             // Hour View
             minutesStep: 5,
             minutesStart: 0,
             minutesEnd: 59,
+            minutesPerLine: 4,
             // Minute View
             secondsFormat: 'ss',
             secondsStep: 1,
             secondsStart: 0,
-            secondsEnd: 59
+            secondsEnd: 59,
+            secondsPerLine: 6
         };
     }
     Provider.prototype.options = function (options) {
@@ -754,12 +759,12 @@ exports["default"] = Provider;
 
 exports.__esModule = true;
 var utility_1 = __webpack_require__(0);
-var DayView = (function () {
+var DayView = /** @class */ (function () {
     function DayView($scope, $ctrl, provider) {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
         this.provider = provider;
-        this.perLine = 4;
+        this.perLine = this.provider.hoursPerLine;
         this.rows = {};
     }
     DayView.prototype.render = function () {
@@ -807,12 +812,12 @@ exports["default"] = DayView;
 
 exports.__esModule = true;
 var utility_1 = __webpack_require__(0);
-var DecadeView = (function () {
+var DecadeView = /** @class */ (function () {
     function DecadeView($scope, $ctrl, provider) {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
         this.provider = provider;
-        this.perLine = 4;
+        this.perLine = this.provider.yearsPerLine;
         this.rows = {};
     }
     DecadeView.prototype.render = function () {
@@ -860,12 +865,12 @@ exports.__esModule = true;
 var angular = __webpack_require__(1);
 var moment = __webpack_require__(2);
 var utility_1 = __webpack_require__(0);
-var HourView = (function () {
+var HourView = /** @class */ (function () {
     function HourView($scope, $ctrl, provider) {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
         this.provider = provider;
-        this.perLine = 4;
+        this.perLine = this.provider.minutesPerLine;
         this.rows = {};
     }
     HourView.prototype.render = function () {
@@ -958,12 +963,12 @@ exports.MinuteView = minuteView_1["default"];
 exports.__esModule = true;
 var angular = __webpack_require__(1);
 var utility_1 = __webpack_require__(0);
-var MinuteView = (function () {
+var MinuteView = /** @class */ (function () {
     function MinuteView($scope, $ctrl, provider) {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
         this.provider = provider;
-        this.perLine = 6;
+        this.perLine = this.provider.secondsPerLine;
         this.rows = {};
     }
     MinuteView.prototype.render = function () {
@@ -1037,7 +1042,7 @@ exports.__esModule = true;
 var angular = __webpack_require__(1);
 var moment = __webpack_require__(2);
 var utility_1 = __webpack_require__(0);
-var MonthView = (function () {
+var MonthView = /** @class */ (function () {
     function MonthView($scope, $ctrl, provider) {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
@@ -1096,12 +1101,12 @@ exports["default"] = MonthView;
 exports.__esModule = true;
 var moment = __webpack_require__(2);
 var utility_1 = __webpack_require__(0);
-var YearView = (function () {
+var YearView = /** @class */ (function () {
     function YearView($scope, $ctrl, provider) {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
         this.provider = provider;
-        this.perLine = 4;
+        this.perLine = this.provider.monthsPerLine;
         this.rows = {};
     }
     YearView.prototype.render = function () {

@@ -4,7 +4,7 @@ import { IProviderOptions } from '../provider';
 import { isValidMoment } from '../utility';
 
 export default class MinuteView implements IView {
-	public perLine: number = 6;
+	public perLine: number = this.provider.secondsPerLine;
 	public rows: { [index: number]: IViewItem[] } = {};
 
 	constructor(

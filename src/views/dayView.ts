@@ -3,7 +3,7 @@ import { IProviderOptions } from '../provider';
 import { isValidMoment } from '../utility';
 
 export default class DayView implements IView {
-	public perLine: number = 4;
+	public perLine: number = this.provider.hoursPerLine;
 	public rows: { [index: number]: IViewItem[] } = {};
 
 	constructor(
