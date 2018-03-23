@@ -104,7 +104,7 @@ exports.valueToMoment = function (formattedValue, $scope) {
     if (!$scope.format)
         momentValue = moment(formattedValue);
     else
-        momentValue = moment(formattedValue, $scope.format, $scope.locale, true);
+        momentValue = moment(formattedValue, $scope.formats, $scope.locale, true);
     if ($scope.model) {
         // set value for each view precision (from Decade View to minView)
         var views = $scope.views.all.slice(0, $scope.views.all.indexOf($scope.detectedMinView));
@@ -228,6 +228,7 @@ var Directive = /** @class */ (function () {
             model: '=?ngModel',
             locale: '@?',
             format: '@?',
+            formats: '@?',
             minView: '@?',
             maxView: '@?',
             startView: '@?',
@@ -252,7 +253,8 @@ var Directive = /** @class */ (function () {
             $transclude(function ($transElement) {
                 // one-way binding attributes
                 angular.forEach([
-                    'locale', 'format', 'minView', 'maxView', 'startView', 'position', 'inline', 'validate', 'autoclose', 'setOnSelect', 'today',
+                    'locale', 'format', 'formats', 'minView', 'maxView', 'startView', 'position', 'inline', 'validate',
+                    'autoclose', 'setOnSelect', 'today',
                     'keyboard', 'showHeader', 'leftArrow', 'rightArrow', 'additions'
                 ], function (attr) {
                     if (!angular.isDefined($scope[attr]))
@@ -701,6 +703,7 @@ var Provider = /** @class */ (function () {
         this.settings = {
             locale: 'en',
             format: 'L LTS',
+            formats: ['L'],
             minView: 'decade',
             maxView: 'minute',
             startView: 'year',

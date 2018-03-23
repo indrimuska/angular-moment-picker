@@ -18,6 +18,7 @@ export default class Directive implements ng.IDirective {
 		model:       '=?ngModel',
 		locale:      '@?',
 		format:      '@?',
+		formats:     '@?',
 		minView:     '@?',
 		maxView:     '@?',
 		startView:   '@?',
@@ -52,7 +53,8 @@ export default class Directive implements ng.IDirective {
 		$transclude(($transElement: ng.IAugmentedJQuery) => {
 			// one-way binding attributes
 			angular.forEach([
-				'locale', 'format', 'minView', 'maxView', 'startView', 'position', 'inline', 'validate', 'autoclose', 'setOnSelect', 'today',
+				'locale', 'format', 'formats', 'minView', 'maxView', 'startView', 'position', 'inline', 'validate', 
+				'autoclose', 'setOnSelect', 'today',
 				'keyboard', 'showHeader', 'leftArrow', 'rightArrow', 'additions'
 			], (attr: string) => {
 				if (!angular.isDefined($scope[attr])) $scope[attr] = this.provider[attr];
