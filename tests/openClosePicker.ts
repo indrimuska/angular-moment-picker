@@ -16,7 +16,7 @@ describe('Open / close picker', () => {
 		$divContent   = test.buildTemplate('div', { class: 'div-picker' });
 	});
 	
-	const isVisible = ($element: ng.IAugmentedJQuery) => test.getPicker($element).is(':visible');
+	const isVisible = ($element: ng.IAugmentedJQuery) =>(test.getPicker($element)as any).is(':visible');
 	
 	// open picker on click
 	it('should open the picker on click', () => {

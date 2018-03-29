@@ -5,6 +5,7 @@ import { IProviderOptions } from '../../src/provider';
 import { ViewString, IView } from '../../src/definitions';
 import { KEYS } from '../../src/utility';
 import * as views from '../../src/views';
+import * as $ from 'jquery';
 
 describe('Keyboard', () => {
 
@@ -20,7 +21,7 @@ describe('Keyboard', () => {
 	// create an event object for each key to test
 	const EVENTS: { [name: string]: () => JQueryEventObject } = {};
 	angular.forEach(KEYS, (code: number, key: MockKeyboardKeys) => {
-		EVENTS[key] = () => $.Event('keydown', { keyCode: code });
+		EVENTS[key] = () => $.Event('keydown', { keyCode: code }) as any;
 	});
 
 	/**
@@ -65,7 +66,7 @@ describe('Keyboard', () => {
 	describe('picker open/close', () => {
 		let $input: ng.IAugmentedJQuery;
 
-		const isOpen = () => test.getPicker($input).is(':visible');
+		const isOpen = () => (test.getPicker($input) as any).is(':visible');
 
 		beforeEach(inject(($rootScope) => {
 			$input = test.buildTemplate('input', { keyboard: 'true' });

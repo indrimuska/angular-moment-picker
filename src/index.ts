@@ -9,7 +9,7 @@ angular
 		'$timeout', '$sce', '$log', '$window', 'momentPicker', '$compile', '$templateCache',
 		($timeout: ng.ITimeoutService, $sce: ng.ISCEService, $log: ng.ILogService, $window: ng.IWindowService, momentPicker: Provider,
 		$compile: ng.ICompileService, $templateCache: ng.ITemplateCacheService) => {
-			return new Directive($timeout, $sce, $log, $window, momentPicker, $compile, $templateCache);
+			return new Directive($timeout, $sce, $log, $window, momentPicker as any, $compile, $templateCache);
 		}
 	]);
 

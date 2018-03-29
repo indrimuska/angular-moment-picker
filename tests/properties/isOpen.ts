@@ -14,7 +14,7 @@ describe('Property `isOpen`', () => {
 		$rootScope = _$rootScope_;
 	}));
 	
-	const isVisible = ($element: ng.IAugmentedJQuery) => test.getPicker($element).is(':visible');
+	const isVisible = ($element: ng.IAugmentedJQuery) => (test.getPicker($element) as any).is(':visible');
 	
 	it('should open the picker when set to `true`', () => {
 		let $picker = test.buildTemplate('input', { isOpen: true });

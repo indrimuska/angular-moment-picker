@@ -18,6 +18,7 @@ export default class Directive implements ng.IDirective {
 		model:       '=?ngModel',
 		locale:      '@?',
 		format:      '@?',
+		formats:     '@?',
 		minView:     '@?',
 		maxView:     '@?',
 		startView:   '@?',
@@ -52,7 +53,8 @@ export default class Directive implements ng.IDirective {
 		$transclude(($transElement: ng.IAugmentedJQuery) => {
 			// one-way binding attributes
 			angular.forEach([
-				'locale', 'format', 'minView', 'maxView', 'startView', 'position', 'inline', 'validate', 'autoclose', 'setOnSelect', 'today',
+				'locale', 'format', 'formats', 'minView', 'maxView', 'startView', 'position', 'inline', 'validate', 
+				'autoclose', 'setOnSelect', 'today',
 				'keyboard', 'showHeader', 'leftArrow', 'rightArrow', 'additions'
 			], (attr: string) => {
 				if (!angular.isDefined($scope[attr])) $scope[attr] = this.provider[attr];
@@ -431,7 +433,7 @@ export default class Directive implements ng.IDirective {
 			$scope.input
 				.on('focus click touchstart', () => $scope.$evalAsync($scope.view.open))
 				.on('blur',        			  () => $scope.$evalAsync($scope.view.close))
-				.on('keydown',     			  (e) => { if ($scope.keyboard) $scope.view.keydown(e); });
+				.on('keydown',     			  (e) => { if ($scope.keyboard) $scope.view.keydown(e as any); });
 			$element.on('click touchstart', () => focusInput());
 			$scope.container.on('mousedown', (e: JQueryEventObject) => focusInput(e));
 			angular.element(this.$window).on('resize scroll', $scope.view.position);
