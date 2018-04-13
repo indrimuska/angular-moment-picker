@@ -25,6 +25,7 @@
   "scripts": {
     "build": "webpack",
     "minify": "webpack && webpack -p",
+    "dev": "webpack --watch",
     "release": "npm run test && webpack --define increase='patch' && webpack -p",
     "test": "node ./node_modules/karma/bin/karma start"
   },

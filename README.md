@@ -1,7 +1,7 @@
 # Angular Moment Picker
 
 [![Join the chat at https://gitter.im/indrimuska/angular-moment-picker](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/indrimuska/angular-moment-picker?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
-[![Build Status](https://travis-ci.org/indrimuska/angular-moment-picker.svg)](https://travis-ci.org/indrimuska/angular-moment-picker)
+[![Build Status](https://travis-ci.org/Guysbert/angular-moment-picker.svg)](https://travis-ci.org/Guysbert/angular-moment-picker)
 
 [![NPM version](http://img.shields.io/npm/v/angular-moment-picker.svg?style=flat)](https://npmjs.org/package/angular-moment-picker)
 [![NPM downloads](http://img.shields.io/npm/dm/angular-moment-picker.svg?style=flat)](https://npmjs.org/package/angular-moment-picker)
@@ -180,19 +180,24 @@ left-arrow | `"&larr;"` | Left arrow string (HTML allowed).
 right-arrow | `"&rarr;"` | Right arrow string (HTML allowed).
 additions | `{ top: undefined, bottom: undefined }` | Template url for custom contents above and below each picker views (inside the dialog).
 years-format | `"YYYY"` | Years format in `decade` view.
+years-per-line | 4 | Number of years shown per line.
 months-format | `"MMM"` | Months format in `year` view.
+months-per-line | 4 | Number of months shown per line.
 days-format | `"D"` | Days format in `month` view.
 hours-format | `"HH:[00]"` | Hours format in `day` view.
 hours-start | `0` | First rendered hour in `day` view (24h format).
 hours-end | `23` | Last rendered hour in `day` view (24h format).
-minutes-format | <sup>2</sub> | Minutes format in `hour` view.
+hours-per-line | 4 | Number of hours shown per line.
+minutes-format | `"HH:mm"` | Minutes format in `hour` view.
 minutes-step | `5` | Step between each visible minute in `hour` view.
 minutes-start | `0` | First rendered minute in `hour` view.
 minutes-end | `59` | Last rendered minute in `hour` view.
+minutes-per-line | 4 | Number of hours minutes per line.
 seconds-format | `"ss"` | Seconds format in `minute` view.
 seconds-step | `1` | Step between each visible second in `minute` view.
 seconds-start | `0` | First rendered second in `minute` view.
 seconds-end | `59` | Last rendered second in `minute` view.
+seconds-per-line | 6 | Number of seconds minutes per line.
 
 ## Notes
 
