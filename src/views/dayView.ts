@@ -29,7 +29,8 @@ export default class DayView implements IView {
 				hour: hour.hour(),
 				class: [
 					this.$scope.keyboard && hour.isSame(this.$scope.view.moment, 'hour') ? 'highlighted' : '',
-					!selectable ? 'disabled' : isValidMoment(this.$ctrl.$modelValue) && hour.isSame(this.$ctrl.$modelValue, 'hour') ? 'selected' : ''
+					!selectable ? 'disabled' : isValidMoment(this.$ctrl.$modelValue) && hour.isSame(this.$ctrl.$modelValue, 'hour') ? 'selected' : '',
+					this.$scope.limits.isRangeHighlighted(hour, 'hour')
 				].join(' ').trim(),
 				selectable: selectable
 			});

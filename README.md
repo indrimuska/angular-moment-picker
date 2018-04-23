@@ -105,6 +105,8 @@ today | `false` | Highlights the current day. | [Plunker](https://embed.plnkr.co
 keyboard | `false` | Allows using the keyboard to navigate the picker. | [Plunker](https://embed.plnkr.co/OdUhHx)
 show-header | `true` | Shows the header in the view. | [Plunker](https://embed.plnkr.co/PCL4mh)
 additions | `{ top: undefined, bottom: undefined }` | Template url for custom contents above and below each picker views (inside the dialog). | [Plunker](https://embed.plnkr.co/CXOH5U)
+range-start | | Beginning date set when rangeSelection is set to true |
+range-end | | Ending date set when rangeSelection is set to true |
 
 ## Methods
 
@@ -193,6 +195,7 @@ seconds-format | `"ss"` | Seconds format in `minute` view.
 seconds-step | `1` | Step between each visible second in `minute` view.
 seconds-start | `0` | First rendered second in `minute` view.
 seconds-end | `59` | Last rendered second in `minute` view.
+rangeSelection | `false` | Allows selecting a range of dates. Set on range-start and range-end options
 
 ## Notes
 

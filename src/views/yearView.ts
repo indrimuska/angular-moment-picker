@@ -29,7 +29,8 @@ class YearView implements IView {
 				month: month.month(),
 				class: [
 					this.$scope.keyboard && month.isSame(this.$scope.view.moment, 'month') ? 'highlighted' : '',
-					!selectable ? 'disabled' : isValidMoment(this.$ctrl.$modelValue) && month.isSame(this.$ctrl.$modelValue, 'month') ? 'selected' : ''
+					!selectable ? 'disabled' : isValidMoment(this.$ctrl.$modelValue) && month.isSame(this.$ctrl.$modelValue, 'month') ? 'selected' : '',
+					this.$scope.limits.isRangeHighlighted(month, 'month')
 				].join(' ').trim(),
 				selectable: selectable
 			});
