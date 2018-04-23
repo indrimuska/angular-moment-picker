@@ -34,7 +34,8 @@ export default class HourView implements IView {
 				minute: minute.minute(),
 				class: [
 					this.$scope.keyboard && minute.isSame(this.$scope.view.moment, 'minute') ? 'highlighted' : '',
-					!selectable ? 'disabled' : isValidMoment(this.$ctrl.$modelValue) && minute.isSame(this.$ctrl.$modelValue, 'minute') ? 'selected' : ''
+					!selectable ? 'disabled' : isValidMoment(this.$ctrl.$modelValue) && minute.isSame(this.$ctrl.$modelValue, 'minute') ? 'selected' : '',
+					this.$scope.limits.isRangeHighlighted(minute, 'minute')
 				].join(' ').trim(),
 				selectable: selectable
 			});

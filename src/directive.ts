@@ -36,7 +36,10 @@ export default class Directive implements ng.IDirective {
 		showHeader:  '=?',
 		additions:   '=?',
 		change:      '&?',
-		selectable:  '&?'
+		selectable:  '&?',
+		rangeSelection: '@?',
+		rangeStart: '=?rangeStart',
+		rangeEnd: '=?rangeEnd'
 	};
 
 	constructor(
@@ -53,7 +56,7 @@ export default class Directive implements ng.IDirective {
 			// one-way binding attributes
 			angular.forEach([
 				'locale', 'format', 'minView', 'maxView', 'startView', 'position', 'inline', 'validate', 'autoclose', 'setOnSelect', 'today',
-				'keyboard', 'showHeader', 'leftArrow', 'rightArrow', 'additions'
+				'keyboard', 'showHeader', 'leftArrow', 'rightArrow', 'additions', 'rangeSelection', 'rangeStart', 'rangeEnd'
 			], (attr: string) => {
 				if (!angular.isDefined($scope[attr])) $scope[attr] = this.provider[attr];
 				if (!angular.isDefined($attrs[attr])) $attrs[attr] = $scope[attr];
@@ -79,7 +82,18 @@ export default class Directive implements ng.IDirective {
 					} catch (e) {
 						this.$log.error(e);
 					}
+					if ($scope.rangeSelection && $scope.rangeStart && !$scope.rangeEnd && value.isBefore($scope.rangeStart, precision)) {
+						return false;
+					}
 					return $scope.limits.isAfterOrEqualMin(value, precision) && $scope.limits.isBeforeOrEqualMax(value, precision) && selectable;
+				},
+				isRangeHighlighted: (value: moment.Moment, precision?: moment.unitOfTime.StartOf) => {
+					return $scope.rangeSelection &&
+							$scope.rangeStart &&
+							$scope.rangeEnd &&
+							value.isSameOrAfter($scope.rangeStart, precision) &&
+							value.isSameOrBefore($scope.rangeEnd, precision)
+								? 'rangeHighlight' : '';
 				},
 				checkValue: () => {
 					if (!isValidMoment($ctrl.$modelValue) || !$scope.validate) return;
@@ -288,6 +302,14 @@ export default class Directive implements ng.IDirective {
 					if ($scope.setOnSelect) update();
 					if (nextView < 0 || nextView > maxView) {
 						if (!$scope.setOnSelect) update();
+						if (!$scope.rangeStart) {
+							$scope.rangeStart = $scope.view.moment.clone();
+						} else if (!$scope.rangeEnd) {
+							$scope.rangeEnd = $scope.view.moment.clone();
+						} else {
+							$scope.rangeStart = $scope.view.moment.clone();
+							$scope.rangeEnd = null;
+						}
 						if ($scope.autoclose) this.$timeout($scope.view.close);
 					} else if (nextView >= minView) $scope.view.selected = view;
 				}

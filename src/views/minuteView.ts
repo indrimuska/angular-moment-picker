@@ -33,7 +33,8 @@ export default class MinuteView implements IView {
 				second: second.second(),
 				class: [
 					this.$scope.keyboard && second.isSame(this.$scope.view.moment, 'second') ? 'highlighted' : '',
-					!selectable ? 'disabled' : isValidMoment(this.$ctrl.$modelValue) && second.isSame(this.$ctrl.$modelValue, 'second') ? 'selected' : ''
+					!selectable ? 'disabled' : isValidMoment(this.$ctrl.$modelValue) && second.isSame(this.$ctrl.$modelValue, 'second') ? 'selected' : '',
+					this.$scope.limits.isRangeHighlighted(second, 'second')
 				].join(' ').trim(),
 				selectable: selectable
 			});

@@ -43,6 +43,7 @@ export interface IProviderOptions {
 	secondsStep?: number;
 	secondsStart?: number;
 	secondsEnd?: number;
+	rangeSelection?: boolean;
 }
 
 export default class Provider implements angular.IServiceProvider {
@@ -85,7 +86,8 @@ export default class Provider implements angular.IServiceProvider {
 		secondsFormat: 'ss',
 		secondsStep: 1,
 		secondsStart: 0,
-		secondsEnd: 59
+		secondsEnd: 59,
+		rangeSelection: false
 	};
 	
 	public options(options: IProviderOptions): IProviderOptions {

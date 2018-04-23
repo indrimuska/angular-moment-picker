@@ -28,7 +28,8 @@ export default class DecadeView implements IView {
 				year: year.year(),
 				class: [
 					this.$scope.keyboard && year.isSame(this.$scope.view.moment, 'year') ? 'highlighted' : '',
-					!selectable || [0, 11].indexOf(y) >= 0 ? 'disabled' : isValidMoment(this.$ctrl.$modelValue) && year.isSame(this.$ctrl.$modelValue, 'year') ? 'selected' : ''
+					!selectable || [0, 11].indexOf(y) >= 0 ? 'disabled' : isValidMoment(this.$ctrl.$modelValue) && year.isSame(this.$ctrl.$modelValue, 'year') ? 'selected' : '',
+					this.$scope.limits.isRangeHighlighted(year, 'year')
 				].join(' ').trim(),
 				selectable: selectable
 			});

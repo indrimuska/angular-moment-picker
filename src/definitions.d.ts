@@ -34,6 +34,9 @@ export interface IDirectiveScope extends ng.IScope {
 	};
 	change?: (context: any) => boolean;
 	selectable?: (context: any) => boolean;
+	rangeSelection?: boolean;
+	rangeStart?: moment.Moment;
+	rangeEnd?: moment.Moment;
 }
 
 export interface IUtility {
@@ -81,6 +84,7 @@ export interface IDirectiveScopeInternal extends IDirectiveScope, IProviderOptio
 		isAfterOrEqualMin: (value: moment.Moment, precision?: moment.unitOfTime.StartOf) => boolean;
 		isBeforeOrEqualMax: (value: moment.Moment, precision?: moment.unitOfTime.StartOf) => boolean;
 		isSelectable: (value: moment.Moment, precision?: moment.unitOfTime.StartOf) => boolean;
+		isRangeHighlighted: (value: moment.Moment, precision?: moment.unitOfTime.StartOf) => string;
 		checkValue: () => void;
 		checkView: () => void;
 	};
@@ -137,6 +141,10 @@ export interface IDirectiveScopeInternal extends IDirectiveScope, IProviderOptio
 	picker: ng.IAugmentedJQuery;
 	container: ng.IAugmentedJQuery;
 	input: ng.IAugmentedJQuery;
+
+	// range selection
+	rangeStart: moment.Moment;
+	rangeEnd: moment.Moment;
 }
 
 export interface IModelValidators extends ng.IModelValidators {
