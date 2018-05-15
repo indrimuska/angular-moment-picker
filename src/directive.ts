@@ -36,7 +36,8 @@ export default class Directive implements ng.IDirective {
 		showHeader:  '=?',
 		additions:   '=?',
 		change:      '&?',
-		selectable:  '&?'
+		selectable:  '&?',
+        	minutesStep: '=?'
 	};
 
 	constructor(
