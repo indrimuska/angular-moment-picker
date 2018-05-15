@@ -14,10 +14,11 @@ export default class MinuteView implements IView {
 
 	public render(): string {
 		let i = 0,
+            	secondsStep = this.$scope.minutesStep || this.provider.secondsStep;
 			second = this.$scope.view.moment.clone().startOf('minute').second(this.provider.secondsStart);
 
 		this.rows = {};
-		for (let s = 0; s <= this.provider.secondsEnd - this.provider.secondsStart; s += this.provider.secondsStep) {
+		for (let s = 0; s <= this.provider.secondsEnd - this.provider.secondsStart; s += secondsStep) {
 			let index = Math.floor(i / this.perLine),
 				selectable = this.$scope.limits.isSelectable(second, 'second');
 
