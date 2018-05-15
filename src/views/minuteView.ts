@@ -14,7 +14,7 @@ export default class MinuteView implements IView {
 
 	public render(): string {
 		let i = 0,
-            	secondsStep = this.$scope.minutesStep || this.provider.secondsStep;
+            	secondsStep = this.$scope.minutesStep || this.provider.secondsStep,
 			second = this.$scope.view.moment.clone().startOf('minute').second(this.provider.secondsStart);
 
 		this.rows = {};
