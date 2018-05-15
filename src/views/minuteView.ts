@@ -14,10 +14,11 @@ export default class MinuteView implements IView {
 
 	public render(): string {
 		let i = 0,
+            	secondsStep = this.$scope.minutesStep || this.provider.secondsStep,
 			second = this.$scope.view.moment.clone().startOf('minute').second(this.provider.secondsStart);
 
 		this.rows = {};
-		for (let s = 0; s <= this.provider.secondsEnd - this.provider.secondsStart; s += this.provider.secondsStep) {
+		for (let s = 0; s <= this.provider.secondsEnd - this.provider.secondsStart; s += secondsStep) {
 			let index = Math.floor(i / this.perLine),
 				selectable = this.$scope.limits.isSelectable(second, 'second');
 
@@ -38,7 +39,7 @@ export default class MinuteView implements IView {
 				selectable: selectable
 			});
 			i++;
-			second.add(this.provider.secondsStep, 'seconds');
+			second.add(secondsStep, 'seconds');
 		}
 		if (this.$scope.keyboard) this.highlightClosest();
 		// return title
@@ -53,10 +54,10 @@ export default class MinuteView implements IView {
 	}
 
 	public highlightClosest(): void {
-		let seconds = <IViewItem[]>[], second;
+		let seconds = <IViewItem[]>[], second, secondsStep = this.$scope.minutesStep || this.provider.secondsStep;
 		angular.forEach(this.rows, (row) => {
 			angular.forEach(row, (value) => {
-				if (Math.abs(value.second - this.$scope.view.moment.second()) < this.provider.secondsStep) seconds.push(value);
+				if (Math.abs(value.second - this.$scope.view.moment.second()) < secondsStep) seconds.push(value);
 			});
 		});
 		second = seconds.sort((value1, value2) => {
