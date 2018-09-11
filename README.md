@@ -20,11 +20,19 @@ Check out the homepage at [http://indrimuska.github.io/angular-moment-picker/](h
 
 ## Installation
 
-Get Angular Moment Picker from [**npm**](https://www.npmjs.com/), [**bower**](http://bower.io/) or [**git**](https://git-scm.com/):
+Get Angular Moment Picker from one of the sources:
+
+[**npm**](https://www.npmjs.com/)
 ```
-  npm install angular-moment-picker
-bower install moment-picker
-  git clone   https://github.com/indrimuska/angular-moment-picker.git
+    npm install angular-moment-picker
+```
+[**bower**](http://bower.io/)
+```
+    bower install moment-picker
+```
+[**git**](https://git-scm.com/)
+```
+    git clone   https://github.com/indrimuska/angular-moment-picker.git
 ```
 
 Include style and script in your page:
