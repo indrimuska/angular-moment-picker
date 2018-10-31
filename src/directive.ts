@@ -401,7 +401,7 @@ export default class Directive implements ng.IDirective {
 				$scope.view.render();
 			});
 			$scope.$watch(() => toValue($scope.startDate, $scope.format, $scope.locale), (newViewValue, oldViewValue) => {
-				if (newViewValue == oldViewValue) return;
+				if (!newViewValue || (newViewValue == oldViewValue)) return;
 
 				$scope.view.moment = valueToMoment(newViewValue, $scope);
 				$scope.view.update();
