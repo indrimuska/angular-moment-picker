@@ -2,7 +2,7 @@
     <div class="moment-picker-container {{view.selected}}-view"
          ng-class="{'moment-picker-disabled': disabled, open: view.isOpen}">
         <div ng-if="additions.top" class="moment-picker-addition top"></div>
-        <table class="header-view" ng-if="showHeader">
+        <table class="header-view" ng-if="showHeader" role="presentation">
             <thead>
                 <tr>
                     <th ng-class="{disabled: !view.previous.selectable}" ng-bind-html="view.previous.label" ng-click="view.previous.set()"></th>
@@ -12,7 +12,7 @@
             </thead>
         </table>
         <div class="moment-picker-specific-views">
-            <table>
+            <table role="presentation">
                 <thead ng-if="views[view.selected].headers">
                     <tr>
                         <th ng-repeat="header in views[view.selected].headers" ng-bind="header"></th>
