@@ -12,10 +12,15 @@ export default class DayView implements IView {
 		private provider: IProviderOptions) { }
 
 	public render(): string {
-		let hour = this.$scope.view.moment.clone().startOf('day').hour(this.provider.hoursStart);
+		const hoursStart = this.$scope.hoursStart != undefined
+			? this.$scope.hoursStart
+			: this.provider.hoursStart;
+		const hoursEnd = this.$scope.hoursEnd || this.provider.hoursEnd;
+
+		let hour = this.$scope.view.moment.clone().startOf('day').hour(hoursStart);
 
 		this.rows = {};
-		for (let h = 0; h <= this.provider.hoursEnd - this.provider.hoursStart; h++) {
+		for (let h = 0; h <= hoursEnd - hoursStart; h++) {
 			let index = Math.floor(h / this.perLine),
 				selectable = this.$scope.limits.isSelectable(hour, 'hour');
 

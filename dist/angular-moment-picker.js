@@ -209,7 +209,7 @@ var helpers_1 = __webpack_require__(8);
 var views_1 = __webpack_require__(13);
 var utility_1 = __webpack_require__(0);
 var templateHtml = __webpack_require__(6);
-var Directive = (function () {
+var Directive = /** @class */ (function () {
     function Directive($timeout, $sce, $log, $window, provider, $compile, $templateCache) {
         var _this = this;
         this.$timeout = $timeout;
@@ -233,6 +233,8 @@ var Directive = (function () {
             startView: '@?',
             minDate: '=?',
             maxDate: '=?',
+            hoursStart: '=?',
+            hoursEnd: '=?',
             startDate: '=?',
             disabled: '=?disable',
             position: '@?',
@@ -696,7 +698,7 @@ exports.getOffset = function (element) {
 
 exports.__esModule = true;
 var angular = __webpack_require__(1);
-var Provider = (function () {
+var Provider = /** @class */ (function () {
     function Provider() {
         this.settings = {
             locale: 'en',
@@ -754,7 +756,7 @@ exports["default"] = Provider;
 
 exports.__esModule = true;
 var utility_1 = __webpack_require__(0);
-var DayView = (function () {
+var DayView = /** @class */ (function () {
     function DayView($scope, $ctrl, provider) {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
@@ -763,9 +765,13 @@ var DayView = (function () {
         this.rows = {};
     }
     DayView.prototype.render = function () {
-        var hour = this.$scope.view.moment.clone().startOf('day').hour(this.provider.hoursStart);
+        var hoursStart = this.$scope.hoursStart != undefined
+            ? this.$scope.hoursStart
+            : this.provider.hoursStart;
+        var hoursEnd = this.$scope.hoursEnd || this.provider.hoursEnd;
+        var hour = this.$scope.view.moment.clone().startOf('day').hour(hoursStart);
         this.rows = {};
-        for (var h = 0; h <= this.provider.hoursEnd - this.provider.hoursStart; h++) {
+        for (var h = 0; h <= hoursEnd - hoursStart; h++) {
             var index = Math.floor(h / this.perLine), selectable = this.$scope.limits.isSelectable(hour, 'hour');
             if (!this.rows[index])
                 this.rows[index] = [];
@@ -807,7 +813,7 @@ exports["default"] = DayView;
 
 exports.__esModule = true;
 var utility_1 = __webpack_require__(0);
-var DecadeView = (function () {
+var DecadeView = /** @class */ (function () {
     function DecadeView($scope, $ctrl, provider) {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
@@ -860,7 +866,7 @@ exports.__esModule = true;
 var angular = __webpack_require__(1);
 var moment = __webpack_require__(2);
 var utility_1 = __webpack_require__(0);
-var HourView = (function () {
+var HourView = /** @class */ (function () {
     function HourView($scope, $ctrl, provider) {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
@@ -958,7 +964,7 @@ exports.MinuteView = minuteView_1["default"];
 exports.__esModule = true;
 var angular = __webpack_require__(1);
 var utility_1 = __webpack_require__(0);
-var MinuteView = (function () {
+var MinuteView = /** @class */ (function () {
     function MinuteView($scope, $ctrl, provider) {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
@@ -1037,7 +1043,7 @@ exports.__esModule = true;
 var angular = __webpack_require__(1);
 var moment = __webpack_require__(2);
 var utility_1 = __webpack_require__(0);
-var MonthView = (function () {
+var MonthView = /** @class */ (function () {
     function MonthView($scope, $ctrl, provider) {
         this.$scope = $scope;
         this.$ctrl = $ctrl;
@@ -1096,7 +1102,7 @@ exports["default"] = MonthView;
 exports.__esModule = true;
 var moment = __webpack_require__(2);
 var utility_1 = __webpack_require__(0);
-var YearView = (function () {
+var YearView = /** @class */ (function () {
     function YearView($scope, $ctrl, provider) {
         this.$scope = $scope;
         this.$ctrl = $ctrl;

@@ -23,6 +23,8 @@ export default class Directive implements ng.IDirective {
 		startView:   '@?',
 		minDate:     '=?',
 		maxDate:     '=?',
+		hoursStart:  '=?',
+		hoursEnd:    '=?',
 		startDate:   '=?',
 		disabled:    '=?disable',
 		position:    '@?',

@@ -120,7 +120,7 @@
   background-color: #fafbfb;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#f0f3f4), to(#fafbfb));
   background-image: -webkit-linear-gradient(#f0f3f4, #fafbfb);
-  background-image: -moz-linear-gradient(#f0f3f4, #fafbfb);
+  background-image: -moz- oldlinear-gradient(#f0f3f4, #fafbfb);
   background-image: -o-linear-gradient(#f0f3f4, #fafbfb);
   background-image: linear-gradient(#f0f3f4, #fafbfb);
 }
@@ -144,13 +144,13 @@
   background-color: #45b1e8;
   background-image: -webkit-gradient(linear, left top, left bottom, from(#45b1e8), to(#3097de));
   background-image: -webkit-linear-gradient(#45b1e8, #3097de);
-  background-image: -moz-linear-gradient(#45b1e8, #3097de);
+  background-image: -moz- oldlinear-gradient(#45b1e8, #3097de);
   background-image: -o-linear-gradient(#45b1e8, #3097de);
   background-image: linear-gradient(#45b1e8, #3097de);
 }
 .moment-picker td.highlighted {
   background-image: -webkit-radial-gradient(transparent, rgba(0, 0, 0, 0.15));
-  background-image: -moz-radial-gradient(transparent, rgba(0, 0, 0, 0.15));
+  background-image: -moz- oldradial-gradient(transparent, rgba(0, 0, 0, 0.15));
   background-image: -o-radial-gradient(transparent, rgba(0, 0, 0, 0.15));
   background-image: radial-gradient(transparent, rgba(0, 0, 0, 0.15));
 }
