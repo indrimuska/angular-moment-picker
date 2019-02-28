@@ -18,6 +18,8 @@ export interface IDirectiveScope extends ng.IScope {
 	startView?: ViewString;
 	minDate?: Value;
 	maxDate?: Value;
+	hoursStart?: number;
+	hoursEnd?: number;
 	startDate?: Value;
 	disabled?: boolean;
 	position?: Position;
