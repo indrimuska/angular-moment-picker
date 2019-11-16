@@ -168,6 +168,9 @@ export default class Directive implements ng.IDirective {
 					$scope.view.isOpen = false;
 					$scope.view.selected = $scope.startView;
 					$scope.picker[0].parentNode.removeChild($scope.picker[0]);
+					//$scope.$emit(uiGridEditConstants.events.END_CELL_EDIT);  <-- the right way
+					$scope.$emit('uiGridEventEndCellEdit');
+					
 				},
 				position: () => {
 					if (!$scope.view.isOpen || $scope.position || $scope.inline) return;
